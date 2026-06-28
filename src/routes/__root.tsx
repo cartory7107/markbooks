@@ -253,46 +253,60 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function hideInitialLoader(delay = 0) {
-  if (typeof window === "undefined") return;
+function SplashOverlay() {
+  const status = useRouterState({ select: (s) => s.status });
+  const isLoading = status === "pending";
+  const [visible, setVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  window.setTimeout(() => {
-    document.querySelectorAll<HTMLElement>("#mb-initial-loader").forEach((loader) => {
-      loader.classList.add("mb-hide");
-      window.setTimeout(() => loader.parentElement?.removeChild(loader), 180);
-    });
-  }, delay);
+  // Hide initial splash after first paint settles
+  useEffect(() => {
+    setMounted(true);
+    const t = window.setTimeout(() => setVisible(false), 350);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  // Show splash whenever router is navigating; hide shortly after it settles
+  useEffect(() => {
+    if (!mounted) return;
+    if (isLoading) {
+      setVisible(true);
+      return;
+    }
+    const t = window.setTimeout(() => setVisible(false), 180);
+    return () => window.clearTimeout(t);
+  }, [isLoading, mounted]);
+
+  return (
+    <div
+      id="mb-initial-loader"
+      aria-hidden={!visible}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "14px",
+        background: "var(--background)",
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transition: "opacity 220ms ease",
+      }}
+    >
+      <div className="mb-loader-bars" aria-label="Loading">
+        <span /><span /><span /><span /><span />
+      </div>
+      <div className="mb-loader-text">Loading MarkBook…</div>
+    </div>
+  );
 }
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
   const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    hideInitialLoader();
-  }, [pathname]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of Array.from(mutation.addedNodes)) {
-          if (!(node instanceof HTMLElement)) continue;
-          if (node.id === "mb-initial-loader" || node.querySelector("#mb-initial-loader")) {
-            hideInitialLoader();
-            return;
-          }
-        }
-      }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-    hideInitialLoader();
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
 
