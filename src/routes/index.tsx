@@ -1646,7 +1646,12 @@ function ToolCard({
 
   return (
     <article
-      onClick={() => { window.location.href = `/tool/${toolSlug}`; }}
+      onClick={() => {
+        try {
+          sessionStorage.setItem("mb:home:scroll", String(window.scrollY));
+        } catch {}
+        window.location.href = `/tool/${toolSlug}`;
+      }}
       style={cardStyle}
       className={`tool-lift flex min-w-0 flex-col rounded-xl border p-4 cursor-pointer ${
         exclusive
