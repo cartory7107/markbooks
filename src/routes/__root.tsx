@@ -13,6 +13,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
+import logoAsset from "../assets/markbook-symbol-clean.png.asset.json";
 import type { User } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
@@ -296,6 +297,19 @@ function SplashOverlay() {
         transition: "opacity 220ms ease",
       }}
     >
+      <img
+        src={logoAsset.url}
+        alt="MarkBook"
+        width={88}
+        height={88}
+        style={{
+          width: 88,
+          height: 88,
+          objectFit: "contain",
+          filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
+          animation: "mb-logo-pulse 1.6s ease-in-out infinite",
+        }}
+      />
       <div className="mb-loader-bars" aria-label="Loading">
         <span /><span /><span /><span /><span />
       </div>

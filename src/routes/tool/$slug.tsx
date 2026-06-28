@@ -196,7 +196,11 @@ ${kws}
 <script type="application/ld+json">${faqLd}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,system-ui,sans-serif;background:#09090b;color:#fafafa;line-height:1.6}
+html,body{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:#09090b;color:#fafafa;line-height:1.6;min-height:100vh;position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(to right,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at top,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at top,#000 30%,transparent 75%)}
+body::after{content:"";position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:520px;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,rgba(99,102,241,.18),transparent 60%),radial-gradient(ellipse at 70% 40%,rgba(168,85,247,.12),transparent 60%);filter:blur(40px)}
+.nav,.c,footer,.cta{position:relative;z-index:1}
 a{color:#6366f1;text-decoration:none}a:hover{color:#818cf8}
 
 /* Top nav */

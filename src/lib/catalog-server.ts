@@ -160,15 +160,17 @@ function hashStr(s: string): number {
  */
 function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: number): number {
   const base = hashStr(`${seed}:${groupIndex}`);
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 8; attempt++) {
     const pos = (base + attempt * 7) % 4;
     if (prevPos === null) return pos;
-    // Disallow adjacency across group boundary (prev last + new first)
+    // Disallow same column twice in a row (no vertical stacking).
+    if (pos === prevPos) continue;
+    // Disallow adjacency across group boundary (prev last + new first).
     if (prevPos === 3 && pos === 0) continue;
     return pos;
   }
-  // Fallback: middle slot is always safe
-  return 1;
+  // Fallback: a safe middle slot different from prev.
+  return prevPos === 1 ? 2 : 1;
 }
 
 /**
@@ -352,11 +354,9 @@ export function searchTools(opts: {
       }
 
       if (exclusiveTile && group.length === 4) {
-        // Replace the slot at `pos` with the exclusive; the displaced tile is
-        // appended at the end of the group so we keep group size = 4.
-        const displaced = group[pos];
+        // Replace the slot at `pos` with the exclusive in-place so visible
+        // 4-tile rows always have exactly 1 exclusive at the chosen position.
         group[pos] = exclusiveTile;
-        group.push(displaced);
         prevPos = pos;
       } else {
         prevPos = null;
