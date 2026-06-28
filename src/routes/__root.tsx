@@ -329,6 +329,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SplashOverlay />
       <Outlet />
     </QueryClientProvider>
   );
