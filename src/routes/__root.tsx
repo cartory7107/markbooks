@@ -297,6 +297,19 @@ function SplashOverlay() {
         transition: "opacity 220ms ease",
       }}
     >
+      <img
+        src={logoAsset.url}
+        alt="MarkBook"
+        width={88}
+        height={88}
+        style={{
+          width: 88,
+          height: 88,
+          objectFit: "contain",
+          filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
+          animation: "mb-logo-pulse 1.6s ease-in-out infinite",
+        }}
+      />
       <div className="mb-loader-bars" aria-label="Loading">
         <span /><span /><span /><span /><span />
       </div>
