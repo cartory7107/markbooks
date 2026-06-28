@@ -291,6 +291,26 @@ function Index() {
       .catch(() => setSearchLoading(false));
   }, [query, activeCategory, pricing, activeFilter, catalogLoaded]);
 
+  // ── Restore scroll position when returning from a tool detail page ──
+  useEffect(() => {
+    if (!catalogLoaded || searchLoading) return;
+    try {
+      const saved = sessionStorage.getItem("mb:home:scroll");
+      if (saved && catalog.tools.length > 0) {
+        const y = parseInt(saved, 10);
+        if (!Number.isNaN(y) && y > 0) {
+          // Wait for layout to settle, then restore.
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: y, behavior: "auto" });
+            sessionStorage.removeItem("mb:home:scroll");
+          });
+        } else {
+          sessionStorage.removeItem("mb:home:scroll");
+        }
+      }
+    } catch {}
+  }, [catalogLoaded, searchLoading, catalog.tools.length]);
+
   // ── Load more tools from server API ──
   const loadMore = useCallback(() => {
     setLoadingMore(true);
