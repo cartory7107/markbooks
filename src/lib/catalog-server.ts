@@ -354,11 +354,9 @@ export function searchTools(opts: {
       }
 
       if (exclusiveTile && group.length === 4) {
-        // Replace the slot at `pos` with the exclusive; the displaced tile is
-        // appended at the end of the group so we keep group size = 4.
-        const displaced = group[pos];
+        // Replace the slot at `pos` with the exclusive in-place so visible
+        // 4-tile rows always have exactly 1 exclusive at the chosen position.
         group[pos] = exclusiveTile;
-        group.push(displaced);
         prevPos = pos;
       } else {
         prevPos = null;
