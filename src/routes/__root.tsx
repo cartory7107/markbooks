@@ -13,6 +13,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
+import logoAsset from "../assets/markbook-symbol-clean.png.asset.json";
 import type { User } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
