@@ -3,7 +3,19 @@
  * JSON data is bundled at build time via Vite imports so it works on
  * Cloudflare Workers (no filesystem access at runtime).
  */
-import catalogJson from "../../public/ai-catalog.json";
+import catalogPart0 from "../../public/ai-catalog-0.json";
+import catalogPart1 from "../../public/ai-catalog-1.json";
+import catalogPart2 from "../../public/ai-catalog-2.json";
+import catalogMeta from "../../public/ai-catalog-meta.json";
+const catalogJson = {
+  tools: [
+    ...(catalogPart0 as unknown as Tool[]),
+    ...(catalogPart1 as unknown as Tool[]),
+    ...(catalogPart2 as unknown as Tool[]),
+  ],
+  categories: (catalogMeta as { categories: string[] }).categories,
+  categoryEmojis: (catalogMeta as { categoryEmojis: Record<string,string> }).categoryEmojis,
+};
 import verifiedPoolJson from "../../public/verified-top-pool.json";
 import categoryEmojisJson from "../../public/category-emojis.json";
 import categoryMapJson from "../../public/category-map.json";
