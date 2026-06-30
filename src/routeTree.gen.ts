@@ -22,6 +22,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiNewsApiDotjsonRouteImport } from './routes/ai-news-api[.]json'
 import { Route as AdvertiseRouteImport } from './routes/advertise'
@@ -97,6 +98,11 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/categories': typeof CategoriesRoute
   '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/categories'
     | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/categories'
     | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/categories'
     | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
@@ -298,6 +310,7 @@ export interface RootRouteChildren {
   AdvertiseRoute: typeof AdvertiseRoute
   AiNewsApiDotjsonRoute: typeof AiNewsApiDotjsonRoute
   AuthRoute: typeof AuthRoute
+  CategoriesRoute: typeof CategoriesRoute
   CompareRoute: typeof CompareRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -409,6 +422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -482,6 +502,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdvertiseRoute: AdvertiseRoute,
   AiNewsApiDotjsonRoute: AiNewsApiDotjsonRoute,
   AuthRoute: AuthRoute,
+  CategoriesRoute: CategoriesRoute,
   CompareRoute: CompareRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
   PrivacyRoute: PrivacyRoute,
@@ -502,3 +523,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

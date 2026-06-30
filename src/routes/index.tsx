@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import {
   ArrowRight,
@@ -157,6 +157,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const navigate = useNavigate();
   const [catalog, setCatalog] = useState<Catalog>({
     tools: [],
     categories: {},
@@ -520,7 +521,7 @@ function Index() {
                       setPricing(pricing === "Free" ? "All" : "Free");
                       setVisible(20);
                     } else if (item.action === "categories") {
-                      setMobileSidebar(true);
+                      navigate({ to: "/categories" });
                     } else if (item.action === "latest") {
                       document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" });
                     } else if (item.action === "news") {
@@ -694,7 +695,7 @@ function Index() {
                     key={item.label}
                     onClick={() => {
                       if (item.action === "free") { setPricing("Free"); setVisible(20); }
-                      else if (item.action === "categories") setMobileSidebar(true);
+                      else if (item.action === "categories") { navigate({ to: "/categories" }); }
                       else if (item.action === "latest") { document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" }); }
                       else if (item.action === "news") { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); }
                       setMobileMenu(false);
@@ -883,12 +884,12 @@ function Index() {
                 );
               })}
               {categories.length > 30 && (
-                <button
-                  onClick={() => setMobileSidebar(true)}
+                <Link
+                  to="/categories"
                   className="shrink-0 rounded-full bg-muted px-3 py-1 text-xs font-medium text-primary hover:bg-accent"
                 >
                   +{categories.length - 30} more
-                </button>
+                </Link>
               )}
             </>
           ) : (
@@ -1253,7 +1254,7 @@ function Index() {
                 {[
                   { label: "Submit your AI tool", href: "/submit", icon: "➕" },
                   { label: "Advertise with us", href: "/advertise", icon: "📢" },
-                  { label: "Browse categories", action: () => setMobileSidebar(true), icon: "📂" },
+                  { label: "Browse categories", href: "/categories", icon: "📂" },
                 ].map((link) => (
                   <Link
                     key={link.label}
