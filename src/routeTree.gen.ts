@@ -28,6 +28,7 @@ import { Route as AdvertiseRouteImport } from './routes/advertise'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RankingsIndexRouteImport } from './routes/rankings/index'
 import { Route as CompareIndexRouteImport } from './routes/compare/index'
 import { Route as ToolSlugRouteImport } from './routes/tool/$slug'
 import { Route as SitemapToolsIndexRouteImport } from './routes/sitemap-tools.$index'
@@ -130,6 +131,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RankingsIndexRoute = RankingsIndexRouteImport.update({
+  id: '/rankings/',
+  path: '/rankings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareIndexRoute = CompareIndexRouteImport.update({
   id: '/compare/',
   path: '/compare/',
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare/': typeof CompareIndexRoute
+  '/rankings/': typeof RankingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare': typeof CompareIndexRoute
+  '/rankings': typeof RankingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -242,6 +250,7 @@ export interface FileRoutesById {
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare/': typeof CompareIndexRoute
+  '/rankings/': typeof RankingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare/'
+    | '/rankings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare'
+    | '/rankings'
   id:
     | '__root__'
     | '/'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare/'
+    | '/rankings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -353,6 +365,7 @@ export interface RootRouteChildren {
   SitemapToolsIndexRoute: typeof SitemapToolsIndexRoute
   ToolSlugRoute: typeof ToolSlugRoute
   CompareIndexRoute: typeof CompareIndexRoute
+  RankingsIndexRoute: typeof RankingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -490,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rankings/': {
+      id: '/rankings/'
+      path: '/rankings'
+      fullPath: '/rankings/'
+      preLoaderRoute: typeof RankingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare/': {
       id: '/compare/'
       path: '/compare'
@@ -561,6 +581,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapToolsIndexRoute: SitemapToolsIndexRoute,
   ToolSlugRoute: ToolSlugRoute,
   CompareIndexRoute: CompareIndexRoute,
+  RankingsIndexRoute: RankingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
