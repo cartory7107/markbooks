@@ -37,7 +37,11 @@ export const Route = createFileRoute("/research")({
 });
 
 function ResearchPage() {
-  const { totalTools, totalCategories, topCategories } = Route.useLoaderData();
+  const { totalTools, totalCategories, topCategories } = Route.useLoaderData() as {
+    totalTools: number;
+    totalCategories: number;
+    topCategories: { name: string; count: number; slug: string }[];
+  };
   return (
     <div
       className="min-h-screen text-foreground"

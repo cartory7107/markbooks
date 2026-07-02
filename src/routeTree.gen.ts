@@ -17,6 +17,7 @@ import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SearchApiDotjsonRouteImport } from './routes/search-api[.]json'
+import { Route as ResearchRouteImport } from './routes/research'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -76,6 +77,11 @@ const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
 const SearchApiDotjsonRoute = SearchApiDotjsonRouteImport.update({
   id: '/search-api.json',
   path: '/search-api.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RankingRoute = RankingRouteImport.update({
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -252,6 +260,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -344,6 +355,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -375,6 +387,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   RankingRoute: typeof RankingRoute
+  ResearchRoute: typeof ResearchRoute
   SearchApiDotjsonRoute: typeof SearchApiDotjsonRoute
   SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -450,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/search-api.json'
       fullPath: '/search-api.json'
       preLoaderRoute: typeof SearchApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ranking': {
@@ -607,6 +627,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   RankingRoute: RankingRoute,
+  ResearchRoute: ResearchRoute,
   SearchApiDotjsonRoute: SearchApiDotjsonRoute,
   SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
