@@ -17,6 +17,7 @@ import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SearchApiDotjsonRouteImport } from './routes/search-api[.]json'
+import { Route as ResearchRouteImport } from './routes/research'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -30,11 +31,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RankingsIndexRouteImport } from './routes/rankings/index'
 import { Route as CompareIndexRouteImport } from './routes/compare/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ToolSlugRouteImport } from './routes/tool/$slug'
 import { Route as SitemapToolsIndexRouteImport } from './routes/sitemap-tools.$index'
 import { Route as RankingsSlugRouteImport } from './routes/rankings/$slug'
 import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 
 const UniversityRoute = UniversityRouteImport.update({
   id: '/university',
@@ -74,6 +77,11 @@ const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
 const SearchApiDotjsonRoute = SearchApiDotjsonRouteImport.update({
   id: '/search-api.json',
   path: '/search-api.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RankingRoute = RankingRouteImport.update({
@@ -141,6 +149,11 @@ const CompareIndexRoute = CompareIndexRouteImport.update({
   path: '/compare/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolSlugRoute = ToolSlugRouteImport.update({
   id: '/tool/$slug',
   path: '/tool/$slug',
@@ -166,6 +179,11 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   path: '/category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -179,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -187,11 +206,13 @@ export interface FileRoutesByFullPath {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
 }
@@ -207,6 +228,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -215,11 +237,13 @@ export interface FileRoutesByTo {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/blog': typeof BlogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/rankings': typeof RankingsIndexRoute
 }
@@ -236,6 +260,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
+  '/research': typeof ResearchRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -244,11 +269,13 @@ export interface FileRoutesById {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
   '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
 }
@@ -266,6 +293,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -274,11 +302,13 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
     | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/blog/'
     | '/compare/'
     | '/rankings/'
   fileRoutesByTo: FileRoutesByTo
@@ -294,6 +324,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -302,11 +333,13 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
     | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/blog'
     | '/compare'
     | '/rankings'
   id:
@@ -322,6 +355,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/ranking'
+    | '/research'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -330,11 +364,13 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
     | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/blog/'
     | '/compare/'
     | '/rankings/'
   fileRoutesById: FileRoutesById
@@ -351,6 +387,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   RankingRoute: typeof RankingRoute
+  ResearchRoute: typeof ResearchRoute
   SearchApiDotjsonRoute: typeof SearchApiDotjsonRoute
   SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -359,11 +396,13 @@ export interface RootRouteChildren {
   ToolsApiDotjsonRoute: typeof ToolsApiDotjsonRoute
   ToolsDictionaryDotjsonRoute: typeof ToolsDictionaryDotjsonRoute
   UniversityRoute: typeof UniversityRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
   CompareSlugRoute: typeof CompareSlugRoute
   RankingsSlugRoute: typeof RankingsSlugRoute
   SitemapToolsIndexRoute: typeof SitemapToolsIndexRoute
   ToolSlugRoute: typeof ToolSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   RankingsIndexRoute: typeof RankingsIndexRoute
 }
@@ -424,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/search-api.json'
       fullPath: '/search-api.json'
       preLoaderRoute: typeof SearchApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ranking': {
@@ -517,6 +563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tool/$slug': {
       id: '/tool/$slug'
       path: '/tool/$slug'
@@ -552,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -567,6 +627,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   RankingRoute: RankingRoute,
+  ResearchRoute: ResearchRoute,
   SearchApiDotjsonRoute: SearchApiDotjsonRoute,
   SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -575,11 +636,13 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsApiDotjsonRoute: ToolsApiDotjsonRoute,
   ToolsDictionaryDotjsonRoute: ToolsDictionaryDotjsonRoute,
   UniversityRoute: UniversityRoute,
+  BlogSlugRoute: BlogSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
   CompareSlugRoute: CompareSlugRoute,
   RankingsSlugRoute: RankingsSlugRoute,
   SitemapToolsIndexRoute: SitemapToolsIndexRoute,
   ToolSlugRoute: ToolSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   RankingsIndexRoute: RankingsIndexRoute,
 }
