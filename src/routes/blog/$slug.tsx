@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getPost, blogPosts } from "@/lib/blog-posts";
+import { getPost, blogPosts, type BlogPost as BlogPostType } from "@/lib/blog-posts";
 
 const BASE_URL = "https://markbook.top";
 
