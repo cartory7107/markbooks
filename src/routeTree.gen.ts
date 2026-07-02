@@ -31,6 +31,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompareIndexRouteImport } from './routes/compare/index'
 import { Route as ToolSlugRouteImport } from './routes/tool/$slug'
 import { Route as SitemapToolsIndexRouteImport } from './routes/sitemap-tools.$index'
+import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 
 const UniversityRoute = UniversityRouteImport.update({
@@ -143,6 +144,11 @@ const SitemapToolsIndexRoute = SitemapToolsIndexRouteImport.update({
   path: '/sitemap-tools/$index',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareSlugRoute = CompareSlugRouteImport.update({
+  id: '/compare/$slug',
+  path: '/compare/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare/': typeof CompareIndexRoute
@@ -195,6 +202,7 @@ export interface FileRoutesByTo {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare': typeof CompareIndexRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
   '/compare/': typeof CompareIndexRoute
@@ -248,6 +257,7 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare/'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
     | '/compare/'
@@ -324,6 +336,7 @@ export interface RootRouteChildren {
   ToolsDictionaryDotjsonRoute: typeof ToolsDictionaryDotjsonRoute
   UniversityRoute: typeof UniversityRoute
   CategorySlugRoute: typeof CategorySlugRoute
+  CompareSlugRoute: typeof CompareSlugRoute
   SitemapToolsIndexRoute: typeof SitemapToolsIndexRoute
   ToolSlugRoute: typeof ToolSlugRoute
   CompareIndexRoute: typeof CompareIndexRoute
@@ -485,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare/$slug': {
+      id: '/compare/$slug'
+      path: '/compare/$slug'
+      fullPath: '/compare/$slug'
+      preLoaderRoute: typeof CompareSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -516,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsDictionaryDotjsonRoute: ToolsDictionaryDotjsonRoute,
   UniversityRoute: UniversityRoute,
   CategorySlugRoute: CategorySlugRoute,
+  CompareSlugRoute: CompareSlugRoute,
   SitemapToolsIndexRoute: SitemapToolsIndexRoute,
   ToolSlugRoute: ToolSlugRoute,
   CompareIndexRoute: CompareIndexRoute,
