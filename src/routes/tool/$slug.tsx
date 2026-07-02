@@ -378,6 +378,8 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 
       <div class="p-actions">
         ${tool.u && tool.u !== "#" ? `<a href="${esc(tool.u)}" target="_blank" rel="noopener" class="p-visit">&#127760; Visit ${esc(tool.n)} &rarr;</a>` : ""}
+        <a href="/compare" class="p-share">&#9878;&#65039; Compare</a>
+        <a href="/rankings/best-${slugify(normCat)}" class="p-share">&#127942; See ${esc(normCat)} Ranking</a>
         <button class="p-share" onclick="navigator.clipboard.writeText(window.location.href);this.innerHTML='&#10003; Copied!'">
           &#128279; Share
         </button>
