@@ -13,8 +13,8 @@ const catalogJson = {
     ...(catalogPart1 as unknown as Tool[]),
     ...(catalogPart2 as unknown as Tool[]),
   ],
-  categories: (catalogMeta as { categories: string[] }).categories,
-  categoryEmojis: (catalogMeta as { categoryEmojis: Record<string,string> }).categoryEmojis,
+  categories: (catalogMeta as unknown as { categories: Record<string, number> }).categories,
+  categoryEmojis: (catalogMeta as unknown as { categoryEmojis: Record<string, string> }).categoryEmojis,
 };
 import verifiedPoolJson from "../../public/verified-top-pool.json";
 import categoryEmojisJson from "../../public/category-emojis.json";

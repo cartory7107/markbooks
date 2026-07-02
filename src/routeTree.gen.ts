@@ -21,7 +21,6 @@ import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
-import { Route as CompareRouteImport } from './routes/compare'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiNewsApiDotjsonRouteImport } from './routes/ai-news-api[.]json'
@@ -29,8 +28,12 @@ import { Route as AdvertiseRouteImport } from './routes/advertise'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RankingsIndexRouteImport } from './routes/rankings/index'
+import { Route as CompareIndexRouteImport } from './routes/compare/index'
 import { Route as ToolSlugRouteImport } from './routes/tool/$slug'
 import { Route as SitemapToolsIndexRouteImport } from './routes/sitemap-tools.$index'
+import { Route as RankingsSlugRouteImport } from './routes/rankings/$slug'
+import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 
 const UniversityRoute = UniversityRouteImport.update({
@@ -93,11 +96,6 @@ const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
   path: '/exclusive-api.json',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompareRoute = CompareRouteImport.update({
-  id: '/compare',
-  path: '/compare',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CategoriesRoute = CategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -133,6 +131,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RankingsIndexRoute = RankingsIndexRouteImport.update({
+  id: '/rankings/',
+  path: '/rankings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareIndexRoute = CompareIndexRouteImport.update({
+  id: '/compare/',
+  path: '/compare/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolSlugRoute = ToolSlugRouteImport.update({
   id: '/tool/$slug',
   path: '/tool/$slug',
@@ -141,6 +149,16 @@ const ToolSlugRoute = ToolSlugRouteImport.update({
 const SitemapToolsIndexRoute = SitemapToolsIndexRouteImport.update({
   id: '/sitemap-tools/$index',
   path: '/sitemap-tools/$index',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RankingsSlugRoute = RankingsSlugRouteImport.update({
+  id: '/rankings/$slug',
+  path: '/rankings/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareSlugRoute = CompareSlugRouteImport.update({
+  id: '/compare/$slug',
+  path: '/compare/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -157,7 +175,6 @@ export interface FileRoutesByFullPath {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/categories': typeof CategoriesRoute
-  '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -171,8 +188,12 @@ export interface FileRoutesByFullPath {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/compare/': typeof CompareIndexRoute
+  '/rankings/': typeof RankingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -182,7 +203,6 @@ export interface FileRoutesByTo {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/categories': typeof CategoriesRoute
-  '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -196,8 +216,12 @@ export interface FileRoutesByTo {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/compare': typeof CompareIndexRoute
+  '/rankings': typeof RankingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -208,7 +232,6 @@ export interface FileRoutesById {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/categories': typeof CategoriesRoute
-  '/compare': typeof CompareRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -222,8 +245,12 @@ export interface FileRoutesById {
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/compare/$slug': typeof CompareSlugRoute
+  '/rankings/$slug': typeof RankingsSlugRoute
   '/sitemap-tools/$index': typeof SitemapToolsIndexRoute
   '/tool/$slug': typeof ToolSlugRoute
+  '/compare/': typeof CompareIndexRoute
+  '/rankings/': typeof RankingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -235,7 +262,6 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/categories'
-    | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
     | '/profile'
@@ -249,8 +275,12 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
+    | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/compare/'
+    | '/rankings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -260,7 +290,6 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/categories'
-    | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
     | '/profile'
@@ -274,8 +303,12 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
+    | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/compare'
+    | '/rankings'
   id:
     | '__root__'
     | '/'
@@ -285,7 +318,6 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/categories'
-    | '/compare'
     | '/exclusive-api.json'
     | '/privacy'
     | '/profile'
@@ -299,8 +331,12 @@ export interface FileRouteTypes {
     | '/tools-dictionary.json'
     | '/university'
     | '/category/$slug'
+    | '/compare/$slug'
+    | '/rankings/$slug'
     | '/sitemap-tools/$index'
     | '/tool/$slug'
+    | '/compare/'
+    | '/rankings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -311,7 +347,6 @@ export interface RootRouteChildren {
   AiNewsApiDotjsonRoute: typeof AiNewsApiDotjsonRoute
   AuthRoute: typeof AuthRoute
   CategoriesRoute: typeof CategoriesRoute
-  CompareRoute: typeof CompareRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
@@ -325,8 +360,12 @@ export interface RootRouteChildren {
   ToolsDictionaryDotjsonRoute: typeof ToolsDictionaryDotjsonRoute
   UniversityRoute: typeof UniversityRoute
   CategorySlugRoute: typeof CategorySlugRoute
+  CompareSlugRoute: typeof CompareSlugRoute
+  RankingsSlugRoute: typeof RankingsSlugRoute
   SitemapToolsIndexRoute: typeof SitemapToolsIndexRoute
   ToolSlugRoute: typeof ToolSlugRoute
+  CompareIndexRoute: typeof CompareIndexRoute
+  RankingsIndexRoute: typeof RankingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -415,13 +454,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExclusiveApiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/compare': {
-      id: '/compare'
-      path: '/compare'
-      fullPath: '/compare'
-      preLoaderRoute: typeof CompareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/categories': {
       id: '/categories'
       path: '/categories'
@@ -471,6 +503,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rankings/': {
+      id: '/rankings/'
+      path: '/rankings'
+      fullPath: '/rankings/'
+      preLoaderRoute: typeof RankingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/': {
+      id: '/compare/'
+      path: '/compare'
+      fullPath: '/compare/'
+      preLoaderRoute: typeof CompareIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tool/$slug': {
       id: '/tool/$slug'
       path: '/tool/$slug'
@@ -483,6 +529,20 @@ declare module '@tanstack/react-router' {
       path: '/sitemap-tools/$index'
       fullPath: '/sitemap-tools/$index'
       preLoaderRoute: typeof SitemapToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings/$slug': {
+      id: '/rankings/$slug'
+      path: '/rankings/$slug'
+      fullPath: '/rankings/$slug'
+      preLoaderRoute: typeof RankingsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare/$slug': {
+      id: '/compare/$slug'
+      path: '/compare/$slug'
+      fullPath: '/compare/$slug'
+      preLoaderRoute: typeof CompareSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -503,7 +563,6 @@ const rootRouteChildren: RootRouteChildren = {
   AiNewsApiDotjsonRoute: AiNewsApiDotjsonRoute,
   AuthRoute: AuthRoute,
   CategoriesRoute: CategoriesRoute,
-  CompareRoute: CompareRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
@@ -517,19 +576,13 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsDictionaryDotjsonRoute: ToolsDictionaryDotjsonRoute,
   UniversityRoute: UniversityRoute,
   CategorySlugRoute: CategorySlugRoute,
+  CompareSlugRoute: CompareSlugRoute,
+  RankingsSlugRoute: RankingsSlugRoute,
   SitemapToolsIndexRoute: SitemapToolsIndexRoute,
   ToolSlugRoute: ToolSlugRoute,
+  CompareIndexRoute: CompareIndexRoute,
+  RankingsIndexRoute: RankingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

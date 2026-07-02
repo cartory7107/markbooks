@@ -24,17 +24,24 @@ export const Route = createFileRoute("/sitemap-static.xml")({
         const staticPages = [
           { path: "/", priority: "1.0", freq: "daily" },
           { path: "/ranking", priority: "0.9", freq: "weekly" },
+          { path: "/rankings", priority: "0.9", freq: "weekly" },
+          { path: "/compare", priority: "0.8", freq: "weekly" },
           { path: "/university", priority: "0.8", freq: "weekly" },
           { path: "/submit", priority: "0.7", freq: "monthly" },
           { path: "/advertise", priority: "0.5", freq: "monthly" },
-          { path: "/compare", priority: "0.7", freq: "weekly" },
           { path: "/tools-dictionary.json", priority: "0.8", freq: "weekly" },
           { path: "/tools-api.json", priority: "0.3", freq: "weekly" },
           { path: "/search-api.json", priority: "0.3", freq: "weekly" },
           { path: "/exclusive-api.json", priority: "0.3", freq: "weekly" },
-          { path: "/admin", priority: "0.3", freq: "monthly" },
-          { path: "/auth", priority: "0.3", freq: "monthly" },
         ];
+
+        for (const [cat] of Object.entries(catalog.categories).sort((a, b) => b[1] - a[1])) {
+          const s = slugify(cat);
+          if (!s) continue;
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}/rankings/best-${s}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.75</priority>\n  </url>`,
+          );
+        }
 
         for (const p of staticPages) {
           urls.push(

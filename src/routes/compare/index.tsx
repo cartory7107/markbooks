@@ -21,7 +21,7 @@ type CompareResult = {
   }>;
 };
 
-export const Route = createFileRoute("/compare")({
+export const Route = createFileRoute("/compare/")({
   head: () => ({
     meta: [
       { title: "Compare AI Tools — MarkBook" },
