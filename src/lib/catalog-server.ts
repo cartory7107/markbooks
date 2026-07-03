@@ -280,6 +280,7 @@ export function searchTools(opts: {
     //   tier 9: repo / hosting domains (GitHub, Vercel…) → bottom
     const tier = (t: Tool) => {
       if (isDemoted(t.u)) return 9;
+      if (!hasLogo(t)) return 8; // no logo → likely stale/broken, push down
       const verified = trendingSet.has(t.n.toLowerCase());
       const rich = isRich(t);
       if (verified && rich) return 0;
