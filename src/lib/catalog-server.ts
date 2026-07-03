@@ -155,6 +155,11 @@ function isRich(t: Tool): boolean {
   return !!t.fl && (t.d?.length ?? 0) >= 40;
 }
 
+/** Tools without a logo/favicon usually mean stale or dead sites. */
+function hasLogo(t: Tool): boolean {
+  return !!t.fl && t.fl.length > 0;
+}
+
 /** Hash a string → stable non-negative int (FNV-1a). */
 function hashStr(s: string): number {
   let h = 0x811c9dc5;
