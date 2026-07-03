@@ -397,6 +397,7 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
   const FREE = new Set(["Free", "Free Plan", "Free Trial", "Free Credits", "Daily Free", "Monthly Free", "Open Source", "open_source", "freemium"]);
   const tier = (t: Tool) => {
     if (isDemoted(t.u)) return 9;
+    if (!hasLogo(t)) return 8;
     const v = verified.has(t.n.toLowerCase());
     const rich = isRich(t);
     if (v && rich) return 0;
