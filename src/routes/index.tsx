@@ -1659,8 +1659,10 @@ function ToolCard({
         backgroundImage: "url('/holographic-card.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-      }
-    : {};
+        contentVisibility: "auto",
+        containIntrinsicSize: "260px",
+      } as React.CSSProperties
+    : ({ contentVisibility: "auto", containIntrinsicSize: "260px" } as React.CSSProperties);
 
   const toolSlug = tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
