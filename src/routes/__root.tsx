@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MarkBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
+      { title: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compar" },
       {
         name: "description",
         content:
@@ -96,18 +96,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { name: "apple-mobile-web-app-title", content: "MarkBook" },
       { name: "author", content: "MarkBook" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
-      { property: "og:title", content: "MarkBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
-      { property: "og:description", content: "MarkBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. Search, compare, and discover the best AI tools. Updated daily." },
+      { property: "og:title", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compar" },
+      { property: "og:description", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "MarkBook" },
       { property: "og:url", content: "https://markbook.top" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@markbook" },
-      { name: "twitter:title", content: "MarkBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
-      { name: "twitter:description", content: "MarkBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. Updated daily." },
+      { name: "twitter:title", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compar" },
+      { name: "twitter:description", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
       { property: "og:image", content: "https://markbook.top/og-image.png" },
       { name: "twitter:image", content: "https://markbook.top/og-image.png" },
-      { name: "description", content: "MarkBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
+      { name: "description", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
     ],
     links: [
       {
