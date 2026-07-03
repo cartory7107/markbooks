@@ -171,23 +171,22 @@ function hashStr(s: string): number {
 }
 
 /**
- * Pick a random position 0..3 inside the current 4-tile group such that, when
+ * Pick a random position 0..4 inside the current 5-tile group such that, when
  * combined with the previous group's pick, no two exclusive tiles end up
- * visually adjacent (group N pos 3 + group N+1 pos 0 would touch).
+ * visually adjacent.
  */
+const GROUP_SIZE = 5;
 function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: number): number {
   const base = hashStr(`${seed}:${groupIndex}`);
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const pos = (base + attempt * 7) % 4;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    const pos = (base + attempt * 7) % GROUP_SIZE;
     if (prevPos === null) return pos;
     // Disallow same column twice in a row (no vertical stacking).
     if (pos === prevPos) continue;
-    // Disallow adjacency across group boundary (prev last + new first).
-    if (prevPos === 3 && pos === 0) continue;
     return pos;
   }
-  // Fallback: a safe middle slot different from prev.
-  return prevPos === 1 ? 2 : 1;
+  // Fallback: a safe slot different from prev.
+  return prevPos === 0 ? 2 : 0;
 }
 
 /**
@@ -343,17 +342,16 @@ export function searchTools(opts: {
     return t;
   });
 
-  // Inject exclusive tiles — 1 per 4-tile group, random position per group,
-  // never adjacent across group boundaries. Browsing mode only.
-  if (!term && results.length > 4) {
+  // Inject exclusive tiles — 1 per 5-tile group, random position per group.
+  // Browsing mode only. Starts from the VERY FIRST position (no skipping).
+  if (!term && results.length > 0) {
     const resultNames = new Set(results.map((r) => r.n.toLowerCase()));
-    const startGroup = Math.floor(offset / 4);
     const injected: Tool[] = [];
     let prevPos: number | null = null;
+    let groupIdx = 0;
 
-    for (let i = 0; i < results.length; i += 4) {
-      const group = results.slice(i, i + 4);
-      const groupIdx = startGroup + i / 4;
+    for (let i = 0; i < results.length; i += GROUP_SIZE) {
+      const group = results.slice(i, i + GROUP_SIZE);
       const pos = pickGroupPosition(groupIdx, prevPos, offset || 1);
 
       // Find next exclusive that's not already in this page
@@ -371,9 +369,8 @@ export function searchTools(opts: {
         }
       }
 
-      if (exclusiveTile && group.length === 4) {
-        // Replace the slot at `pos` with the exclusive in-place so visible
-        // 4-tile rows always have exactly 1 exclusive at the chosen position.
+      if (exclusiveTile && pos < group.length) {
+        // Replace the slot at `pos` with the exclusive in-place.
         group[pos] = exclusiveTile;
         prevPos = pos;
       } else {
@@ -381,6 +378,7 @@ export function searchTools(opts: {
       }
 
       injected.push(...group);
+      groupIdx++;
     }
     results = injected;
   }

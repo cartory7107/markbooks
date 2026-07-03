@@ -279,12 +279,10 @@ function Index() {
     fetch(`/search-api.json?${params}`)
       .then((r) => r.json())
       .then((data: { results: Tool[]; total: number }) => {
-        // In browsing mode, prepend the verified top-20 tools first
-        const initialTools = (!query.trim() && activeCategory === "All" && pricing === "All" && (!activeFilter || activeFilter === "today"))
-          ? catalog.tools.slice(0, 20) : [];
+        // Use search results directly — server already handles ranking + exclusive injection
         setCatalog((prev) => ({
           ...prev,
-          tools: [...initialTools, ...data.results.filter((t: Tool) => !initialTools.some((it: Tool) => it.n === t.n))],
+          tools: data.results,
         }));
         setTotalResults(data.total);
         setSearchLoading(false);
@@ -1675,10 +1673,10 @@ const ToolCard = memo(function ToolCard({
         window.location.href = `/tool/${toolSlug}`;
       }}
       style={cardStyle}
-      className={`tool-lift flex min-w-0 flex-col rounded-xl border p-4 cursor-pointer ${
+      className={`tool-lift flex min-w-0 flex-col rounded-xl border-2 p-4 cursor-pointer ${
         exclusive
-          ? "border-fuchsia-400/40 ring-1 ring-fuchsia-400/30 shadow-[0_0_24px_-12px_rgba(217,70,239,0.45)]"
-          : `border-border bg-card ${featured ? "ring-1 ring-primary/20" : ""}`
+          ? "border-fuchsia-400/60 ring-1 ring-fuchsia-400/30 shadow-[0_0_24px_-12px_rgba(217,70,239,0.45)]"
+          : `border-zinc-300 dark:border-zinc-600 bg-card ${featured ? "ring-1 ring-primary/20" : ""}`
       }`}
     >
       <div className="flex min-w-0 items-start gap-3">
@@ -1710,7 +1708,7 @@ const ToolCard = memo(function ToolCard({
               if (!style) return null;
               return (
                 <span className={`shrink-0 rounded-md px-2 py-0.5 text-[10px] font-extrabold shadow-sm ${style.bg} ${style.text}`}>
-                  {tool.fl && !tool.fl.startsWith("http") ? tool.fl : style.label}
+                  {style.label}
                 </span>
               );
             })()}
