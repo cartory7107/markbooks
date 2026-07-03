@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, useRef, useCallback } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import {
   ArrowRight,
   Bot,
@@ -1600,7 +1600,7 @@ function generateHashtags(tool: Tool): string[] {
 // Reaction emojis for the popup
 const REACTION_EMOJIS = ["👍", "❤️", "🔥", "😮", "😢"];
 
-function ToolCard({
+const ToolCard = memo(function ToolCard({
   tool,
   saved,
   onToggleSave,
@@ -1659,8 +1659,10 @@ function ToolCard({
         backgroundImage: "url('/holographic-card.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-      }
-    : {};
+        contentVisibility: "auto",
+        containIntrinsicSize: "260px",
+      } as React.CSSProperties
+    : ({ contentVisibility: "auto", containIntrinsicSize: "260px" } as React.CSSProperties);
 
   const toolSlug = tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -1824,7 +1826,7 @@ function ToolCard({
       </div>
     </article>
   );
-}
+});
 
 function EmptyState({ onReset }: { onReset: () => void }) {
   return (

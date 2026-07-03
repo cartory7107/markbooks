@@ -155,6 +155,11 @@ function isRich(t: Tool): boolean {
   return !!t.fl && (t.d?.length ?? 0) >= 40;
 }
 
+/** Tools without a logo/favicon usually mean stale or dead sites. */
+function hasLogo(t: Tool): boolean {
+  return !!t.fl && t.fl.length > 0;
+}
+
 /** Hash a string → stable non-negative int (FNV-1a). */
 function hashStr(s: string): number {
   let h = 0x811c9dc5;
@@ -275,6 +280,7 @@ export function searchTools(opts: {
     //   tier 9: repo / hosting domains (GitHub, Vercel…) → bottom
     const tier = (t: Tool) => {
       if (isDemoted(t.u)) return 9;
+      if (!hasLogo(t)) return 8; // no logo → likely stale/broken, push down
       const verified = trendingSet.has(t.n.toLowerCase());
       const rich = isRich(t);
       if (verified && rich) return 0;
@@ -391,6 +397,7 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
   const FREE = new Set(["Free", "Free Plan", "Free Trial", "Free Credits", "Daily Free", "Monthly Free", "Open Source", "open_source", "freemium"]);
   const tier = (t: Tool) => {
     if (isDemoted(t.u)) return 9;
+    if (!hasLogo(t)) return 8;
     const v = verified.has(t.n.toLowerCase());
     const rich = isRich(t);
     if (v && rich) return 0;
