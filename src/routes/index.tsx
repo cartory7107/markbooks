@@ -1600,7 +1600,7 @@ function generateHashtags(tool: Tool): string[] {
 // Reaction emojis for the popup
 const REACTION_EMOJIS = ["👍", "❤️", "🔥", "😮", "😢"];
 
-function ToolCard({
+const ToolCard = memo(function ToolCard({
   tool,
   saved,
   onToggleSave,
