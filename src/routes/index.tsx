@@ -1826,7 +1826,7 @@ const ToolCard = memo(function ToolCard({
       </div>
     </article>
   );
-}
+});
 
 function EmptyState({ onReset }: { onReset: () => void }) {
   return (
