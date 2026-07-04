@@ -42,7 +42,22 @@ export type Tool = {
   ex?: boolean;
   /** Trending flag — verified-pool tool that is also viral/popular. */
   tr?: boolean;
+  /** Admin-assigned badges: Verified, Exclusive, Trending, Underrated, Super Valuable (+ custom). */
+  badges?: string[];
+  /** Admin-set positioning (lower = higher rank). Applied globally across listings. */
+  pos?: number;
 };
+
+/** Canonical premium badges available in the admin panel. Order = display priority. */
+export const PREMIUM_BADGES = [
+  "Verified",
+  "Exclusive",
+  "Trending",
+  "Underrated",
+  "Super Valuable",
+] as const;
+export type PremiumBadge = (typeof PREMIUM_BADGES)[number];
+
 
 
 export type VerifiedTool = { n: string; d: string; c: string; g: string; p: string; u: string; fl?: string };
