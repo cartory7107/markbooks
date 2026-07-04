@@ -22,7 +22,8 @@ export const Route = createFileRoute("/search-api.json")({
         const offset = parseInt(url.searchParams.get("offset") || "0", 10);
         const limit = parseInt(url.searchParams.get("limit") || "20", 10);
 
-        const data = searchTools({ q, category, pricing, sort, offset, limit });
+        const overlay = await getAdminOverlay();
+        const data = searchTools({ q, category, pricing, sort, offset, limit, overlay });
 
         return new Response(JSON.stringify(data), {
           headers: {
