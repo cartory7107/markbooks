@@ -397,11 +397,17 @@ export function searchTools(opts: {
 
 
   // Get the page of results, then mark trending tags on every tile.
+  // Also auto-set `ex:true` for tools with the admin "Exclusive" badge so
+  // they render with the premium holographic background.
   let results: Tool[] = filtered.slice(offset, offset + limit).map((t) => {
     const key = t.n.toLowerCase();
-    if (trendingSet.has(key)) return { ...t, tr: true };
-    return t;
+    const hasExclusiveBadge = (t.badges || []).some((b) => b.toLowerCase() === "exclusive");
+    let out: Tool = t;
+    if (trendingSet.has(key)) out = { ...out, tr: true };
+    if (hasExclusiveBadge) out = { ...out, ex: true };
+    return out;
   });
+
 
   // Inject exclusive tiles — 1 per 5-tile group, random position per group.
   // Browsing mode only. Starts from the VERY FIRST position (no skipping).
