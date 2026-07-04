@@ -210,6 +210,36 @@ function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: num
 }
 
 /**
+ * Admin override rank — LOWER is better. Applied as the final stable sort so
+ * admin-assigned positioning & badges always take precedence over relevance
+ * & tier ordering. Ties preserve prior order (side-by-side placement).
+ */
+export function adminRankKey(t: Tool): number {
+  if (typeof t.pos === "number" && Number.isFinite(t.pos)) {
+    // 1..999999 range for positioned tools. Comes first.
+    return Math.max(1, Math.min(999999, Math.floor(t.pos)));
+  }
+  const badges = t.badges || [];
+  if (badges.length === 0) return 10_000_000;
+  const has = (b: string) => badges.some((x) => x.toLowerCase() === b.toLowerCase());
+  let rank = 5_000_000;
+  if (has("Verified")) rank = 1_000_000;
+  else if (has("Exclusive")) rank = 2_000_000;
+  else if (has("Trending")) rank = 3_000_000;
+  else if (has("Super Valuable")) rank = 3_500_000;
+  else if (has("Underrated")) rank = 4_000_000;
+  // More badges → tighter rank (subtract up to 100k)
+  rank -= Math.min(5, badges.length) * 20_000;
+  return rank;
+}
+
+export function adminRankSort(tools: Tool[]): Tool[] {
+  return tools.slice().sort((a, b) => adminRankKey(a) - adminRankKey(b));
+}
+
+
+
+/**
  * Server-side search & filter with relevance scoring, pagination, ranking
  * (verified-first, repos-last) and organic exclusive injection.
  */
