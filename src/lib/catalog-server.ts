@@ -98,7 +98,7 @@ export function getTopToolsBundle(overlay?: AdminOverlay) {
   const emojis = getCategoryEmojis();
   const verifiedPool = getVerifiedPool();
 
-  const tools = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
+  const tools = overlay ? applyOverlay(allTools, overlay) : allTools;
 
   let top20: Tool[] = [];
   let gems: Tool[] = [];
@@ -210,7 +210,7 @@ export function searchTools(opts: {
   const { q = "", category = "All", pricing = "All", sort = "", offset = 0, limit = 50, overlay } = opts;
   const catalog = getCatalog();
   const exclusivePool = getVerifiedPool();
-  const allTools = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
+  const allTools = overlay ? applyOverlay(allTools, overlay) : allTools;
 
   const term = q.trim().toLowerCase();
 
@@ -252,7 +252,7 @@ export function searchTools(opts: {
   const shuffledExclusives = seededShuffle(categoryExclusives, offset);
   let exclusiveIndex = 0;
 
-  let filtered = catalog.tools.filter(
+  let filtered = allTools.filter(
     (tool) =>
       (!term || `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(term)) &&
       matchPricing(tool.p) &&
@@ -322,7 +322,7 @@ export function searchTools(opts: {
     if (words.length > 0) {
       // Try each word individually for partial matches
       for (const w of words) {
-        const partials = catalog.tools.filter(
+        const partials = allTools.filter(
           (tool) => `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(w.toLowerCase().slice(0, -1)) || `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(w.toLowerCase())
         );
         if (partials.length > 0) {
@@ -333,7 +333,7 @@ export function searchTools(opts: {
     }
     // If still nothing, return top popular tools
     if (filtered.length === 0) {
-      filtered = catalog.tools
+      filtered = allTools
         .filter((t) => !isDemoted(t.u))
         .slice(0, limit)
         .map((t) => ({ ...t, tr: trendingSet.has(t.n.toLowerCase()) }));
