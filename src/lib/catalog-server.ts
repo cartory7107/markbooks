@@ -22,6 +22,9 @@ import categoryMapJson from "../../public/category-map.json";
 
 const CATEGORY_MAP = categoryMapJson as unknown as Record<string, string>;
 
+import type { AdminOverlay } from "./admin-overlay.server";
+import { applyOverlay } from "./admin-overlay.server";
+
 /** Normalize a raw category to one of ~100 major categories. */
 export function normalizeCategory(cat: string): string {
   return CATEGORY_MAP[cat] || "AI Other";
@@ -90,22 +93,24 @@ function shuffle<T>(arr: T[]): T[] {
  * Returns the "homepage bundle": top 20 shuffled verified tools + all categories + emojis + total count.
  * This response is ~10-15 KB instead of 11 MB.
  */
-export function getTopToolsBundle() {
+export function getTopToolsBundle(overlay?: AdminOverlay) {
   const catalog = getCatalog();
   const emojis = getCategoryEmojis();
   const verifiedPool = getVerifiedPool();
 
-  const tools = catalog.tools;
+  const tools = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
 
   let top20: Tool[] = [];
   let gems: Tool[] = [];
 
   if (verifiedPool.length > 0 && tools.length > 0) {
     const verifiedNames = new Set(verifiedPool.map((v) => v.n));
-    const shuffledPool = shuffle(verifiedPool).slice(0, 20) as Tool[];
+    const pool = overlay
+      ? (applyOverlay(verifiedPool as Tool[], overlay) as Tool[])
+      : (verifiedPool as Tool[]);
+    const shuffledPool = shuffle(pool).slice(0, 20);
     const restTools = tools.filter((t) => !verifiedNames.has(t.n));
     top20 = shuffledPool;
-    // Hidden gems — pick 3 from random positions
     gems = restTools.filter((_, i) => i % 97 === 0).slice(0, 3);
   } else if (tools.length > 0) {
     top20 = shuffle(tools).slice(0, 20);
@@ -200,10 +205,12 @@ export function searchTools(opts: {
   sort?: string;
   offset?: number;
   limit?: number;
+  overlay?: AdminOverlay;
 }) {
-  const { q = "", category = "All", pricing = "All", sort = "", offset = 0, limit = 50 } = opts;
+  const { q = "", category = "All", pricing = "All", sort = "", offset = 0, limit = 50, overlay } = opts;
   const catalog = getCatalog();
   const exclusivePool = getVerifiedPool();
+  const allTools: Tool[] = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
 
   const term = q.trim().toLowerCase();
 
@@ -245,7 +252,7 @@ export function searchTools(opts: {
   const shuffledExclusives = seededShuffle(categoryExclusives, offset);
   let exclusiveIndex = 0;
 
-  let filtered = catalog.tools.filter(
+  let filtered = allTools.filter(
     (tool) =>
       (!term || `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(term)) &&
       matchPricing(tool.p) &&
@@ -315,7 +322,7 @@ export function searchTools(opts: {
     if (words.length > 0) {
       // Try each word individually for partial matches
       for (const w of words) {
-        const partials = catalog.tools.filter(
+        const partials = allTools.filter(
           (tool) => `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(w.toLowerCase().slice(0, -1)) || `${tool.n} ${tool.d} ${tool.c} ${tool.g}`.toLowerCase().includes(w.toLowerCase())
         );
         if (partials.length > 0) {
@@ -326,7 +333,7 @@ export function searchTools(opts: {
     }
     // If still nothing, return top popular tools
     if (filtered.length === 0) {
-      filtered = catalog.tools
+      filtered = allTools
         .filter((t) => !isDemoted(t.u))
         .slice(0, limit)
         .map((t) => ({ ...t, tr: trendingSet.has(t.n.toLowerCase()) }));

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { searchTools } from "@/lib/catalog-server";
+import { getAdminOverlay } from "@/lib/admin-overlay.server";
 
 /**
  * Server-side search endpoint with pagination.
@@ -21,12 +22,13 @@ export const Route = createFileRoute("/search-api.json")({
         const offset = parseInt(url.searchParams.get("offset") || "0", 10);
         const limit = parseInt(url.searchParams.get("limit") || "20", 10);
 
-        const data = searchTools({ q, category, pricing, sort, offset, limit });
+        const overlay = await getAdminOverlay();
+        const data = searchTools({ q, category, pricing, sort, offset, limit, overlay });
 
         return new Response(JSON.stringify(data), {
           headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "public, max-age=30, s-maxage=120",
+            "Cache-Control": "public, max-age=5, s-maxage=5",
           },
         });
       },
