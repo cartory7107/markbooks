@@ -522,17 +522,20 @@ export const Route = createFileRoute("/tool/$slug")({
     handlers: {
       GET: async ({ params }) => {
         const { slug } = params;
+        const { getAdminOverlay, applyOverlay } = await import("@/lib/admin-overlay.server");
         const catalog = getCatalog();
         const emojis = getCategoryEmojis();
+        const overlay = await getAdminOverlay();
+        const allTools = applyOverlay(catalog.tools, overlay);
 
         let tool: Tool | null = null;
-        for (const t of catalog.tools) {
+        for (const t of allTools) {
           if (slugify(t.n) === slug) { tool = t; break; }
         }
         if (!tool) return new Response("Not Found", { status: 404, headers: { "Content-Type": "text/plain" } });
 
         const normCat = normalizeCategory(tool.c);
-        const related = catalog.tools
+        const related = allTools
           .filter(t => (normalizeCategory(t.c) === normCat || t.g === tool!.g) && t.n !== tool!.n)
           .slice(0, 8);
 
