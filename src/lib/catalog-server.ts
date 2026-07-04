@@ -22,6 +22,9 @@ import categoryMapJson from "../../public/category-map.json";
 
 const CATEGORY_MAP = categoryMapJson as unknown as Record<string, string>;
 
+import type { AdminOverlay } from "./admin-overlay.server";
+import { applyOverlay } from "./admin-overlay.server";
+
 /** Normalize a raw category to one of ~100 major categories. */
 export function normalizeCategory(cat: string): string {
   return CATEGORY_MAP[cat] || "AI Other";
