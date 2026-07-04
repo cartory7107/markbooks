@@ -54,7 +54,12 @@ type Tool = {
   ex?: boolean;
   /** Trending tag (verified-pool tool). */
   tr?: boolean;
+  /** Admin-assigned premium badges. */
+  badges?: string[];
+  /** Admin-set positioning (lower = higher rank). */
+  pos?: number;
 };
+
 
 
 const PRICING_STYLES: Record<string, { bg: string; text: string; label: string }> = {
