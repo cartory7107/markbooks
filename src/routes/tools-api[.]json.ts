@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getTopToolsBundle } from "@/lib/catalog-server";
+import { getAdminOverlay } from "@/lib/admin-overlay.server";
 
 /**
  * Lightweight API endpoint — returns only the data the homepage needs:
@@ -13,11 +14,12 @@ export const Route = createFileRoute("/tools-api.json")({
   server: {
     handlers: {
       GET: async () => {
-        const data = getTopToolsBundle();
+        const overlay = await getAdminOverlay();
+        const data = getTopToolsBundle(overlay);
         return new Response(JSON.stringify(data), {
           headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "public, max-age=60, s-maxage=300",
+            "Cache-Control": "public, max-age=5, s-maxage=5",
           },
         });
       },
