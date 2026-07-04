@@ -93,22 +93,24 @@ function shuffle<T>(arr: T[]): T[] {
  * Returns the "homepage bundle": top 20 shuffled verified tools + all categories + emojis + total count.
  * This response is ~10-15 KB instead of 11 MB.
  */
-export function getTopToolsBundle() {
+export function getTopToolsBundle(overlay?: AdminOverlay) {
   const catalog = getCatalog();
   const emojis = getCategoryEmojis();
   const verifiedPool = getVerifiedPool();
 
-  const tools = catalog.tools;
+  const tools = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
 
   let top20: Tool[] = [];
   let gems: Tool[] = [];
 
   if (verifiedPool.length > 0 && tools.length > 0) {
     const verifiedNames = new Set(verifiedPool.map((v) => v.n));
-    const shuffledPool = shuffle(verifiedPool).slice(0, 20) as Tool[];
+    const pool = overlay
+      ? (applyOverlay(verifiedPool as Tool[], overlay) as Tool[])
+      : (verifiedPool as Tool[]);
+    const shuffledPool = shuffle(pool).slice(0, 20);
     const restTools = tools.filter((t) => !verifiedNames.has(t.n));
     top20 = shuffledPool;
-    // Hidden gems — pick 3 from random positions
     gems = restTools.filter((_, i) => i % 97 === 0).slice(0, 3);
   } else if (tools.length > 0) {
     top20 = shuffle(tools).slice(0, 20);
