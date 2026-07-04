@@ -471,6 +471,9 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return 3;
   };
   return tools.slice().sort((a, b) => {
+    // Admin override wins first.
+    const ar = adminRankKey(a), br = adminRankKey(b);
+    if (ar !== br) return ar - br;
     const ta = tier(a), tb = tier(b);
     if (ta !== tb) return ta - tb;
     const fa = FREE.has(a.p) ? 0 : 1;
@@ -478,4 +481,5 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return fa - fb;
   });
 }
+
 
