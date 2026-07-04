@@ -355,7 +355,16 @@ export function searchTools(opts: {
     }
   }
 
+  // ADMIN OVERRIDE — always wins. Applied as a final stable sort so it beats
+  // relevance/tier ordering. Uses:
+  //   1. explicit `pos` (lower = higher; ties preserve original order = side-by-side)
+  //   2. Verified badge → top
+  //   3. Exclusive badge → second
+  //   4. more badges = higher
+  filtered = adminRankSort(filtered);
+
   const total = filtered.length;
+
 
   // Get the page of results, then mark trending tags on every tile.
   let results: Tool[] = filtered.slice(offset, offset + limit).map((t) => {
