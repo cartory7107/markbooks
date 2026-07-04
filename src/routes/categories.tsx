@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getCatalog, getCategoryEmojis, slugify } from "@/lib/catalog-server";
-import { getAdminOverlay } from "@/lib/admin-overlay.server";
-import { applyOverlay, normalizeCategory } from "@/lib/catalog-server";
+import { getCatalog, getCategoryEmojis, slugify, normalizeCategory } from "@/lib/catalog-server";
+import { getAdminOverlay, applyOverlay } from "@/lib/admin-overlay.server";
+
 
 const loadCategories = createServerFn({ method: "GET" }).handler(async () => {
   const overlay = await getAdminOverlay();
