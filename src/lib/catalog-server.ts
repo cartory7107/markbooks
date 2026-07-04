@@ -42,7 +42,22 @@ export type Tool = {
   ex?: boolean;
   /** Trending flag — verified-pool tool that is also viral/popular. */
   tr?: boolean;
+  /** Admin-assigned badges: Verified, Exclusive, Trending, Underrated, Super Valuable (+ custom). */
+  badges?: string[];
+  /** Admin-set positioning (lower = higher rank). Applied globally across listings. */
+  pos?: number;
 };
+
+/** Canonical premium badges available in the admin panel. Order = display priority. */
+export const PREMIUM_BADGES = [
+  "Verified",
+  "Exclusive",
+  "Trending",
+  "Underrated",
+  "Super Valuable",
+] as const;
+export type PremiumBadge = (typeof PREMIUM_BADGES)[number];
+
 
 
 export type VerifiedTool = { n: string; d: string; c: string; g: string; p: string; u: string; fl?: string };
@@ -195,6 +210,36 @@ function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: num
 }
 
 /**
+ * Admin override rank — LOWER is better. Applied as the final stable sort so
+ * admin-assigned positioning & badges always take precedence over relevance
+ * & tier ordering. Ties preserve prior order (side-by-side placement).
+ */
+export function adminRankKey(t: Tool): number {
+  if (typeof t.pos === "number" && Number.isFinite(t.pos)) {
+    // 1..999999 range for positioned tools. Comes first.
+    return Math.max(1, Math.min(999999, Math.floor(t.pos)));
+  }
+  const badges = t.badges || [];
+  if (badges.length === 0) return 10_000_000;
+  const has = (b: string) => badges.some((x) => x.toLowerCase() === b.toLowerCase());
+  let rank = 5_000_000;
+  if (has("Verified")) rank = 1_000_000;
+  else if (has("Exclusive")) rank = 2_000_000;
+  else if (has("Trending")) rank = 3_000_000;
+  else if (has("Super Valuable")) rank = 3_500_000;
+  else if (has("Underrated")) rank = 4_000_000;
+  // More badges → tighter rank (subtract up to 100k)
+  rank -= Math.min(5, badges.length) * 20_000;
+  return rank;
+}
+
+export function adminRankSort(tools: Tool[]): Tool[] {
+  return tools.slice().sort((a, b) => adminRankKey(a) - adminRankKey(b));
+}
+
+
+
+/**
  * Server-side search & filter with relevance scoring, pagination, ranking
  * (verified-first, repos-last) and organic exclusive injection.
  */
@@ -340,14 +385,29 @@ export function searchTools(opts: {
     }
   }
 
+  // ADMIN OVERRIDE — always wins. Applied as a final stable sort so it beats
+  // relevance/tier ordering. Uses:
+  //   1. explicit `pos` (lower = higher; ties preserve original order = side-by-side)
+  //   2. Verified badge → top
+  //   3. Exclusive badge → second
+  //   4. more badges = higher
+  filtered = adminRankSort(filtered);
+
   const total = filtered.length;
 
+
   // Get the page of results, then mark trending tags on every tile.
+  // Also auto-set `ex:true` for tools with the admin "Exclusive" badge so
+  // they render with the premium holographic background.
   let results: Tool[] = filtered.slice(offset, offset + limit).map((t) => {
     const key = t.n.toLowerCase();
-    if (trendingSet.has(key)) return { ...t, tr: true };
-    return t;
+    const hasExclusiveBadge = (t.badges || []).some((b) => b.toLowerCase() === "exclusive");
+    let out: Tool = t;
+    if (trendingSet.has(key)) out = { ...out, tr: true };
+    if (hasExclusiveBadge) out = { ...out, ex: true };
+    return out;
   });
+
 
   // Inject exclusive tiles — 1 per 5-tile group, random position per group.
   // Browsing mode only. Starts from the VERY FIRST position (no skipping).
@@ -411,6 +471,9 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return 3;
   };
   return tools.slice().sort((a, b) => {
+    // Admin override wins first.
+    const ar = adminRankKey(a), br = adminRankKey(b);
+    if (ar !== br) return ar - br;
     const ta = tier(a), tb = tier(b);
     if (ta !== tb) return ta - tb;
     const fa = FREE.has(a.p) ? 0 : 1;
@@ -418,4 +481,5 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return fa - fb;
   });
 }
+
 
