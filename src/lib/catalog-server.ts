@@ -210,7 +210,7 @@ export function searchTools(opts: {
   const { q = "", category = "All", pricing = "All", sort = "", offset = 0, limit = 50, overlay } = opts;
   const catalog = getCatalog();
   const exclusivePool = getVerifiedPool();
-  const allTools = overlay ? applyOverlay(allTools, overlay) : allTools;
+  const allTools: Tool[] = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
 
   const term = q.trim().toLowerCase();
 
