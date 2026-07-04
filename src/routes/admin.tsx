@@ -534,7 +534,10 @@ function ToolsTab({
           p: editForm.p || editTool.p,
           u: editForm.u || editTool.u,
           fl: editForm.fl || editTool.fl,
+          badges: editForm.badges || [],
+          pos: typeof editForm.pos === "number" && Number.isFinite(editForm.pos) ? editForm.pos : undefined,
         },
+
         action: "edit",
       });
       if (error) throw error;
