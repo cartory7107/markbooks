@@ -28,7 +28,7 @@ export const Route = createFileRoute("/search-api.json")({
         return new Response(JSON.stringify(data), {
           headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "public, max-age=30, s-maxage=120",
+            "Cache-Control": "public, max-age=5, s-maxage=5",
           },
         });
       },
