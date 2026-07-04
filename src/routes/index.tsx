@@ -1693,16 +1693,41 @@ const ToolCard = memo(function ToolCard({
                 Recommended
               </span>
             )}
-            {exclusive && (
-              <span className="shrink-0 rounded-md bg-gradient-to-r from-fuchsia-500 via-pink-500 to-violet-500 px-2 py-0.5 text-[10px] font-extrabold text-white shadow-[0_0_10px_-2px_rgba(217,70,239,0.6)] ring-1 ring-fuchsia-400/50">
-                ✨ Exclusive
-              </span>
-            )}
-            {trending && (
-              <span className="shrink-0 rounded-md bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 text-[10px] font-extrabold text-white shadow-[0_0_10px_-2px_rgba(249,115,22,0.5)] ring-1 ring-orange-400/50">
-                🔥 Trending
-              </span>
-            )}
+            {(() => {
+              // Merge implicit badges (from ex/tr flags) with admin-assigned badges.
+              const set = new Set<string>();
+              if (exclusive) set.add("Exclusive");
+              if (trending) set.add("Trending");
+              for (const b of tool.badges || []) set.add(b);
+              const ORDER = ["Verified", "Exclusive", "Trending", "Super Valuable", "Underrated"];
+              const list = Array.from(set).sort((a, b) => {
+                const ia = ORDER.indexOf(a); const ib = ORDER.indexOf(b);
+                return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+              });
+              const STYLE: Record<string, string> = {
+                "Verified": "bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 ring-1 ring-sky-300/60 shadow-[0_0_14px_-3px_rgba(56,189,248,0.75)]",
+                "Exclusive": "bg-gradient-to-r from-fuchsia-500 via-pink-500 to-violet-500 ring-1 ring-fuchsia-400/60 shadow-[0_0_12px_-2px_rgba(217,70,239,0.7)]",
+                "Trending": "bg-gradient-to-r from-orange-500 to-amber-500 ring-1 ring-orange-400/60 shadow-[0_0_12px_-2px_rgba(249,115,22,0.6)]",
+                "Super Valuable": "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 ring-1 ring-emerald-300/60 shadow-[0_0_12px_-2px_rgba(16,185,129,0.6)]",
+                "Underrated": "bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-400 ring-1 ring-amber-300/60 shadow-[0_0_12px_-2px_rgba(245,158,11,0.6)]",
+              };
+              const ICON: Record<string, string> = {
+                "Verified": "✓",
+                "Exclusive": "✨",
+                "Trending": "🔥",
+                "Super Valuable": "💎",
+                "Underrated": "⭐",
+              };
+              return list.map((b) => (
+                <span
+                  key={b}
+                  className={`shrink-0 rounded-md px-2 py-0.5 text-[10px] font-extrabold text-white ${STYLE[b] || "bg-gradient-to-r from-slate-500 to-slate-700"}`}
+                >
+                  {ICON[b] || "🏅"} {b}
+                </span>
+              ));
+            })()}
+
             {(() => {
               const style = PRICING_STYLES[tool.p];
               if (!style) return null;
