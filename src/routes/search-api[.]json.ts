@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { searchTools } from "@/lib/catalog-server";
+import { getAdminOverlay } from "@/lib/admin-overlay.server";
 
 /**
  * Server-side search endpoint with pagination.
