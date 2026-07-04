@@ -62,7 +62,18 @@ type Tool = {
   p: string;
   u: string;
   fl?: string;
+  badges?: string[];
+  pos?: number;
 };
+
+const PREMIUM_BADGES = [
+  "Verified",
+  "Exclusive",
+  "Trending",
+  "Underrated",
+  "Super Valuable",
+];
+
 
 type CatalogData = {
   tools: Tool[];
