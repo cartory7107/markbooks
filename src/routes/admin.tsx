@@ -741,6 +741,60 @@ function ToolsTab({
               <label className="mb-1 block text-sm font-medium">URL *</label>
               <Input value={editForm.u || ""} onChange={(e) => setEditForm({ ...editForm, u: e.target.value })} />
             </div>
+
+            {/* Premium badges — admin-only. Verified pushes to #1, Exclusive to #2, more badges = higher rank. */}
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+              <label className="mb-2 block text-sm font-semibold">Premium Badges</label>
+              <p className="mb-2 text-[11px] text-muted-foreground">
+                Verified = #1 rank · Exclusive = #2 (holographic BG) · more badges rank higher. Select up to 5.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {PREMIUM_BADGES.map((b) => {
+                  const active = (editForm.badges || []).includes(b);
+                  return (
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => {
+                        const cur = new Set(editForm.badges || []);
+                        if (active) cur.delete(b);
+                        else if (cur.size < 5) cur.add(b);
+                        setEditForm({ ...editForm, badges: Array.from(cur) });
+                      }}
+                      className={`rounded-md px-2.5 py-1 text-xs font-bold transition-all ${
+                        active
+                          ? b === "Verified" ? "bg-gradient-to-r from-sky-500 to-indigo-500 text-white shadow"
+                          : b === "Exclusive" ? "bg-gradient-to-r from-fuchsia-500 to-violet-500 text-white shadow"
+                          : b === "Trending" ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow"
+                          : b === "Super Valuable" ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow"
+                          : "bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow"
+                          : "border border-border bg-background text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {active ? "✓ " : "+ "}{b}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium">Positioning (rank)</label>
+              <Input
+                type="number"
+                min={1}
+                placeholder="e.g. 1 — leave empty for automatic ranking"
+                value={typeof editForm.pos === "number" ? editForm.pos : ""}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setEditForm({ ...editForm, pos: v === "" ? undefined : Number(v) });
+                }}
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Lower number = higher rank across category, rankings, and All pages. Two tools with the same number appear side-by-side.
+              </p>
+            </div>
+
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditTool(null)}>Cancel</Button>
