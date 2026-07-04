@@ -98,7 +98,7 @@ export function getTopToolsBundle(overlay?: AdminOverlay) {
   const emojis = getCategoryEmojis();
   const verifiedPool = getVerifiedPool();
 
-  const tools = overlay ? applyOverlay(allTools, overlay) : allTools;
+  const tools = overlay ? applyOverlay(catalog.tools, overlay) : catalog.tools;
 
   let top20: Tool[] = [];
   let gems: Tool[] = [];
