@@ -64,6 +64,8 @@ type Tool = {
   fl?: string;
   badges?: string[];
   pos?: number;
+  posr?: number;
+  posa?: number;
 };
 
 const PREMIUM_BADGES = [
