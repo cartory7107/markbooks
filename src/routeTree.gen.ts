@@ -26,6 +26,7 @@ import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
+import { Route as BlogAiGenerateApiDotjsonRouteImport } from './routes/blog-ai-generate-api[.]json'
 import { Route as BlogAdminApiDotjsonRouteImport } from './routes/blog-admin-api[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiNewsApiDotjsonRouteImport } from './routes/ai-news-api[.]json'
@@ -129,6 +130,12 @@ const BlogCategoriesApiDotjsonRoute =
     path: '/blog-categories-api.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogAiGenerateApiDotjsonRoute =
+  BlogAiGenerateApiDotjsonRouteImport.update({
+    id: '/blog-ai-generate-api.json',
+    path: '/blog-ai-generate-api.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogAdminApiDotjsonRoute = BlogAdminApiDotjsonRouteImport.update({
   id: '/blog-admin-api.json',
   path: '/blog-admin-api.json',
@@ -218,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
@@ -253,6 +261,7 @@ export interface FileRoutesByTo {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
@@ -289,6 +298,7 @@ export interface FileRoutesById {
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
   '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/blog-admin-api.json'
+    | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/blog-admin-api.json'
+    | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
@@ -396,6 +408,7 @@ export interface FileRouteTypes {
     | '/ai-news-api.json'
     | '/auth'
     | '/blog-admin-api.json'
+    | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
@@ -432,6 +445,7 @@ export interface RootRouteChildren {
   AiNewsApiDotjsonRoute: typeof AiNewsApiDotjsonRoute
   AuthRoute: typeof AuthRoute
   BlogAdminApiDotjsonRoute: typeof BlogAdminApiDotjsonRoute
+  BlogAiGenerateApiDotjsonRoute: typeof BlogAiGenerateApiDotjsonRoute
   BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
   ContactRoute: typeof ContactRoute
@@ -581,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogCategoriesApiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog-ai-generate-api.json': {
+      id: '/blog-ai-generate-api.json'
+      path: '/blog-ai-generate-api.json'
+      fullPath: '/blog-ai-generate-api.json'
+      preLoaderRoute: typeof BlogAiGenerateApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog-admin-api.json': {
       id: '/blog-admin-api.json'
       path: '/blog-admin-api.json'
@@ -704,6 +725,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiNewsApiDotjsonRoute: AiNewsApiDotjsonRoute,
   AuthRoute: AuthRoute,
   BlogAdminApiDotjsonRoute: BlogAdminApiDotjsonRoute,
+  BlogAiGenerateApiDotjsonRoute: BlogAiGenerateApiDotjsonRoute,
   BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
   ContactRoute: ContactRoute,

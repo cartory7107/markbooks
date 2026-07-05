@@ -264,6 +264,14 @@ export function BlogManagement() {
   // Toggle publish
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
+  // AI Generate
+  const [aiDialogOpen, setAiDialogOpen] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiTopic, setAiTopic] = useState("");
+  const [aiCategory, setAiCategory] = useState("");
+  const [aiTone, setAiTone] = useState("professional");
+  const [aiTargetWords, setAiTargetWords] = useState("1500");
+
   /* ---- categories map ---- */
   const categoryMap = useMemo(() => {
     const m = new Map<string, BlogCategory>();
@@ -448,6 +456,57 @@ export function BlogManagement() {
     });
   };
 
+  /* ---- AI Generate ---- */
+  const handleAiGenerate = async () => {
+    if (!aiTopic.trim()) {
+      toast.error("Please enter a topic");
+      return;
+    }
+    setAiGenerating(true);
+    try {
+      const res = await fetch("/blog-ai-generate-api.json", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: aiTopic,
+          category: aiCategory || undefined,
+          tone: aiTone,
+          targetWords: Number(aiTargetWords) || 1500,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Generation failed");
+
+      const post = data.post;
+      setIsNew(true);
+      setEditingArticle(null);
+      setForm({
+        ...EMPTY_FORM,
+        title: post.title || "",
+        slug: post.slug || "",
+        excerpt: post.excerpt || "",
+        content: post.content_md || "",
+        faq: Array.isArray(post.faq) ? post.faq : [],
+        meta_title: post.meta_title || "",
+        meta_description: post.meta_description || "",
+        tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
+        keywords: Array.isArray(post.keywords) ? post.keywords.join(", ") : "",
+        category_slug: aiCategory || "",
+        ai_generated: true,
+        reading_minutes: post.reading_minutes || 5,
+        status: "draft",
+      });
+      setAiDialogOpen(false);
+      setEditorOpen(true);
+      setAiTopic("");
+      toast.success("Article generated! Review and edit before saving.");
+    } catch (err) {
+      toast.error("AI generation failed: " + (err as Error).message);
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   /* ================================================================ */
   /*  Render                                                           */
   /* ================================================================ */
@@ -462,9 +521,14 @@ export function BlogManagement() {
             Create, edit, and manage blog articles.
           </p>
         </div>
-        <Button onClick={openNewArticle}>
-          <Plus className="size-4" /> New Article
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setAiDialogOpen(true)} className="gap-1.5 border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:hover:bg-purple-950/50">
+            <Sparkles className="size-4" /> AI Generate
+          </Button>
+          <Button onClick={openNewArticle}>
+            <Plus className="size-4" /> New Article
+          </Button>
+        </div>
       </div>
 
       {/* ---- Sub-tabs ---- */}
@@ -656,6 +720,85 @@ export function BlogManagement() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* ---- AI Generate Dialog ---- */}
+      <Dialog open={aiDialogOpen} onOpenChange={setAiDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="size-5 text-purple-500" /> Generate Article with AI
+            </DialogTitle>
+            <DialogDescription>
+              Describe the topic and the AI will create a full blog post draft.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="ai-topic">Topic *</Label>
+              <Textarea
+                id="ai-topic"
+                placeholder="e.g. Best AI code assistants for developers in 2026, How to use AI for content marketing, Comparison of ChatGPT vs Claude vs Gemini..."
+                value={aiTopic}
+                onChange={(e) => setAiTopic(e.target.value)}
+                rows={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ai-category">Category</Label>
+              <Select value={aiCategory} onValueChange={setAiCategory}>
+                <SelectTrigger id="ai-category">
+                  <SelectValue placeholder="Select a category (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((c) => (
+                    <SelectItem key={c.slug} value={c.slug}>
+                      {c.emoji} {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="ai-tone">Tone</Label>
+                <Select value={aiTone} onValueChange={setAiTone}>
+                  <SelectTrigger id="ai-tone">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="casual">Casual & Friendly</SelectItem>
+                    <SelectItem value="educational">Educational</SelectItem>
+                    <SelectItem value="persuasive">Persuasive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ai-length">Length</Label>
+                <Select value={aiTargetWords} onValueChange={setAiTargetWords}>
+                  <SelectTrigger id="ai-length">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="800">Short (~800 words)</SelectItem>
+                    <SelectItem value="1500">Medium (~1,500 words)</SelectItem>
+                    <SelectItem value="3000">Long (~3,000 words)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAiDialogOpen(false)} disabled={aiGenerating}>
+              Cancel
+            </Button>
+            <Button onClick={handleAiGenerate} disabled={aiGenerating || !aiTopic.trim()} className="gap-1.5 bg-purple-600 hover:bg-purple-700">
+              {aiGenerating ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+              {aiGenerating ? "Generating..." : "Generate Article"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* ---- Article Editor Dialog ---- */}
       <Dialog
