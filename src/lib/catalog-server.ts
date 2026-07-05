@@ -470,7 +470,7 @@ export function searchTools(opts: {
  * Standalone ranking helper used by the SSR category page so it follows the
  * same verified-first, repos-last rules as the homepage.
  */
-export function rankBrowseList(tools: Tool[]): Tool[] {
+export function rankBrowseList(tools: Tool[], variant: RankVariant = "category"): Tool[] {
   const verified = new Set(getVerifiedPool().map((v) => v.n.toLowerCase()));
   const FREE = new Set(["Free", "Free Plan", "Free Trial", "Free Credits", "Daily Free", "Monthly Free", "Open Source", "open_source", "freemium"]);
   const tier = (t: Tool) => {
@@ -484,8 +484,8 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return 3;
   };
   return tools.slice().sort((a, b) => {
-    // Admin override wins first.
-    const ar = adminRankKey(a), br = adminRankKey(b);
+    // Admin override wins first (variant-specific).
+    const ar = adminRankKey(a, variant), br = adminRankKey(b, variant);
     if (ar !== br) return ar - br;
     const ta = tier(a), tb = tier(b);
     if (ta !== tb) return ta - tb;
