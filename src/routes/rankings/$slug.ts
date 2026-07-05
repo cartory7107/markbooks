@@ -268,6 +268,76 @@ a{color:#4f46e5;text-decoration:none}
 
   <div class="footer">&copy; 2026 MarkBook — AI Tools Directory.</div>
 </div>
+<script id="rk-cats" type="application/json">${JSON.stringify(allRankings)}</script>
+<script>
+(function(){
+  var data = JSON.parse(document.getElementById('rk-cats').textContent || '[]');
+  var input = document.getElementById('catSearch');
+  var clear = document.getElementById('catClear');
+  var box = document.getElementById('sbResults');
+  var currentSlug = ${JSON.stringify(slug)};
+  var currentCat = ${JSON.stringify(category)};
+  var mail = ${JSON.stringify(feedbackMail)};
+
+  function norm(s){ return (s||'').toLowerCase().trim(); }
+  function score(name, q){
+    var n = norm(name), s = norm(q);
+    if (!s) return 0;
+    if (n === s) return 100;
+    if (n.startsWith(s)) return 80;
+    if (n.indexOf(s) >= 0) return 60;
+    // token overlap
+    var toks = s.split(/\\s+/).filter(Boolean);
+    var hits = 0;
+    for (var i=0;i<toks.length;i++) if (n.indexOf(toks[i]) >= 0) hits++;
+    if (hits) return 30 + hits*5;
+    // char-level fuzzy (letters in order)
+    var j = 0;
+    for (var k=0;k<n.length && j<s.length;k++) if (n[k] === s[j]) j++;
+    if (j === s.length) return 15;
+    return 0;
+  }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function render(q){
+    q = q.trim();
+    if (!q){ box.hidden = true; box.innerHTML = ''; clear.style.display = 'none'; return; }
+    clear.style.display = '';
+    var ranked = data.map(function(d){ return { d: d, s: score(d.name, q) }; })
+      .filter(function(x){ return x.s > 0 && x.d.slug !== currentSlug; })
+      .sort(function(a,b){ return b.s - a.s || b.d.count - a.d.count; })
+      .slice(0, 8);
+    box.hidden = false;
+    if (ranked.length === 0){
+      var subj = encodeURIComponent('New ranking category suggestion: ' + q);
+      var body = encodeURIComponent('Hi MarkBook team,\\n\\nI searched for "' + q + '" on the "' + currentCat + '" ranking page but did not find a matching category. Please consider adding it.\\n\\nThanks!');
+      box.innerHTML = '<div class="sbempty">'
+        + '<h3>No matching ranking for "' + esc(q) + '"</h3>'
+        + '<p>We could not find a similar category. Want us to add one? Send a quick suggestion — it helps us prioritize.</p>'
+        + '<div class="fbrow">'
+        +   '<a class="fb" href="mailto:' + mail + '?subject=' + subj + '&body=' + body + '">✉️ Suggest this category</a>'
+        +   '<a class="fb ghost" href="/submit">Submit an AI tool →</a>'
+        + '</div></div>';
+      return;
+    }
+    box.innerHTML = ranked.map(function(x){
+      var d = x.d;
+      return '<a href="/rankings/best-' + d.slug + '">'
+        + '<div class="sbemoji">' + d.emoji + '</div>'
+        + '<div><div class="sbmatch">Best ' + esc(d.name) + '</div>'
+        + '<div class="sbmeta">' + d.count.toLocaleString() + ' tools · Ranked leaderboard</div></div>'
+        + '</a>';
+    }).join('');
+  }
+
+  input.addEventListener('input', function(){ render(input.value); });
+  input.addEventListener('focus', function(){ if (input.value) render(input.value); });
+  clear.addEventListener('click', function(){ input.value=''; input.focus(); render(''); });
+  document.addEventListener('click', function(e){
+    if (!box.contains(e.target) && e.target !== input) box.hidden = true;
+  });
+})();
+</script>
 </body></html>`;
 
         return new Response(html, {
