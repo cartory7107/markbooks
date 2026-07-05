@@ -81,7 +81,7 @@ export const Route = createFileRoute("/rankings/$slug")({
         }
 
         const inCat = catalog.tools.filter(t => normalizeCategory(t.c) === category || t.c === category || t.g === category);
-        const ranked = rankBrowseList(inCat).slice(0, 25);
+        const ranked = rankBrowseList(inCat, "ranking").slice(0, 25);
         const emoji = emojis[category] || "🤖";
         const canonical = `https://markbook.top/rankings/${slug}`;
 
