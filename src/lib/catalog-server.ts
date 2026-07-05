@@ -44,8 +44,12 @@ export type Tool = {
   tr?: boolean;
   /** Admin-assigned badges: Verified, Exclusive, Trending, Underrated, Super Valuable (+ custom). */
   badges?: string[];
-  /** Admin-set positioning (lower = higher rank). Applied globally across listings. */
+  /** Admin category rank — used inside a category listing (lower = higher). */
   pos?: number;
+  /** Admin rankings-page rank — used on /rankings/{slug} pages (lower = higher). */
+  posr?: number;
+  /** Admin homepage/all-tools rank — used on the main dashboard All view (lower = higher). */
+  posa?: number;
 };
 
 /** Canonical premium badges available in the admin panel. Order = display priority. */
