@@ -195,6 +195,27 @@ a{color:#4f46e5;text-decoration:none}
 .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .pill{padding:8px 14px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#374151}
 .pill:hover{border-color:#6366f1;color:#4f46e5}
+.searchbox{margin:20px 0 4px;position:relative}
+.sbinput{display:flex;align-items:center;gap:10px;padding:0 14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 4px 14px -8px rgba(0,0,0,.08);transition:all .15s}
+.sbinput:focus-within{border-color:#6366f1;box-shadow:0 6px 22px -10px rgba(99,102,241,.4)}
+.sbicon{font-size:15px;opacity:.6}
+.sbinput input{flex:1;border:0;outline:0;padding:14px 0;font:600 15px Inter,system-ui,sans-serif;background:transparent;color:#111827}
+.sbinput button{border:0;background:#f3f4f6;border-radius:999px;width:26px;height:26px;cursor:pointer;color:#6b7280;font-size:12px}
+.sbresults{margin-top:8px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;max-height:340px;overflow-y:auto}
+.sbresults a{display:flex;align-items:center;gap:12px;padding:12px 14px;color:#111827;border-bottom:1px solid #f3f4f6}
+.sbresults a:last-child{border-bottom:0}
+.sbresults a:hover{background:#f9fafb;color:#4f46e5}
+.sbresults .sbemoji{width:34px;height:34px;display:grid;place-items:center;background:rgba(99,102,241,.08);border-radius:9px;font-size:18px}
+.sbresults .sbmeta{font-size:11px;color:#9ca3af;margin-top:1px}
+.sbresults .sbmatch{font-size:14px;font-weight:700}
+.sbempty{padding:20px 16px;text-align:center}
+.sbempty h3{font-size:15px;font-weight:800;color:#111827;margin-bottom:6px}
+.sbempty p{font-size:13px;color:#6b7280;margin-bottom:14px}
+.sbempty .fbrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.sbempty a.fb{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;font-size:13px;font-weight:700;box-shadow:0 6px 18px -8px rgba(99,102,241,.5)}
+.sbempty a.fb.ghost{background:#fff;color:#4f46e5;border:1px solid #e5e7eb;box-shadow:none}
+.footer{border-top:1px solid #e5e7eb;padding:20px 0;text-align:center;font-size:12px;color:#9ca3af}
+@media(max-width:640px){.row{flex-wrap:wrap}.cta-btn{margin-left:60px}}
 .footer{border-top:1px solid #e5e7eb;padding:20px 0;text-align:center;font-size:12px;color:#9ca3af}
 @media(max-width:640px){.row{flex-wrap:wrap}.cta-btn{margin-left:60px}}
 </style>
