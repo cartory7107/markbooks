@@ -141,6 +141,12 @@ export const Route = createFileRoute("/rankings/$slug")({
 </a>`;
         }).join("\n");
 
+        // All rankings for client-side search — { name, slug, emoji, count }
+        const allRankings = allCats
+          .map((c) => ({ name: c, slug: slugify(c), emoji: emojis[c] || "🤖", count: catalog.categories[c] || 0 }))
+          .sort((a, b) => b.count - a.count);
+        const feedbackMail = "cartory7107@gmail.com";
+
         const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
