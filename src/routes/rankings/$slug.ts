@@ -208,12 +208,23 @@ a{color:#4f46e5;text-decoration:none}
     <h1>${esc(prettyTitle)} of 2026</h1>
     <p>${esc(desc)}</p>
   </div>
+
+  <div class="searchbox" role="search">
+    <div class="sbinput">
+      <span class="sbicon">🔎</span>
+      <input id="catSearch" type="text" autocomplete="off" placeholder="Search a ranking category — e.g. chatbot, image, coding…" aria-label="Search ranking categories">
+      <button id="catClear" type="button" aria-label="Clear" style="display:none">✕</button>
+    </div>
+    <div id="sbResults" class="sbresults" hidden></div>
+  </div>
+
   <div class="list">${listHtml}</div>
 
   <div class="sec">
     <h2>How we rank</h2>
     <p>MarkBook rankings blend user ratings, feature depth, data quality, and pricing accessibility. Verified tools with rich descriptions and working links appear first; repository-only listings are demoted. Rankings refresh with each catalog update.</p>
   </div>
+
 
   <div class="sec">
     <h2>Explore more rankings</h2>
