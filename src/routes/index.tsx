@@ -485,7 +485,7 @@ function Index() {
         <div className="sponsor-glow py-2 text-center text-sm text-white relative">
           <span className="font-medium">🔥 Sponsored by MarkBook AI</span>
           <span className="mx-2 opacity-60">—</span>
-          <span className="opacity-90">Discover {totalTools.toLocaleString()}+ AI tools. Updated daily.</span>
+          <span className="opacity-90">Discover 116,000+ AI tools. Updated daily.</span>
           <button
             onClick={() => setShowSponsor(false)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
@@ -757,7 +757,7 @@ function Index() {
           <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
             {catalogLoaded ? (
               <>
-                {totalTools.toLocaleString()} AIs and {categories.length} categories in the best AI tools directory.
+                116,000+ AI tools and {categories.length} categories in the best AI tools directory.
                 Updated daily.
               </>
             ) : (
@@ -797,7 +797,7 @@ function Index() {
           <div className="mx-auto mt-8 flex max-w-3xl items-center justify-center gap-6 sm:gap-10">
             {[
               {
-                value: catalogLoaded ? `${(totalTools / 1000).toFixed(0)}K+` : null,
+                value: catalogLoaded ? "116K+" : null,
                 label: "AI Tools",
                 skeletonWidth: "4ch",
               },
