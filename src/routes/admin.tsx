@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   BarChart3,
+  BookOpen,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -42,6 +43,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BlogManagement } from "@/components/admin/blog-management";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -285,6 +287,7 @@ function AdminDashboard() {
           <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col">
             {[
               { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+              { id: "blog", label: "Blog", icon: BookOpen },
               { id: "tools", label: "Manage Tools", icon: Edit3 },
               { id: "submissions", label: "Submissions", icon: Send },
               { id: "add", label: "Add Tool", icon: Plus },
@@ -310,6 +313,7 @@ function AdminDashboard() {
           {activeTab === "dashboard" && (
             <DashboardTab stats={stats} loading={statsLoading} adminEdits={adminEdits} submissions={submissions} />
           )}
+          {activeTab === "blog" && <BlogManagement />}
           {activeTab === "tools" && (
             <ToolsTab
               catalog={catalog}
