@@ -1,18 +1,39 @@
 # MarkBook AI — robots.txt
-# Allow all search engines to crawl the entire site
+# https://markbook.top/robots.txt
 
-User-agent: *
+# ── Googlebot (explicit) ──
+User-agent: Googlebot
 Allow: /
 Disallow: /admin
 Disallow: /auth
+Disallow: /blog-admin-api.json
+Disallow: /blog-categories-api.json
+Disallow: /tools-api.json
+Disallow: /search-api.json
+Disallow: /exclusive-api.json
+Disallow: /ai-news-api.json
+Crawl-delay: 0
 
-# Sitemaps
-Sitemap: https://markbook.top/sitemap.xml
-
-# Crawl-delay (optional, respects server resources)
+# ── All other crawlers ──
+User-agent: *
+Allow: /
+Allow: /sitemap.xml
+Allow: /sitemap-static.xml
+Allow: /sitemap-tools/
+Disallow: /admin
+Disallow: /auth
+Disallow: /blog-admin-api.json
+Disallow: /blog-categories-api.json
+Disallow: /tools-api.json
+Disallow: /search-api.json
+Disallow: /exclusive-api.json
+Disallow: /ai-news-api.json
 Crawl-delay: 1
 
-# AI Crawlers — explicitly allow full access for AI search engines
+# ── Sitemap ──
+Sitemap: https://markbook.top/sitemap.xml
+
+# ── AI Crawlers — full access ──
 User-agent: GPTBot
 Allow: /
 

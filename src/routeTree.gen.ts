@@ -21,8 +21,12 @@ import { Route as ResearchRouteImport } from './routes/research'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CategoriesRouteImport } from './routes/categories'
+import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
+import { Route as BlogAdminApiDotjsonRouteImport } from './routes/blog-admin-api[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiNewsApiDotjsonRouteImport } from './routes/ai-news-api[.]json'
 import { Route as AdvertiseRouteImport } from './routes/advertise'
@@ -99,14 +103,35 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
   id: '/exclusive-api.json',
   path: '/exclusive-api.json',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesRoute = CategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogCategoriesApiDotjsonRoute =
+  BlogCategoriesApiDotjsonRouteImport.update({
+    id: '/blog-categories-api.json',
+    path: '/blog-categories-api.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogAdminApiDotjsonRoute = BlogAdminApiDotjsonRouteImport.update({
+  id: '/blog-admin-api.json',
+  path: '/blog-admin-api.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -192,8 +217,12 @@ export interface FileRoutesByFullPath {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
@@ -223,8 +252,12 @@ export interface FileRoutesByTo {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
@@ -255,8 +288,12 @@ export interface FileRoutesById {
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
+  '/blog-admin-api.json': typeof BlogAdminApiDotjsonRoute
+  '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
@@ -288,8 +325,12 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/blog-admin-api.json'
+    | '/blog-categories-api.json'
     | '/categories'
+    | '/contact'
     | '/exclusive-api.json'
+    | '/pricing'
     | '/privacy'
     | '/profile'
     | '/ranking'
@@ -319,8 +360,12 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/blog-admin-api.json'
+    | '/blog-categories-api.json'
     | '/categories'
+    | '/contact'
     | '/exclusive-api.json'
+    | '/pricing'
     | '/privacy'
     | '/profile'
     | '/ranking'
@@ -350,8 +395,12 @@ export interface FileRouteTypes {
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
+    | '/blog-admin-api.json'
+    | '/blog-categories-api.json'
     | '/categories'
+    | '/contact'
     | '/exclusive-api.json'
+    | '/pricing'
     | '/privacy'
     | '/profile'
     | '/ranking'
@@ -382,8 +431,12 @@ export interface RootRouteChildren {
   AdvertiseRoute: typeof AdvertiseRoute
   AiNewsApiDotjsonRoute: typeof AiNewsApiDotjsonRoute
   AuthRoute: typeof AuthRoute
+  BlogAdminApiDotjsonRoute: typeof BlogAdminApiDotjsonRoute
+  BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
+  ContactRoute: typeof ContactRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   RankingRoute: typeof RankingRoute
@@ -493,6 +546,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/exclusive-api.json': {
       id: '/exclusive-api.json'
       path: '/exclusive-api.json'
@@ -500,11 +560,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExclusiveApiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories': {
       id: '/categories'
       path: '/categories'
       fullPath: '/categories'
       preLoaderRoute: typeof CategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog-categories-api.json': {
+      id: '/blog-categories-api.json'
+      path: '/blog-categories-api.json'
+      fullPath: '/blog-categories-api.json'
+      preLoaderRoute: typeof BlogCategoriesApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog-admin-api.json': {
+      id: '/blog-admin-api.json'
+      path: '/blog-admin-api.json'
+      fullPath: '/blog-admin-api.json'
+      preLoaderRoute: typeof BlogAdminApiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -622,8 +703,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdvertiseRoute: AdvertiseRoute,
   AiNewsApiDotjsonRoute: AiNewsApiDotjsonRoute,
   AuthRoute: AuthRoute,
+  BlogAdminApiDotjsonRoute: BlogAdminApiDotjsonRoute,
+  BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
+  ContactRoute: ContactRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   RankingRoute: RankingRoute,
@@ -649,3 +734,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

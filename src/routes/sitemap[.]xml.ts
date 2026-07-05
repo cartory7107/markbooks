@@ -10,51 +10,64 @@ const TOOLS_PER_SITEMAP = 50000;
  * stays within search-engine limits (max 50,000 URLs / ~50 MB per file).
  *
  * References:
- *   - /sitemap-static.xml  : public pages + category landing pages
+ *   - /sitemap-static.xml  : public pages + category landing pages + blog posts
  *   - /sitemap-tools/N     : individual tool pages (up to 50k per file)
  */
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const catalog = getCatalog();
-        const now = new Date().toISOString().split("T")[0];
+        try {
+          const catalog = getCatalog();
+          const now = new Date().toISOString().split("T")[0];
 
-        // Build the full deduplicated slug list once (count only) so we can
-        // emit the correct number of child sitemaps.
-        const seenSlugs = new Set<string>();
-        let toolCount = 0;
-        for (const tool of catalog.tools) {
-          const slug = slugify(tool.n);
-          if (!slug) continue; // skip names that produce empty slugs
-          if (seenSlugs.has(slug)) continue; // skip duplicate URLs
-          seenSlugs.add(slug);
-          toolCount++;
+          // Build the full deduplicated slug list once (count only) so we can
+          // emit the correct number of child sitemaps.
+          const seenSlugs = new Set<string>();
+          let toolCount = 0;
+          for (const tool of catalog.tools) {
+            const slug = slugify(tool.n);
+            if (!slug) continue;
+            if (seenSlugs.has(slug)) continue;
+            seenSlugs.add(slug);
+            toolCount++;
+          }
+
+          const sitemapCount = Math.ceil(toolCount / TOOLS_PER_SITEMAP) || 1;
+
+          const sitemaps: string[] = [`${BASE_URL}/sitemap-static.xml`];
+          for (let i = 0; i < sitemapCount; i++) {
+            sitemaps.push(`${BASE_URL}/sitemap-tools/${i}`);
+          }
+
+          const xml = [
+            `<?xml version="1.0" encoding="UTF-8"?>`,
+            `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+            ...sitemaps.map(
+              (loc) =>
+                `  <sitemap>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>`,
+            ),
+            `</sitemapindex>`,
+          ].join("\n");
+
+          return new Response(xml, {
+            status: 200,
+            headers: {
+              "Content-Type": "application/xml; charset=utf-8",
+              "Cache-Control": "public, max-age=3600",
+              "X-Robots-Tag": "noindex",
+            },
+          });
+        } catch (err) {
+          console.error("[sitemap.xml] Error generating sitemap index:", err);
+          return new Response(
+            `<?xml version="1.0" encoding="UTF-8"?><error>Failed to generate sitemap index</error>`,
+            {
+              status: 500,
+              headers: { "Content-Type": "application/xml; charset=utf-8" },
+            },
+          );
         }
-
-        const sitemapCount = Math.ceil(toolCount / TOOLS_PER_SITEMAP) || 1;
-
-        const sitemaps: string[] = [`${BASE_URL}/sitemap-static.xml`];
-        for (let i = 0; i < sitemapCount; i++) {
-          sitemaps.push(`${BASE_URL}/sitemap-tools/${i}`);
-        }
-
-        const xml = [
-          `<?xml version="1.0" encoding="UTF-8"?>`,
-          `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-          ...sitemaps.map(
-            (loc) =>
-              `  <sitemap>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>`,
-          ),
-          `</sitemapindex>`,
-        ].join("\n");
-
-        return new Response(xml, {
-          headers: {
-            "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=3600",
-          },
-        });
       },
     },
   },
