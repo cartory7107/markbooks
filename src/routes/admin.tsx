@@ -782,22 +782,59 @@ function ToolsTab({
               </div>
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium">Positioning (rank)</label>
-              <Input
-                type="number"
-                min={1}
-                placeholder="e.g. 1 — leave empty for automatic ranking"
-                value={typeof editForm.pos === "number" ? editForm.pos : ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setEditForm({ ...editForm, pos: v === "" ? undefined : Number(v) });
-                }}
-              />
-              <p className="mt-1 text-[11px] text-muted-foreground">
-                Lower number = higher rank across category, rankings, and All pages. Two tools with the same number appear side-by-side.
-              </p>
+            <div className="rounded-lg border border-border p-3 space-y-3">
+              <div>
+                <label className="mb-1 block text-sm font-semibold">Positioning (three independent ranks)</label>
+                <p className="text-[11px] text-muted-foreground">
+                  Lower number = higher rank. Leave empty for automatic (badge-based) ranking. Each rank is category-scoped for the tool&apos;s current category.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-muted-foreground">📂 Category rank</label>
+                  <Input
+                    type="number"
+                    min={1}
+                    placeholder="e.g. 1"
+                    value={typeof editForm.pos === "number" ? editForm.pos : ""}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setEditForm({ ...editForm, pos: v === "" ? undefined : Number(v) });
+                    }}
+                  />
+                  <p className="mt-1 text-[10px] text-muted-foreground">Category page listings + default fallback.</p>
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-muted-foreground">🏆 Ranking page rank</label>
+                  <Input
+                    type="number"
+                    min={1}
+                    placeholder="e.g. 1"
+                    value={typeof editForm.posr === "number" ? editForm.posr : ""}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setEditForm({ ...editForm, posr: v === "" ? undefined : Number(v) });
+                    }}
+                  />
+                  <p className="mt-1 text-[10px] text-muted-foreground">/rankings/best-… leaderboards.</p>
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-muted-foreground">🏠 Dashboard (All) rank</label>
+                  <Input
+                    type="number"
+                    min={1}
+                    placeholder="e.g. 1"
+                    value={typeof editForm.posa === "number" ? editForm.posa : ""}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setEditForm({ ...editForm, posa: v === "" ? undefined : Number(v) });
+                    }}
+                  />
+                  <p className="mt-1 text-[10px] text-muted-foreground">Homepage &quot;All Categories&quot; view.</p>
+                </div>
+              </div>
             </div>
+
 
           </div>
           <DialogFooter>
