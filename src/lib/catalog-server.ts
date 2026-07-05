@@ -44,8 +44,12 @@ export type Tool = {
   tr?: boolean;
   /** Admin-assigned badges: Verified, Exclusive, Trending, Underrated, Super Valuable (+ custom). */
   badges?: string[];
-  /** Admin-set positioning (lower = higher rank). Applied globally across listings. */
+  /** Admin category rank — used inside a category listing (lower = higher). */
   pos?: number;
+  /** Admin rankings-page rank — used on /rankings/{slug} pages (lower = higher). */
+  posr?: number;
+  /** Admin homepage/all-tools rank — used on the main dashboard All view (lower = higher). */
+  posa?: number;
 };
 
 /** Canonical premium badges available in the admin panel. Order = display priority. */
@@ -214,10 +218,20 @@ function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: num
  * admin-assigned positioning & badges always take precedence over relevance
  * & tier ordering. Ties preserve prior order (side-by-side placement).
  */
-export function adminRankKey(t: Tool): number {
-  if (typeof t.pos === "number" && Number.isFinite(t.pos)) {
-    // 1..999999 range for positioned tools. Comes first.
-    return Math.max(1, Math.min(999999, Math.floor(t.pos)));
+export type RankVariant = "category" | "ranking" | "all";
+
+export function adminRankKey(t: Tool, variant: RankVariant = "category"): number {
+  // Variant-specific positioning wins, then falls back to generic `pos`.
+  const specific =
+    variant === "ranking" ? t.posr :
+    variant === "all" ? t.posa :
+    t.pos;
+  const fallback = t.pos;
+  const chosen = typeof specific === "number" && Number.isFinite(specific)
+    ? specific
+    : (typeof fallback === "number" && Number.isFinite(fallback) ? fallback : undefined);
+  if (typeof chosen === "number") {
+    return Math.max(1, Math.min(999999, Math.floor(chosen)));
   }
   const badges = t.badges || [];
   if (badges.length === 0) return 10_000_000;
@@ -228,13 +242,12 @@ export function adminRankKey(t: Tool): number {
   else if (has("Trending")) rank = 3_000_000;
   else if (has("Super Valuable")) rank = 3_500_000;
   else if (has("Underrated")) rank = 4_000_000;
-  // More badges → tighter rank (subtract up to 100k)
   rank -= Math.min(5, badges.length) * 20_000;
   return rank;
 }
 
-export function adminRankSort(tools: Tool[]): Tool[] {
-  return tools.slice().sort((a, b) => adminRankKey(a) - adminRankKey(b));
+export function adminRankSort(tools: Tool[], variant: RankVariant = "category"): Tool[] {
+  return tools.slice().sort((a, b) => adminRankKey(a, variant) - adminRankKey(b, variant));
 }
 
 
@@ -391,7 +404,7 @@ export function searchTools(opts: {
   //   2. Verified badge → top
   //   3. Exclusive badge → second
   //   4. more badges = higher
-  filtered = adminRankSort(filtered);
+  filtered = adminRankSort(filtered, category === "All" ? "all" : "category");
 
   const total = filtered.length;
 
@@ -457,7 +470,7 @@ export function searchTools(opts: {
  * Standalone ranking helper used by the SSR category page so it follows the
  * same verified-first, repos-last rules as the homepage.
  */
-export function rankBrowseList(tools: Tool[]): Tool[] {
+export function rankBrowseList(tools: Tool[], variant: RankVariant = "category"): Tool[] {
   const verified = new Set(getVerifiedPool().map((v) => v.n.toLowerCase()));
   const FREE = new Set(["Free", "Free Plan", "Free Trial", "Free Credits", "Daily Free", "Monthly Free", "Open Source", "open_source", "freemium"]);
   const tier = (t: Tool) => {
@@ -471,8 +484,8 @@ export function rankBrowseList(tools: Tool[]): Tool[] {
     return 3;
   };
   return tools.slice().sort((a, b) => {
-    // Admin override wins first.
-    const ar = adminRankKey(a), br = adminRankKey(b);
+    // Admin override wins first (variant-specific).
+    const ar = adminRankKey(a, variant), br = adminRankKey(b, variant);
     if (ar !== br) return ar - br;
     const ta = tier(a), tb = tier(b);
     if (ta !== tb) return ta - tb;

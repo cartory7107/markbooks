@@ -81,7 +81,7 @@ export const Route = createFileRoute("/rankings/$slug")({
         }
 
         const inCat = catalog.tools.filter(t => normalizeCategory(t.c) === category || t.c === category || t.g === category);
-        const ranked = rankBrowseList(inCat).slice(0, 25);
+        const ranked = rankBrowseList(inCat, "ranking").slice(0, 25);
         const emoji = emojis[category] || "🤖";
         const canonical = `https://markbook.top/rankings/${slug}`;
 
@@ -141,6 +141,12 @@ export const Route = createFileRoute("/rankings/$slug")({
 </a>`;
         }).join("\n");
 
+        // All rankings for client-side search — { name, slug, emoji, count }
+        const allRankings = allCats
+          .map((c) => ({ name: c, slug: slugify(c), emoji: emojis[c] || "🤖", count: catalog.categories[c] || 0 }))
+          .sort((a, b) => b.count - a.count);
+        const feedbackMail = "cartory7107@gmail.com";
+
         const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -195,6 +201,27 @@ a{color:#4f46e5;text-decoration:none}
 .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .pill{padding:8px 14px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#374151}
 .pill:hover{border-color:#6366f1;color:#4f46e5}
+.searchbox{margin:20px 0 4px;position:relative}
+.sbinput{display:flex;align-items:center;gap:10px;padding:0 14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 4px 14px -8px rgba(0,0,0,.08);transition:all .15s}
+.sbinput:focus-within{border-color:#6366f1;box-shadow:0 6px 22px -10px rgba(99,102,241,.4)}
+.sbicon{font-size:15px;opacity:.6}
+.sbinput input{flex:1;border:0;outline:0;padding:14px 0;font:600 15px Inter,system-ui,sans-serif;background:transparent;color:#111827}
+.sbinput button{border:0;background:#f3f4f6;border-radius:999px;width:26px;height:26px;cursor:pointer;color:#6b7280;font-size:12px}
+.sbresults{margin-top:8px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;max-height:340px;overflow-y:auto}
+.sbresults a{display:flex;align-items:center;gap:12px;padding:12px 14px;color:#111827;border-bottom:1px solid #f3f4f6}
+.sbresults a:last-child{border-bottom:0}
+.sbresults a:hover{background:#f9fafb;color:#4f46e5}
+.sbresults .sbemoji{width:34px;height:34px;display:grid;place-items:center;background:rgba(99,102,241,.08);border-radius:9px;font-size:18px}
+.sbresults .sbmeta{font-size:11px;color:#9ca3af;margin-top:1px}
+.sbresults .sbmatch{font-size:14px;font-weight:700}
+.sbempty{padding:20px 16px;text-align:center}
+.sbempty h3{font-size:15px;font-weight:800;color:#111827;margin-bottom:6px}
+.sbempty p{font-size:13px;color:#6b7280;margin-bottom:14px}
+.sbempty .fbrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.sbempty a.fb{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;font-size:13px;font-weight:700;box-shadow:0 6px 18px -8px rgba(99,102,241,.5)}
+.sbempty a.fb.ghost{background:#fff;color:#4f46e5;border:1px solid #e5e7eb;box-shadow:none}
+.footer{border-top:1px solid #e5e7eb;padding:20px 0;text-align:center;font-size:12px;color:#9ca3af}
+@media(max-width:640px){.row{flex-wrap:wrap}.cta-btn{margin-left:60px}}
 .footer{border-top:1px solid #e5e7eb;padding:20px 0;text-align:center;font-size:12px;color:#9ca3af}
 @media(max-width:640px){.row{flex-wrap:wrap}.cta-btn{margin-left:60px}}
 </style>
@@ -208,12 +235,23 @@ a{color:#4f46e5;text-decoration:none}
     <h1>${esc(prettyTitle)} of 2026</h1>
     <p>${esc(desc)}</p>
   </div>
+
+  <div class="searchbox" role="search">
+    <div class="sbinput">
+      <span class="sbicon">🔎</span>
+      <input id="catSearch" type="text" autocomplete="off" placeholder="Search a ranking category — e.g. chatbot, image, coding…" aria-label="Search ranking categories">
+      <button id="catClear" type="button" aria-label="Clear" style="display:none">✕</button>
+    </div>
+    <div id="sbResults" class="sbresults" hidden></div>
+  </div>
+
   <div class="list">${listHtml}</div>
 
   <div class="sec">
     <h2>How we rank</h2>
     <p>MarkBook rankings blend user ratings, feature depth, data quality, and pricing accessibility. Verified tools with rich descriptions and working links appear first; repository-only listings are demoted. Rankings refresh with each catalog update.</p>
   </div>
+
 
   <div class="sec">
     <h2>Explore more rankings</h2>
@@ -230,6 +268,76 @@ a{color:#4f46e5;text-decoration:none}
 
   <div class="footer">&copy; 2026 MarkBook — AI Tools Directory.</div>
 </div>
+<script id="rk-cats" type="application/json">${JSON.stringify(allRankings)}</script>
+<script>
+(function(){
+  var data = JSON.parse(document.getElementById('rk-cats').textContent || '[]');
+  var input = document.getElementById('catSearch');
+  var clear = document.getElementById('catClear');
+  var box = document.getElementById('sbResults');
+  var currentSlug = ${JSON.stringify(slug)};
+  var currentCat = ${JSON.stringify(category)};
+  var mail = ${JSON.stringify(feedbackMail)};
+
+  function norm(s){ return (s||'').toLowerCase().trim(); }
+  function score(name, q){
+    var n = norm(name), s = norm(q);
+    if (!s) return 0;
+    if (n === s) return 100;
+    if (n.startsWith(s)) return 80;
+    if (n.indexOf(s) >= 0) return 60;
+    // token overlap
+    var toks = s.split(/\\s+/).filter(Boolean);
+    var hits = 0;
+    for (var i=0;i<toks.length;i++) if (n.indexOf(toks[i]) >= 0) hits++;
+    if (hits) return 30 + hits*5;
+    // char-level fuzzy (letters in order)
+    var j = 0;
+    for (var k=0;k<n.length && j<s.length;k++) if (n[k] === s[j]) j++;
+    if (j === s.length) return 15;
+    return 0;
+  }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function render(q){
+    q = q.trim();
+    if (!q){ box.hidden = true; box.innerHTML = ''; clear.style.display = 'none'; return; }
+    clear.style.display = '';
+    var ranked = data.map(function(d){ return { d: d, s: score(d.name, q) }; })
+      .filter(function(x){ return x.s > 0 && x.d.slug !== currentSlug; })
+      .sort(function(a,b){ return b.s - a.s || b.d.count - a.d.count; })
+      .slice(0, 8);
+    box.hidden = false;
+    if (ranked.length === 0){
+      var subj = encodeURIComponent('New ranking category suggestion: ' + q);
+      var body = encodeURIComponent('Hi MarkBook team,\\n\\nI searched for "' + q + '" on the "' + currentCat + '" ranking page but did not find a matching category. Please consider adding it.\\n\\nThanks!');
+      box.innerHTML = '<div class="sbempty">'
+        + '<h3>No matching ranking for "' + esc(q) + '"</h3>'
+        + '<p>We could not find a similar category. Want us to add one? Send a quick suggestion — it helps us prioritize.</p>'
+        + '<div class="fbrow">'
+        +   '<a class="fb" href="mailto:' + mail + '?subject=' + subj + '&body=' + body + '">✉️ Suggest this category</a>'
+        +   '<a class="fb ghost" href="/submit">Submit an AI tool →</a>'
+        + '</div></div>';
+      return;
+    }
+    box.innerHTML = ranked.map(function(x){
+      var d = x.d;
+      return '<a href="/rankings/best-' + d.slug + '">'
+        + '<div class="sbemoji">' + d.emoji + '</div>'
+        + '<div><div class="sbmatch">Best ' + esc(d.name) + '</div>'
+        + '<div class="sbmeta">' + d.count.toLocaleString() + ' tools · Ranked leaderboard</div></div>'
+        + '</a>';
+    }).join('');
+  }
+
+  input.addEventListener('input', function(){ render(input.value); });
+  input.addEventListener('focus', function(){ if (input.value) render(input.value); });
+  clear.addEventListener('click', function(){ input.value=''; input.focus(); render(''); });
+  document.addEventListener('click', function(e){
+    if (!box.contains(e.target) && e.target !== input) box.hidden = true;
+  });
+})();
+</script>
 </body></html>`;
 
         return new Response(html, {
