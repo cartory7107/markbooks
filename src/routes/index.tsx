@@ -89,7 +89,9 @@ const topNavItems = [
   { label: "Categories", icon: "📂", action: "categories" },
   { label: "Ranking", icon: "🏆", href: "/ranking" },
   { label: "Compare", icon: "⚖️", href: "/compare" },
-  { label: "University", icon: "🎓", href: "/university" },
+  { label: "Blog", icon: "📝", href: "/blog" },
+  { label: "Pricing", icon: "💎", href: "/pricing" },
+  { label: "Contact", icon: "📬", href: "/contact" },
   { label: "Latest AI", icon: "⚡", action: "latest" },
   { label: "AI News", icon: "📰", action: "news" },
   { label: "Submit", icon: "➕", href: "/submit" },
@@ -1399,28 +1401,20 @@ function Index() {
             <div>
               <h4 className="mb-3 text-sm font-bold">📚 Resources</h4>
               <div className="space-y-2">
-                {[
-                  { label: "AI News", href: "#", external: false },
-                  { label: "University", href: "/university", external: false },
-                  { label: "Blog", href: "https://markbookai.blogspot.com/", external: true },
-                  { label: "Submit Tool", href: "/submit", external: false },
-                  { label: "Advertise", href: "/advertise", external: false },
-                  { label: "Ranking", href: "/ranking", external: false },
-                ].map((item) => item.external ? (
-                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block text-sm text-muted-foreground hover:text-primary">
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link key={item.label} to={item.href} className="block text-sm text-muted-foreground hover:text-primary">
-                    {item.label}
-                  </Link>
-                ))}
+                {["AI News", "Blog", "Submit Tool", "Advertise", "Ranking", "Pricing"].map((label) => {
+                  const hrefs: Record<string, string> = { "AI News": "#", "Blog": "/blog", "Submit Tool": "/submit", "Advertise": "/advertise", "Ranking": "/ranking", "Pricing": "/pricing" };
+                  return (
+                    <Link key={label} to={hrefs[label] || "/"} className="block text-sm text-muted-foreground hover:text-primary">
+                      {label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
             <div>
               <h4 className="mb-3 text-sm font-bold">🏢 Company</h4>
               <div className="space-y-2">
-                {[{ label: "About Us", to: "/about" }, { label: "Contact", to: "/about" }, { label: "Privacy Policy", to: "/privacy" }, { label: "Terms of Service", to: "/terms" }].map((item) => (
+                {[{ label: "About Us", to: "/about" }, { label: "Contact", to: "/contact" }, { label: "Privacy Policy", to: "/privacy" }, { label: "Terms of Service", to: "/terms" }].map((item) => (
                   <Link key={item.label} to={item.to} className="block text-sm text-muted-foreground hover:text-primary">
                     {item.label}
                   </Link>

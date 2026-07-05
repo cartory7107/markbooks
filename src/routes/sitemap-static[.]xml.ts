@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, slugify } from "@/lib/catalog-server";
+import { getAllPublishedSlugs, getAllCategorySlugs } from "@/lib/blog.server";
 
 const BASE_URL = "https://markbook.top";
 
@@ -27,9 +28,8 @@ export const Route = createFileRoute("/sitemap-static.xml")({
           { path: "/rankings", priority: "0.9", freq: "weekly" },
           { path: "/compare", priority: "0.8", freq: "weekly" },
           { path: "/blog", priority: "0.9", freq: "weekly" },
-          { path: "/blog/best-ai-tools-2026", priority: "0.85", freq: "monthly" },
-          { path: "/research", priority: "0.85", freq: "weekly" },
-          { path: "/university", priority: "0.8", freq: "weekly" },
+          { path: "/pricing", priority: "0.7", freq: "monthly" },
+          { path: "/contact", priority: "0.6", freq: "monthly" },
           { path: "/about", priority: "0.6", freq: "monthly" },
           { path: "/submit", priority: "0.7", freq: "monthly" },
           { path: "/advertise", priority: "0.5", freq: "monthly" },
@@ -54,6 +54,26 @@ export const Route = createFileRoute("/sitemap-static.xml")({
             `  <url>\n    <loc>${BASE_URL}${p.path}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>${p.freq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`,
           );
         }
+
+        // Blog posts from DB
+        try {
+          const blogSlugs = await getAllPublishedSlugs();
+          for (const slug of blogSlugs) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/blog/${slug}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
+          }
+        } catch {}
+
+        // Blog categories from DB
+        try {
+          const catSlugs = await getAllCategorySlugs();
+          for (const slug of catSlugs) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/blog/category/${slug}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+            );
+          }
+        } catch {}
 
         const categories = Object.entries(catalog.categories).sort((a, b) => b[1] - a[1]);
         for (const [name] of categories) {
