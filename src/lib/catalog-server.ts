@@ -404,7 +404,7 @@ export function searchTools(opts: {
   //   2. Verified badge → top
   //   3. Exclusive badge → second
   //   4. more badges = higher
-  filtered = adminRankSort(filtered);
+  filtered = adminRankSort(filtered, category === "All" ? "all" : "category");
 
   const total = filtered.length;
 
