@@ -37,12 +37,35 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
+// Force correct Content-Type on sitemap / XML routes.
+// TanStack Start's SSR pipeline overrides all responses to text/html,
+// but Google requires application/xml for sitemaps.
+const XML_ROUTES = ["/sitemap.xml", "/sitemap-static.xml", "/sitemap-tools/"];
+
+function fixContentType(request: Request, response: Response): Response {
+  const url = new URL(request.url);
+  if (XML_ROUTES.some((p) => url.pathname === p || url.pathname.startsWith(p))) {
+    const ct = response.headers.get("content-type") ?? "";
+    if (!ct.includes("application/xml") && !ct.includes("text/xml")) {
+      const headers = new Headers(response.headers);
+      headers.set("content-type", "application/xml; charset=utf-8");
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+    }
+  }
+  return response;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const fixed = fixContentType(request, response);
+      return await normalizeCatastrophicSsrResponse(fixed);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
