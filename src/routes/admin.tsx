@@ -538,6 +538,8 @@ function ToolsTab({
           fl: editForm.fl || editTool.fl,
           badges: editForm.badges || [],
           pos: typeof editForm.pos === "number" && Number.isFinite(editForm.pos) ? editForm.pos : undefined,
+          posr: typeof editForm.posr === "number" && Number.isFinite(editForm.posr) ? editForm.posr : undefined,
+          posa: typeof editForm.posa === "number" && Number.isFinite(editForm.posa) ? editForm.posa : undefined,
         },
 
         action: "edit",
