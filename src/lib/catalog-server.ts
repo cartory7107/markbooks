@@ -218,10 +218,20 @@ function pickGroupPosition(groupIndex: number, prevPos: number | null, seed: num
  * admin-assigned positioning & badges always take precedence over relevance
  * & tier ordering. Ties preserve prior order (side-by-side placement).
  */
-export function adminRankKey(t: Tool): number {
-  if (typeof t.pos === "number" && Number.isFinite(t.pos)) {
-    // 1..999999 range for positioned tools. Comes first.
-    return Math.max(1, Math.min(999999, Math.floor(t.pos)));
+export type RankVariant = "category" | "ranking" | "all";
+
+export function adminRankKey(t: Tool, variant: RankVariant = "category"): number {
+  // Variant-specific positioning wins, then falls back to generic `pos`.
+  const specific =
+    variant === "ranking" ? t.posr :
+    variant === "all" ? t.posa :
+    t.pos;
+  const fallback = t.pos;
+  const chosen = typeof specific === "number" && Number.isFinite(specific)
+    ? specific
+    : (typeof fallback === "number" && Number.isFinite(fallback) ? fallback : undefined);
+  if (typeof chosen === "number") {
+    return Math.max(1, Math.min(999999, Math.floor(chosen)));
   }
   const badges = t.badges || [];
   if (badges.length === 0) return 10_000_000;
@@ -232,13 +242,12 @@ export function adminRankKey(t: Tool): number {
   else if (has("Trending")) rank = 3_000_000;
   else if (has("Super Valuable")) rank = 3_500_000;
   else if (has("Underrated")) rank = 4_000_000;
-  // More badges → tighter rank (subtract up to 100k)
   rank -= Math.min(5, badges.length) * 20_000;
   return rank;
 }
 
-export function adminRankSort(tools: Tool[]): Tool[] {
-  return tools.slice().sort((a, b) => adminRankKey(a) - adminRankKey(b));
+export function adminRankSort(tools: Tool[], variant: RankVariant = "category"): Tool[] {
+  return tools.slice().sort((a, b) => adminRankKey(a, variant) - adminRankKey(b, variant));
 }
 
 
