@@ -157,12 +157,9 @@ export const Route = createFileRoute("/blog-admin-api.json")({
           "@/integrations/supabase/client.server"
         );
         const supabaseAdmin = rawSupabaseAdmin as never as {
-          from: (table: string) => {
-            select: (...args: unknown[]) => unknown;
-            insert: (...args: unknown[]) => unknown;
-            update: (...args: unknown[]) => unknown;
-            delete: (...args: unknown[]) => unknown;
-          };
+          // The generated DB types can lag newly-created blog tables during the same turn.
+          // Keep runtime calls typed permissively here so deployment is not blocked.
+          from: (table: string) => any;
         };
 
         let body: Record<string, unknown>;

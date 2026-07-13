@@ -26,9 +26,7 @@ export const Route = createFileRoute("/blog-ai-generate-api.json")({
         );
         const supabaseAdmin = rawSupabaseAdmin as never as {
           auth: { getUser: (token: string) => Promise<{ data: { user: { id: string } | null }; error: unknown }> };
-          from: (table: string) => {
-            select: (...args: unknown[]) => unknown;
-          };
+          from: (table: string) => any;
         };
         const token = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
         if (!token) {
@@ -45,11 +43,7 @@ export const Route = createFileRoute("/blog-ai-generate-api.json")({
             headers: { "Content-Type": "application/json" },
           });
         }
-        const roleQuery = supabaseAdmin
-          .from("user_roles")
-          .select("id") as unknown as {
-            eq: (column: string, value: string) => { eq: (column: string, value: string) => { maybeSingle: () => Promise<{ data: unknown; error: unknown }> } };
-          };
+        const roleQuery = supabaseAdmin.from("user_roles").select("id");
         const { data: roleData, error: roleError } = await roleQuery
           .eq("user_id", userId)
           .eq("role", "admin")
