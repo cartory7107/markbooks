@@ -153,9 +153,17 @@ export const Route = createFileRoute("/blog-admin-api.json")({
     handlers: {
       POST: async ({ request }) => {
         // Dynamic import — route files ship to the client bundle at build time
-        const { supabaseAdmin } = await import(
+        const { supabaseAdmin: rawSupabaseAdmin } = await import(
           "@/integrations/supabase/client.server"
         );
+        const supabaseAdmin = rawSupabaseAdmin as never as {
+          from: (table: string) => {
+            select: (...args: unknown[]) => unknown;
+            insert: (...args: unknown[]) => unknown;
+            update: (...args: unknown[]) => unknown;
+            delete: (...args: unknown[]) => unknown;
+          };
+        };
 
         let body: Record<string, unknown>;
         try {
