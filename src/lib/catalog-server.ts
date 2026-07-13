@@ -71,15 +71,60 @@ type CatalogData = {
   categories: Record<string, number>;
 };
 
+/** Normalize a tool name for duplicate detection. */
+function normName(n: string): string {
+  return (n || "").toLowerCase().trim().replace(/\s+/g, " ").replace(/[^\w\s]/g, "");
+}
+/** Extract root domain from a URL for duplicate detection. */
+function rootDomain(url: string): string {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    let d = u.hostname.toLowerCase();
+    if (d.startsWith("www.")) d = d.slice(4);
+    return d;
+  } catch {
+    return url.toLowerCase();
+  }
+}
+
+let _dedupedCache: Tool[] | null = null;
+function getDedupedTools(): Tool[] {
+  if (_dedupedCache) return _dedupedCache;
+  const raw = (catalogJson as unknown as CatalogData).tools;
+  const seen = new Map<string, Tool>();
+  const richness = (t: Tool) =>
+    (t.fl ? 4 : 0) + ((t.d?.length ?? 0) >= 40 ? 2 : 0) + ((t.d?.length ?? 0) >= 10 ? 1 : 0);
+  for (const t of raw) {
+    const name = normName(t.n);
+    const domain = rootDomain(t.u);
+    // Dedupe by (name) and by (domain) — whichever matches first.
+    const keys = [name && `n:${name}`, domain && `d:${domain}`].filter(Boolean) as string[];
+    const existingKey = keys.find((k) => seen.has(k));
+    if (existingKey) {
+      const prev = seen.get(existingKey)!;
+      if (richness(t) > richness(prev)) {
+        for (const k of keys) seen.set(k, t);
+      }
+      continue;
+    }
+    for (const k of keys) seen.set(k, t);
+  }
+  // Collect unique tools (each tool may have been stored under 2 keys).
+  const uniq = new Set<Tool>();
+  for (const v of seen.values()) uniq.add(v);
+  _dedupedCache = Array.from(uniq);
+  return _dedupedCache;
+}
+
 export function getCatalog(): CatalogData {
-  const raw = catalogJson as unknown as CatalogData;
-  // Build normalized category counts
+  const tools = getDedupedTools();
   const cats: Record<string, number> = {};
-  for (const t of raw.tools) {
+  for (const t of tools) {
     const nc = normalizeCategory(t.c);
     cats[nc] = (cats[nc] || 0) + 1;
   }
-  return { ...raw, categories: cats };
+  return { tools, categories: cats };
 }
 
 export function getVerifiedPool(): VerifiedTool[] {
