@@ -22,23 +22,15 @@ let inflight: Promise<AdminOverlay> | null = null;
 const norm = (s: string) => (s || "").trim().toLowerCase();
 
 async function fetchOverlay(): Promise<AdminOverlay> {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) return EMPTY;
-
   try {
-    const res = await fetch(
-      `${url}/rest/v1/admin_tool_edits?select=original_name,tool_data,action&order=created_at.asc`,
-      {
-        headers: {
-          apikey: key,
-          Authorization: `Bearer ${key}`,
-          Accept: "application/json",
-        },
-      },
-    );
-    if (!res.ok) return EMPTY;
-    const rows = (await res.json()) as Array<{
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("admin_tool_edits")
+      .select("original_name,tool_data,action")
+      .order("created_at", { ascending: true });
+
+    if (error || !data) return EMPTY;
+    const rows = data as Array<{
       original_name: string | null;
       tool_data: Partial<Tool>;
       action: "add" | "edit" | "delete";
