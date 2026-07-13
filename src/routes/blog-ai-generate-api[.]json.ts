@@ -21,16 +21,36 @@ export const Route = createFileRoute("/blog-ai-generate-api.json")({
     handlers: {
       POST: async ({ request }) => {
         // ── Auth check (reuse admin middleware) ──
-        const { requireSupabaseAuth } = await import(
-          "@/integrations/supabase/auth-middleware"
+        const { supabaseAdmin: rawSupabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
         );
-        let userId: string | undefined;
-        try {
-          const ctx = await requireSupabaseAuth({ next: async () => ({}) } as never);
-          userId = (ctx as Record<string, unknown>).userId as string;
-        } catch {
+        const supabaseAdmin = rawSupabaseAdmin as never as {
+          auth: { getUser: (token: string) => Promise<{ data: { user: { id: string } | null }; error: unknown }> };
+          from: (table: string) => any;
+        };
+        const token = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
+        if (!token) {
           return new Response(JSON.stringify({ error: "Unauthorized" }), {
             status: 401,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        const { data: authData, error: authError } = await supabaseAdmin.auth.getUser(token);
+        const userId = authData.user?.id;
+        if (authError || !userId) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        const roleQuery = supabaseAdmin.from("user_roles").select("id");
+        const { data: roleData, error: roleError } = await roleQuery
+          .eq("user_id", userId)
+          .eq("role", "admin")
+          .maybeSingle();
+        if (roleError || !roleData) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
             headers: { "Content-Type": "application/json" },
           });
         }
@@ -124,7 +144,7 @@ CRITICAL RULES:
             model: provider(modelId),
             system: systemPrompt,
             prompt: `Write a comprehensive blog article about: ${topic}`,
-            maxTokens: 8000,
+            maxOutputTokens: 8000,
             temperature: 0.7,
           });
 

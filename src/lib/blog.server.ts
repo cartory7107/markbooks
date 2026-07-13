@@ -250,7 +250,7 @@ export async function getAllCategories(): Promise<BlogCategoryRow[]> {
       return [];
     }
 
-    return (data ?? []) as BlogCategoryRow[];
+    return (data ?? []) as unknown as BlogCategoryRow[];
   } catch (err) {
     console.error("[blog.server] getAllCategories exception:", err);
     return [];
@@ -273,7 +273,7 @@ export async function getCategoryBySlug(slug: string): Promise<BlogCategoryRow |
       return null;
     }
 
-    return data as BlogCategoryRow;
+    return data as unknown as BlogCategoryRow;
   } catch (err) {
     console.error("[blog.server] getCategoryBySlug exception:", err);
     return null;
