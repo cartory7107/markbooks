@@ -478,8 +478,8 @@ function Index() {
 
 
   return (
-    <div ref={topRef} className="min-h-screen bg-background text-foreground moving-grid-bg">
-      <div className="relative z-10">
+    <div ref={topRef} className="min-h-screen bg-background text-foreground moving-grid-bg overflow-x-hidden">
+      <div className="relative z-10 max-w-full overflow-x-hidden">
       {/* ─── Sponsored Banner ─── */}
       {showSponsor && (
         <div className="sponsor-glow py-2 text-center text-sm text-white relative">
@@ -496,8 +496,8 @@ function Index() {
       )}
 
       {/* ─── Glass Navigation Bar ─── */}
-      <header className="glass-nav sticky top-0 z-50">
-        <div className="mx-auto flex h-14 max-w-[1480px] items-center gap-2 px-4 lg:h-16">
+      <header className="glass-nav sticky top-0 z-50 w-full">
+        <div className="mx-auto flex h-14 max-w-[1480px] items-center gap-2 px-4 lg:h-16 min-w-0 overflow-hidden">
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="MarkBook home">
             <img src={logoAsset.url} alt="MarkBook" className="h-8 w-8 object-contain" />
@@ -507,7 +507,7 @@ function Index() {
           </Link>
 
           {/* Nav Links */}
-          <nav className="ml-3 hidden items-center gap-0.5 xl:flex">
+          <nav className="ml-3 hidden items-center gap-0.5 xl:flex shrink min-w-0">
             {topNavItems.map((item) =>
               item.href ? (
                 <Link
@@ -543,7 +543,7 @@ function Index() {
           </nav>
 
           {/* Search */}
-          <div className="relative ml-auto hidden max-w-sm flex-1 lg:block">
+          <div className="relative ml-auto hidden max-w-sm flex-1 lg:block shrink-0">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
