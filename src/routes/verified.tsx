@@ -10,6 +10,7 @@ import {
   Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { getVerifiedTools } from "@/lib/verified.functions";
 
 type Tool = {
@@ -84,16 +85,48 @@ function VerifiedPage() {
   const [category, setCategory] = useState("All");
   const fetchVerified = useServerFn(getVerifiedTools);
 
+  const load = useMemo(
+    () => () => {
+      setLoading(true);
+      fetchVerified({})
+        .then((data) => {
+          setAllTools(data.tools);
+          setTotal(data.total);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    },
+    [fetchVerified],
+  );
+
   useEffect(() => {
-    setLoading(true);
-    fetchVerified({})
-      .then((data) => {
-        setAllTools(data.tools);
-        setTotal(data.total);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [fetchVerified]);
+    load();
+  }, [load]);
+
+  // Realtime: whenever any admin edit lands, refresh the verified list
+  // so newly-verified tools appear instantly (and unverified drop out).
+  useEffect(() => {
+    let cancelled = false;
+    let debounce: ReturnType<typeof setTimeout> | null = null;
+    const trigger = () => {
+      if (cancelled) return;
+      if (debounce) clearTimeout(debounce);
+      debounce = setTimeout(() => load(), 400);
+    };
+    const channel = supabase
+      .channel("verified-admin-edits")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "admin_tool_edits" },
+        trigger,
+      )
+      .subscribe();
+    return () => {
+      cancelled = true;
+      if (debounce) clearTimeout(debounce);
+      supabase.removeChannel(channel);
+    };
+  }, [load]);
 
   const categories = useMemo(() => {
     const map = new Map<string, number>();

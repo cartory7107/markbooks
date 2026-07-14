@@ -14,7 +14,9 @@ export type AdminOverlay = {
 };
 
 const EMPTY: AdminOverlay = { deletes: new Set(), edits: new Map(), adds: [] };
-const TTL_MS = 5_000;
+// Near-zero TTL so admin edits (verify/badge/rename/delete) show up on the
+// live site instantly. Overlay fetch is tiny; a fresh read per request is fine.
+const TTL_MS = 300;
 
 let cache: { at: number; data: AdminOverlay } | null = null;
 let inflight: Promise<AdminOverlay> | null = null;
