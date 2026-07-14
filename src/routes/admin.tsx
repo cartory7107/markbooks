@@ -460,6 +460,7 @@ function ToolsTab({
   const [deleteTool, setDeleteTool] = useState<Tool | null>(null);
   const [editForm, setEditForm] = useState<Partial<Tool>>({});
   const [saving, setSaving] = useState(false);
+  const [listTab, setListTab] = useState<"verified" | "unverified">("verified");
 
   // Build sorted category list from catalog
   const sortedCategories = useMemo(() => {
@@ -519,13 +520,17 @@ function ToolsTab({
     return result;
   }, [mergedTools, search, categoryFilter, pricingFilter]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const verifiedTools = useMemo(() => filtered.filter((t) => (t.badges || []).includes("verified")), [filtered]);
+  const unverifiedTools = useMemo(() => filtered.filter((t) => !(t.badges || []).includes("verified")), [filtered]);
+  const displayedTools = listTab === "verified" ? verifiedTools : unverifiedTools;
+
+  const totalPages = Math.max(1, Math.ceil(displayedTools.length / ITEMS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
-  const paginatedTools = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedTools = displayedTools.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   useEffect(() => {
     setPage(1);
-  }, [search, categoryFilter, pricingFilter]);
+  }, [search, categoryFilter, pricingFilter, listTab]);
 
   const openEdit = (tool: Tool) => {
     setEditTool(tool);
@@ -634,8 +639,19 @@ function ToolsTab({
         </div>
       ) : (
         <>
+          <Tabs value={listTab} onValueChange={(v) => setListTab(v as "verified" | "unverified")} className="mt-4">
+            <TabsList className="grid w-full sm:w-auto grid-cols-2">
+              <TabsTrigger value="verified">
+                Verified ({verifiedTools.length.toLocaleString()})
+              </TabsTrigger>
+              <TabsTrigger value="unverified">
+                Unverified ({unverifiedTools.length.toLocaleString()})
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <div className="mt-4 text-xs text-muted-foreground">
-            Showing {filtered.length.toLocaleString()} results
+            Showing {displayedTools.length.toLocaleString()} results
           </div>
 
           <div className="mt-4 space-y-2">
