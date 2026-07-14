@@ -639,48 +639,46 @@ function ToolsTab({
           </div>
 
           <div className="mt-4 space-y-2">
-            {paginatedTools.map((tool) => (
-              <div
-                key={tool.n + tool.u}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-border bg-card p-3 sm:p-4"
-              >
-                {(tool.badges || []).includes("verified") && (
-                  <div className="flex items-center justify-center shrink-0 size-12 rounded-full bg-sky-500/15 ring-2 ring-sky-500/40" aria-label="Verified">
-                    <BadgeCheck className="size-8 text-sky-500" strokeWidth={2.5} />
+            {paginatedTools.map((tool) => {
+              const isVerified = (tool.badges || []).includes("verified");
+              return (
+                <div
+                  key={tool.n + tool.u}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-border bg-card p-3 sm:p-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="truncate font-semibold text-sm">{tool.n}</span>
+                      {isVerified && (
+                        <BadgeCheck className="shrink-0 size-5 text-sky-500" strokeWidth={2.5} aria-label="Verified" />
+                      )}
+                      <Badge variant="outline" className="text-[10px] shrink-0">
+                        {tool.c}
+                      </Badge>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground truncate">{tool.d}</p>
+                    <div className="mt-1.5 flex items-center gap-3 text-[11px] text-muted-foreground">
+                      <span>{tool.p}</span>
+                      <span className="truncate text-[11px] text-muted-foreground max-w-xs">{tool.u}</span>
+                    </div>
                   </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate font-semibold text-sm">{tool.n}</span>
-                    {(tool.badges || []).includes("verified") && (
-                      <span className="shrink-0 rounded-full bg-sky-500 px-2 py-0.5 text-[10px] font-bold text-white">VERIFIED</span>
-                    )}
-                    <Badge variant="outline" className="text-[10px] shrink-0">
-                      {tool.c}
-                    </Badge>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground truncate">{tool.d}</p>
-                  <div className="mt-1.5 flex items-center gap-3 text-[11px] text-muted-foreground">
-                    <span>{tool.p}</span>
-                    <span className="truncate text-[11px] text-muted-foreground max-w-xs">{tool.u}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <a href={tool.u} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <ExternalLink className="size-3.5" />
-                      <span className="hidden sm:inline">Visit</span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a href={tool.u} target="_blank" rel="noopener noreferrer">
+                      <Button size="sm" variant="outline" className="gap-1.5">
+                        <ExternalLink className="size-3.5" />
+                        <span className="hidden sm:inline">Visit</span>
+                      </Button>
+                    </a>
+                    <Button size="sm" variant="outline" onClick={() => openEdit(tool)}>
+                      <Edit3 className="size-3.5" />
                     </Button>
-                  </a>
-                  <Button size="sm" variant="outline" onClick={() => openEdit(tool)}>
-                    <Edit3 className="size-3.5" />
-                  </Button>
-                  <Button size="sm" variant="destructive" onClick={() => setDeleteTool(tool)}>
-                    <Trash2 className="size-3.5" />
-                  </Button>
+                    <Button size="sm" variant="destructive" onClick={() => setDeleteTool(tool)}>
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {totalPages > 1 && (
