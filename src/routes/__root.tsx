@@ -108,6 +108,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { property: "og:image", content: "https://markbook.top/og-image.png" },
       { name: "twitter:image", content: "https://markbook.top/og-image.png" },
       { name: "description", content: "Markbook AI - 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
+      { name: "theme-color", content: "#0a0a0a" },
+      { name: "color-scheme", content: "dark light" },
+      { name: "application-name", content: "MarkBook" },
+      { name: "apple-mobile-web-app-title", content: "MarkBook" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "format-detection", content: "telephone=no" },
     ],
     links: [
       {
@@ -118,6 +125,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "shortcut icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "alternate", type: "application/rss+xml", title: "MarkBook Blog RSS", href: "https://markbook.top/rss.xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://icon.horse" },

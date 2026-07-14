@@ -17,6 +17,7 @@ import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SearchApiDotjsonRouteImport } from './routes/search-api[.]json'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -83,6 +84,11 @@ const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
 const SearchApiDotjsonRoute = SearchApiDotjsonRouteImport.update({
   id: '/search-api.json',
   path: '/search-api.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResearchRoute = ResearchRouteImport.update({
@@ -242,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
   '/research': typeof ResearchRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -279,6 +286,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
   '/research': typeof ResearchRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -317,6 +325,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/ranking': typeof RankingRoute
   '/research': typeof ResearchRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/search-api.json': typeof SearchApiDotjsonRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/ranking'
     | '/research'
+    | '/rss.xml'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -393,6 +403,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/ranking'
     | '/research'
+    | '/rss.xml'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -430,6 +441,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/ranking'
     | '/research'
+    | '/rss.xml'
     | '/search-api.json'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
@@ -468,6 +480,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   RankingRoute: typeof RankingRoute
   ResearchRoute: typeof ResearchRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   SearchApiDotjsonRoute: typeof SearchApiDotjsonRoute
   SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -543,6 +556,13 @@ declare module '@tanstack/react-router' {
       path: '/search-api.json'
       fullPath: '/search-api.json'
       preLoaderRoute: typeof SearchApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/research': {
@@ -756,6 +776,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   RankingRoute: RankingRoute,
   ResearchRoute: ResearchRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   SearchApiDotjsonRoute: SearchApiDotjsonRoute,
   SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
