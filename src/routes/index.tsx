@@ -85,6 +85,7 @@ type Catalog = {
 
 
 const topNavItems = [
+  { label: "Verified", icon: "✅", href: "/verified" },
   { label: "Free Tools", icon: "🆓", action: "free" },
   { label: "Categories", icon: "📂", action: "categories" },
   { label: "Ranking", icon: "🏆", href: "/ranking" },
