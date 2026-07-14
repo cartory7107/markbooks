@@ -644,15 +644,17 @@ function ToolsTab({
                 key={tool.n + tool.u}
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-border bg-card p-3 sm:p-4"
               >
+                {(tool.badges || []).includes("verified") && (
+                  <div className="flex items-center justify-center shrink-0 size-12 rounded-full bg-sky-500/15 ring-2 ring-sky-500/40" aria-label="Verified">
+                    <BadgeCheck className="size-8 text-sky-500" strokeWidth={2.5} />
+                  </div>
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    {(tool.badges || []).includes("verified") && (
-                      <BadgeCheck
-                        className="size-6 shrink-0 text-sky-500 fill-sky-500/15"
-                        aria-label="Verified"
-                      />
-                    )}
                     <span className="truncate font-semibold text-sm">{tool.n}</span>
+                    {(tool.badges || []).includes("verified") && (
+                      <span className="shrink-0 rounded-full bg-sky-500 px-2 py-0.5 text-[10px] font-bold text-white">VERIFIED</span>
+                    )}
                     <Badge variant="outline" className="text-[10px] shrink-0">
                       {tool.c}
                     </Badge>
