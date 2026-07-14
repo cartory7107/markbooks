@@ -127,6 +127,19 @@ export function getCatalog(): CatalogData {
   return { tools, categories: cats };
 }
 
+/** Raw catalog — every tool, including duplicates and broken links.
+ *  Used by the admin panel so admins can see and fix everything. */
+export function getRawCatalog(): CatalogData {
+  const tools = (catalogJson as unknown as CatalogData).tools;
+  const cats: Record<string, number> = {};
+  for (const t of tools) {
+    const nc = normalizeCategory(t.c);
+    cats[nc] = (cats[nc] || 0) + 1;
+  }
+  return { tools, categories: cats };
+}
+
+
 export function getVerifiedPool(): VerifiedTool[] {
   return verifiedPoolJson as unknown as VerifiedTool[];
 }
