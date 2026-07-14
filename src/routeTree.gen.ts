@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifiedRouteImport } from './routes/verified'
 import { Route as UniversityRouteImport } from './routes/university'
 import { Route as ToolsDictionaryDotjsonRouteImport } from './routes/tools-dictionary[.]json'
 import { Route as ToolsApiDotjsonRouteImport } from './routes/tools-api[.]json'
@@ -46,6 +47,11 @@ import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 
+const VerifiedRoute = VerifiedRouteImport.update({
+  id: '/verified',
+  path: '/verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UniversityRoute = UniversityRouteImport.update({
   id: '/university',
   path: '/university',
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/verified': typeof VerifiedRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/verified': typeof VerifiedRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
@@ -334,6 +342,7 @@ export interface FileRoutesById {
   '/tools-api.json': typeof ToolsApiDotjsonRoute
   '/tools-dictionary.json': typeof ToolsDictionaryDotjsonRoute
   '/university': typeof UniversityRoute
+  '/verified': typeof VerifiedRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/compare/$slug': typeof CompareSlugRoute
@@ -374,6 +383,7 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/verified'
     | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/verified'
     | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
@@ -450,6 +461,7 @@ export interface FileRouteTypes {
     | '/tools-api.json'
     | '/tools-dictionary.json'
     | '/university'
+    | '/verified'
     | '/blog/$slug'
     | '/category/$slug'
     | '/compare/$slug'
@@ -489,6 +501,7 @@ export interface RootRouteChildren {
   ToolsApiDotjsonRoute: typeof ToolsApiDotjsonRoute
   ToolsDictionaryDotjsonRoute: typeof ToolsDictionaryDotjsonRoute
   UniversityRoute: typeof UniversityRoute
+  VerifiedRoute: typeof VerifiedRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
   CompareSlugRoute: typeof CompareSlugRoute
@@ -502,6 +515,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verified': {
+      id: '/verified'
+      path: '/verified'
+      fullPath: '/verified'
+      preLoaderRoute: typeof VerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/university': {
       id: '/university'
       path: '/university'
@@ -785,6 +805,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsApiDotjsonRoute: ToolsApiDotjsonRoute,
   ToolsDictionaryDotjsonRoute: ToolsDictionaryDotjsonRoute,
   UniversityRoute: UniversityRoute,
+  VerifiedRoute: VerifiedRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
   CompareSlugRoute: CompareSlugRoute,
@@ -798,13 +819,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
