@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
+  BadgeCheck,
   BarChart3,
   BookOpen,
   Check,
