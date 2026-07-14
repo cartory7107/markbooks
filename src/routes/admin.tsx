@@ -460,6 +460,7 @@ function ToolsTab({
   const [deleteTool, setDeleteTool] = useState<Tool | null>(null);
   const [editForm, setEditForm] = useState<Partial<Tool>>({});
   const [saving, setSaving] = useState(false);
+  const [listTab, setListTab] = useState<"verified" | "unverified">("verified");
 
   // Build sorted category list from catalog
   const sortedCategories = useMemo(() => {
