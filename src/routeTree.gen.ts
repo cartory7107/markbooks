@@ -31,6 +31,7 @@ import { Route as BlogAdminApiDotjsonRouteImport } from './routes/blog-admin-api
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiNewsApiDotjsonRouteImport } from './routes/ai-news-api[.]json'
 import { Route as AdvertiseRouteImport } from './routes/advertise'
+import { Route as AdminToolsApiDotjsonRouteImport } from './routes/admin-tools-api[.]json'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -156,6 +157,11 @@ const AdvertiseRoute = AdvertiseRouteImport.update({
   path: '/advertise',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminToolsApiDotjsonRoute = AdminToolsApiDotjsonRouteImport.update({
+  id: '/admin-tools-api.json',
+  path: '/admin-tools-api.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -221,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/admin-tools-api.json': typeof AdminToolsApiDotjsonRoute
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
@@ -257,6 +264,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/admin-tools-api.json': typeof AdminToolsApiDotjsonRoute
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
@@ -294,6 +302,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/admin-tools-api.json': typeof AdminToolsApiDotjsonRoute
   '/advertise': typeof AdvertiseRoute
   '/ai-news-api.json': typeof AiNewsApiDotjsonRoute
   '/auth': typeof AuthRoute
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/admin-tools-api.json'
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
@@ -368,6 +378,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/admin-tools-api.json'
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
@@ -404,6 +415,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/admin-tools-api.json'
     | '/advertise'
     | '/ai-news-api.json'
     | '/auth'
@@ -441,6 +453,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  AdminToolsApiDotjsonRoute: typeof AdminToolsApiDotjsonRoute
   AdvertiseRoute: typeof AdvertiseRoute
   AiNewsApiDotjsonRoute: typeof AiNewsApiDotjsonRoute
   AuthRoute: typeof AuthRoute
@@ -630,6 +643,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdvertiseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-tools-api.json': {
+      id: '/admin-tools-api.json'
+      path: '/admin-tools-api.json'
+      fullPath: '/admin-tools-api.json'
+      preLoaderRoute: typeof AdminToolsApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -721,6 +741,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  AdminToolsApiDotjsonRoute: AdminToolsApiDotjsonRoute,
   AdvertiseRoute: AdvertiseRoute,
   AiNewsApiDotjsonRoute: AiNewsApiDotjsonRoute,
   AuthRoute: AuthRoute,
