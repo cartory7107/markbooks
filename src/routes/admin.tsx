@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
+  BadgeCheck,
   BarChart3,
   BookOpen,
   Check,
@@ -645,6 +646,12 @@ function ToolsTab({
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
+                    {(tool.badges || []).includes("verified") && (
+                      <BadgeCheck
+                        className="size-6 shrink-0 text-sky-500 fill-sky-500/15"
+                        aria-label="Verified"
+                      />
+                    )}
                     <span className="truncate font-semibold text-sm">{tool.n}</span>
                     <Badge variant="outline" className="text-[10px] shrink-0">
                       {tool.c}
