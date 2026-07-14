@@ -820,7 +820,7 @@ function ToolsTab({
                       onClick={() => {
                         const cur = new Map(normalizeBadges(editForm.badges).map((badge) => [badgeKey(badge), badge]));
                         if (active) cur.delete(badgeKey(b));
-                        else if (cur.size < 5) cur.add(b);
+                        else if (cur.size < 5) cur.set(badgeKey(b), b);
                         setEditForm({ ...editForm, badges: Array.from(cur.values()) });
                       }}
                       className={`rounded-md px-2.5 py-1 text-xs font-bold transition-all ${
