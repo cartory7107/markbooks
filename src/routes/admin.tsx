@@ -190,25 +190,30 @@ function AdminDashboard() {
       .catch(() => undefined);
   }, []);
 
-  // Lazy-load catalog ONLY when Manage Tools tab is active
+  // Lazy-load catalog ONLY when Manage Tools tab is active.
+  // Uses the admin-only endpoint that returns the FULL raw catalog
+  // (all ~116K tools — including duplicates and broken links) so admins
+  // can view/edit/remove every single entry.
   useEffect(() => {
     if (activeTab !== "tools") return;
     if (catalog.tools.length > 0) return; // already loaded
     setCatalogLoading(true);
-    // Fetch ALL tools (116K+) — admin needs the full catalog
-    fetch(`/search-api.json?limit=50000`)
+    fetch(`/admin-tools-api.json?limit=200000`)
       .then((r) => r.json())
-      .then((data: { results: Tool[]; total: number }) => {
-        // Build categories map from the tools themselves
-        const cats: Record<string, number> = {};
-        for (const t of data.results) {
-          cats[t.c] = (cats[t.c] || 0) + 1;
-        }
+      .then((data: { results: Tool[]; total: number; categories?: Record<string, number> }) => {
+        const cats: Record<string, number> = data.categories && Object.keys(data.categories).length
+          ? data.categories
+          : (() => {
+              const c: Record<string, number> = {};
+              for (const t of data.results) c[t.c] = (c[t.c] || 0) + 1;
+              return c;
+            })();
         setCatalog({ tools: data.results, categories: cats });
         setCatalogLoading(false);
       })
       .catch(() => setCatalogLoading(false));
   }, [activeTab, catalog.tools.length]);
+
 
   // Load submissions and admin edits
   const refreshData = useCallback(() => {
