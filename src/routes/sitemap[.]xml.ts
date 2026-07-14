@@ -37,7 +37,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
           const sitemaps: string[] = [`${BASE_URL}/sitemap-static.xml`];
           for (let i = 0; i < sitemapCount; i++) {
-            sitemaps.push(`${BASE_URL}/sitemap-tools/${i}`);
+            sitemaps.push(`${BASE_URL}/sitemap-tools/${i}.xml`);
           }
 
           const xml = [
