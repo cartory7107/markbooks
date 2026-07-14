@@ -79,6 +79,21 @@ const PREMIUM_BADGES = [
   "Super Valuable",
 ];
 
+const badgeKey = (badge: string) => badge.trim().toLowerCase();
+const hasBadge = (tool: Pick<Tool, "badges">, badge: string) =>
+  (tool.badges || []).some((b) => badgeKey(b) === badgeKey(badge));
+const normalizeBadges = (badges?: string[]) => {
+  const byKey = new Map(PREMIUM_BADGES.map((b) => [badgeKey(b), b]));
+  const seen = new Set<string>();
+  return (badges || []).reduce<string[]>((out, badge) => {
+    const key = badgeKey(badge);
+    if (!key || seen.has(key)) return out;
+    seen.add(key);
+    out.push(byKey.get(key) || badge.trim());
+    return out;
+  }, []);
+};
+
 
 type CatalogData = {
   tools: Tool[];
@@ -520,8 +535,8 @@ function ToolsTab({
     return result;
   }, [mergedTools, search, categoryFilter, pricingFilter]);
 
-  const verifiedTools = useMemo(() => filtered.filter((t) => (t.badges || []).includes("verified")), [filtered]);
-  const unverifiedTools = useMemo(() => filtered.filter((t) => !(t.badges || []).includes("verified")), [filtered]);
+  const verifiedTools = useMemo(() => filtered.filter((t) => hasBadge(t, "Verified")), [filtered]);
+  const unverifiedTools = useMemo(() => filtered.filter((t) => !hasBadge(t, "Verified")), [filtered]);
   const displayedTools = listTab === "verified" ? verifiedTools : unverifiedTools;
 
   const totalPages = Math.max(1, Math.ceil(displayedTools.length / ITEMS_PER_PAGE));
@@ -551,7 +566,7 @@ function ToolsTab({
           p: editForm.p || editTool.p,
           u: editForm.u || editTool.u,
           fl: editForm.fl || editTool.fl,
-          badges: editForm.badges || [],
+          badges: normalizeBadges(editForm.badges),
           pos: typeof editForm.pos === "number" && Number.isFinite(editForm.pos) ? editForm.pos : undefined,
           posr: typeof editForm.posr === "number" && Number.isFinite(editForm.posr) ? editForm.posr : undefined,
           posa: typeof editForm.posa === "number" && Number.isFinite(editForm.posa) ? editForm.posa : undefined,
@@ -656,7 +671,7 @@ function ToolsTab({
 
           <div className="mt-4 space-y-2">
             {paginatedTools.map((tool) => {
-              const isVerified = (tool.badges || []).includes("verified");
+              const isVerified = hasBadge(tool, "Verified");
               return (
                 <div
                   key={tool.n + tool.u}
@@ -797,16 +812,16 @@ function ToolsTab({
               </p>
               <div className="flex flex-wrap gap-2">
                 {PREMIUM_BADGES.map((b) => {
-                  const active = (editForm.badges || []).includes(b);
+                  const active = hasBadge({ badges: editForm.badges }, b);
                   return (
                     <button
                       key={b}
                       type="button"
                       onClick={() => {
-                        const cur = new Set(editForm.badges || []);
-                        if (active) cur.delete(b);
-                        else if (cur.size < 5) cur.add(b);
-                        setEditForm({ ...editForm, badges: Array.from(cur) });
+                        const cur = new Map(normalizeBadges(editForm.badges).map((badge) => [badgeKey(badge), badge]));
+                        if (active) cur.delete(badgeKey(b));
+                        else if (cur.size < 5) cur.set(badgeKey(b), b);
+                        setEditForm({ ...editForm, badges: Array.from(cur.values()) });
                       }}
                       className={`rounded-md px-2.5 py-1 text-xs font-bold transition-all ${
                         active
