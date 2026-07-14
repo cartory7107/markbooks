@@ -28,6 +28,7 @@ export const Route = createFileRoute("/sitemap-static.xml")({
             freq: string;
           }> = [
             { path: "/", priority: "1.0", freq: "daily" },
+            { path: "/verified", priority: "0.95", freq: "weekly" },
             { path: "/ranking", priority: "0.9", freq: "weekly" },
             { path: "/rankings", priority: "0.9", freq: "weekly" },
             { path: "/compare", priority: "0.8", freq: "weekly" },
