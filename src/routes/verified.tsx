@@ -10,6 +10,7 @@ import {
   Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { getVerifiedTools } from "@/lib/verified.functions";
 
 type Tool = {
