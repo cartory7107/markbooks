@@ -639,8 +639,19 @@ function ToolsTab({
         </div>
       ) : (
         <>
+          <Tabs value={listTab} onValueChange={(v) => setListTab(v as "verified" | "unverified")} className="mt-4">
+            <TabsList className="grid w-full sm:w-auto grid-cols-2">
+              <TabsTrigger value="verified">
+                Verified ({verifiedTools.length.toLocaleString()})
+              </TabsTrigger>
+              <TabsTrigger value="unverified">
+                Unverified ({unverifiedTools.length.toLocaleString()})
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <div className="mt-4 text-xs text-muted-foreground">
-            Showing {filtered.length.toLocaleString()} results
+            Showing {displayedTools.length.toLocaleString()} results
           </div>
 
           <div className="mt-4 space-y-2">
