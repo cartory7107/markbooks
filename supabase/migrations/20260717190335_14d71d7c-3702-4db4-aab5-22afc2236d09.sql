@@ -1,0 +1,2 @@
+-- Load SQL from generated file via inline
+-- (content pasted below)
