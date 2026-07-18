@@ -142,9 +142,28 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    position: relative;
   }
+  /* Paper & Ink: fixed dotted grid, radial-masked, no animation */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, color-mix(in oklab, var(--foreground) 14%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+    opacity: 0.5;
+  }
+  .dark body::before {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px);
+    opacity: 1;
+  }
+  #root, main, header, nav, footer, section, aside, article { position: relative; z-index: 1; }
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
   ::selection {
     background: var(--brand-soft);
