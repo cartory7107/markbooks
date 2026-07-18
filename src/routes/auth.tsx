@@ -2,13 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import logoAsset from "@/assets/markbook-symbol-clean.png.asset.json";
+import logoAsset from "@/assets/tavbook-symbol.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — MarkBook" },
-      { name: "description", content: "Sign in to MarkBook with Google." },
+      { title: "Sign in — TavBook" },
+      { name: "description", content: "Sign in to TavBook with Google." },
     ],
   }),
   component: AuthPage,
@@ -54,9 +54,9 @@ function AuthPage() {
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2.5">
-            <img src={logoAsset.url} alt="MarkBook" className="h-10 w-11 object-contain" />
+            <img src={logoAsset.url} alt="TavBook" className="h-10 w-11 object-contain" />
             <span className="text-2xl font-extrabold tracking-tight">
-              Mark<span className="text-brand">Book</span>
+              Tav<span className="text-brand">Book</span>
             </span>
           </Link>
           <h1 className="mt-6 text-2xl font-bold tracking-tight">Welcome back</h1>

@@ -8,27 +8,27 @@ const BASE_URL = "https://markbook.top";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact MarkBook — Get in Touch" },
+      { title: "Contact TavBook — Get in Touch" },
       {
         name: "description",
         content:
-          "Contact the MarkBook team for support, partnerships, or feedback. Reach us via email, Twitter, or our contact form.",
+          "Contact the TavBook team for support, partnerships, or feedback. Reach us via email, Twitter, or our contact form.",
       },
-      { property: "og:title", content: "Contact MarkBook — Get in Touch" },
+      { property: "og:title", content: "Contact TavBook — Get in Touch" },
       {
         property: "og:description",
         content:
-          "Have a question, partnership inquiry, or feedback about MarkBook? Get in touch with our team.",
+          "Have a question, partnership inquiry, or feedback about TavBook? Get in touch with our team.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/contact` },
-      { property: "og:site_name", content: "MarkBook" },
+      { property: "og:site_name", content: "TavBook" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Contact MarkBook — Get in Touch" },
+      { name: "twitter:title", content: "Contact TavBook — Get in Touch" },
       {
         name: "twitter:description",
         content:
-          "Have a question, partnership inquiry, or feedback about MarkBook? Get in touch with our team.",
+          "Have a question, partnership inquiry, or feedback about TavBook? Get in touch with our team.",
       },
       { rel: "canonical", href: `${BASE_URL}/contact` },
     ],
@@ -47,8 +47,8 @@ const CONTACT_CHANNELS = [
   {
     icon: Twitter,
     label: "Twitter / X",
-    value: "@markbook_ai",
-    href: "https://x.com/markbook_ai",
+    value: "@tavbook_ai",
+    href: "https://x.com/tavbook_ai",
     description: "Follow us for updates and news",
   },
   {
@@ -111,7 +111,7 @@ function ContactPage() {
               Send Another Message
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/">Back to MarkBook</Link>
+              <Link to="/">Back to TavBook</Link>
             </Button>
           </div>
         </div>
@@ -127,7 +127,7 @@ function ContactPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "MarkBook",
+            name: "TavBook",
             url: BASE_URL,
             contactPoint: [
               {

@@ -21,13 +21,13 @@ export const Route = createFileRoute("/research")({
   loader: () => getResearchSnapshot(),
   head: ({ loaderData }) => ({
     meta: [
-      { title: "AI Research Hub — Trends, Data & Reports | Markbook AI" },
+      { title: "AI Research Hub — Trends, Data & Reports | TavBook AI" },
       {
         name: "description",
-        content: `Markbook's AI research hub tracks ${loaderData?.totalTools?.toLocaleString?.() ?? "116,000+"} AI tools across ${loaderData?.totalCategories ?? 500}+ categories. Explore trends, category leaders, and independent research on the AI industry.`,
+        content: `TavBook's AI research hub tracks ${loaderData?.totalTools?.toLocaleString?.() ?? "116,000+"} AI tools across ${loaderData?.totalCategories ?? 500}+ categories. Explore trends, category leaders, and independent research on the AI industry.`,
       },
-      { property: "og:title", content: "AI Research Hub — Markbook AI" },
-      { property: "og:description", content: "Independent research and data on the AI tools industry from Markbook's 116,000+ verified directory." },
+      { property: "og:title", content: "AI Research Hub — TavBook AI" },
+      { property: "og:description", content: "Independent research and data on the AI tools industry from TavBook's 116,000+ verified directory." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/research` },
     ],
@@ -59,7 +59,7 @@ function ResearchPage() {
           <span>Research</span>
         </nav>
         <header className="mb-12">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Markbook AI Research Hub</h1>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">TavBook AI Research Hub</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
             Independent research and data on the AI tools industry — powered by the world's largest
             verified AI directory.

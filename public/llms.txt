@@ -1,7 +1,7 @@
-# MarkBook AI
+# TavBook AI
 > The world's largest AI tools directory — 116,000+ verified AI tools across 500+ categories. Discover, compare, and search the best AI for any task.
 
-MarkBook (https://markbook.top) is an independent AI tools directory. Content is editorially curated, updated daily, and free to use.
+TavBook (https://markbook.top) is an independent AI tools directory. Content is editorially curated, updated daily, and free to use.
 
 ## Core
 
@@ -24,4 +24,4 @@ MarkBook (https://markbook.top) is an independent AI tools directory. Content is
 
 ## About
 
-MarkBook is operated by the MarkBook editorial team. Contact: contact@markbook.ai
+TavBook is operated by the TavBook editorial team. Contact: contact@tavbook.ai

@@ -1,4 +1,4 @@
-# MarkBookAI Catalog — Import Guide
+# TavBookAI Catalog — Import Guide
 
 Your catalog is ready! Here's how to get it into your live site.
 

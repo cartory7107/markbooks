@@ -76,7 +76,7 @@ export const Route = createFileRoute("/compare/$slug")({
         }
 
         const names = tools.map(t => t.n).join(" vs ");
-        const title = `${names} — AI Tool Comparison 2026 | MarkBook`;
+        const title = `${names} — AI Tool Comparison 2026 | TavBook`;
         const desc = `Side-by-side comparison of ${names}. Compare features, pricing, pros, cons, and pick the best AI tool for your workflow.`;
         const canonical = `https://markbook.top/compare/${slug}`;
 
@@ -180,7 +180,7 @@ export const Route = createFileRoute("/compare/$slug")({
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
-<meta property="og:site_name" content="MarkBook">
+<meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="${canonical}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -242,7 +242,7 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">MarkBook</a><a href="/compare" class="nav-back">← All comparisons</a></div></nav>
+<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">TavBook</a><a href="/compare" class="nav-back">← All comparisons</a></div></nav>
 <div class="c">
   <div class="bb"><a href="/">Home</a> › <a href="/compare">Compare</a> › <span>${esc(names)}</span></div>
   <div class="hero">
@@ -269,10 +269,10 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 
   <div class="cta">
     <h2>Compare more AI tools</h2>
-    <p>Build your own head-to-head from ${catalog.tools.length.toLocaleString()}+ tools in the MarkBook directory.</p>
+    <p>Build your own head-to-head from ${catalog.tools.length.toLocaleString()}+ tools in the TavBook directory.</p>
     <a href="/compare">Open the comparison builder →</a>
   </div>
-  <div class="footer">&copy; 2026 MarkBook — AI Tools Directory.</div>
+  <div class="footer">&copy; 2026 TavBook — AI Tools Directory.</div>
 </div>
 </body></html>`;
 

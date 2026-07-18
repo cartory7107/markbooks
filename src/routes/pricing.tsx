@@ -8,27 +8,27 @@ const BASE_URL = "https://markbook.top";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "MarkBook Pricing — AI Directory Listings & Advertising" },
+      { title: "TavBook Pricing — AI Directory Listings & Advertising" },
       {
         name: "description",
         content:
-          "Explore MarkBook's pricing plans for AI tool directory listings and advertising. Get your AI tool in front of millions of AI enthusiasts with free and premium options.",
+          "Explore TavBook's pricing plans for AI tool directory listings and advertising. Get your AI tool in front of millions of AI enthusiasts with free and premium options.",
       },
-      { property: "og:title", content: "MarkBook Pricing — AI Directory Listings & Advertising" },
+      { property: "og:title", content: "TavBook Pricing — AI Directory Listings & Advertising" },
       {
         property: "og:description",
         content:
-          "Simple, transparent pricing for listing and advertising your AI tool on MarkBook. Free, Pro, and Enterprise plans available.",
+          "Simple, transparent pricing for listing and advertising your AI tool on TavBook. Free, Pro, and Enterprise plans available.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/pricing` },
-      { property: "og:site_name", content: "MarkBook" },
+      { property: "og:site_name", content: "TavBook" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "MarkBook Pricing — AI Directory Listings & Advertising" },
+      { name: "twitter:title", content: "TavBook Pricing — AI Directory Listings & Advertising" },
       {
         name: "twitter:description",
         content:
-          "Simple, transparent pricing for listing and advertising your AI tool on MarkBook.",
+          "Simple, transparent pricing for listing and advertising your AI tool on TavBook.",
       },
       { rel: "canonical", href: `${BASE_URL}/pricing` },
     ],
@@ -93,7 +93,7 @@ const FAQ_ITEMS = [
   {
     question: "Is listing my AI tool really free?",
     answer:
-      "Yes! Our Free plan lets you submit your AI tool to be listed in the MarkBook directory at no cost. Every submission goes through manual review to ensure quality.",
+      "Yes! Our Free plan lets you submit your AI tool to be listed in the TavBook directory at no cost. Every submission goes through manual review to ensure quality.",
   },
   {
     question: "What does the Pro plan include?",

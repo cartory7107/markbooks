@@ -31,28 +31,28 @@ export const Route = createFileRoute("/blog/")({
     const data = loaderData as LoaderData | undefined;
     return {
       meta: [
-        { title: "MarkBook AI Blog — Guides, Reviews & AI Tool Research" },
+        { title: "TavBook AI Blog — Guides, Reviews & AI Tool Research" },
         {
           name: "description",
           content:
-            "Deep guides, comparisons, and research on the best AI tools of 2026. Written by the MarkBook editorial team using our 116,000+ verified AI directory.",
+            "Deep guides, comparisons, and research on the best AI tools of 2026. Written by the TavBook editorial team using our 116,000+ verified AI directory.",
         },
-        { property: "og:title", content: "MarkBook AI Blog — AI Tool Guides & Research" },
+        { property: "og:title", content: "TavBook AI Blog — AI Tool Guides & Research" },
         {
           property: "og:description",
           content:
-            "Guides, comparisons, and research on the best AI tools of 2026 from MarkBook AI.",
+            "Guides, comparisons, and research on the best AI tools of 2026 from TavBook AI.",
         },
         { property: "og:type", content: "website" },
         { property: "og:url", content: `${BASE_URL}/blog` },
-        { property: "og:site_name", content: "MarkBook" },
+        { property: "og:site_name", content: "TavBook" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:site", content: "@markbook" },
-        { name: "twitter:title", content: "MarkBook AI Blog — AI Tool Guides & Research" },
+        { name: "twitter:site", content: "@tavbook" },
+        { name: "twitter:title", content: "TavBook AI Blog — AI Tool Guides & Research" },
         {
           name: "twitter:description",
           content:
-            "Guides, comparisons, and research on the best AI tools of 2026 from MarkBook AI.",
+            "Guides, comparisons, and research on the best AI tools of 2026 from TavBook AI.",
         },
       ],
       links: [{ rel: "canonical", href: `${BASE_URL}/blog` }],
@@ -62,13 +62,13 @@ export const Route = createFileRoute("/blog/")({
           children: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Blog",
-            name: "MarkBook AI Blog",
+            name: "TavBook AI Blog",
             url: `${BASE_URL}/blog`,
             description:
               "Deep guides, comparisons, and research on the best AI tools of 2026.",
             publisher: {
               "@type": "Organization",
-              name: "MarkBook",
+              name: "TavBook",
               url: BASE_URL,
               logo: { "@type": "ImageObject", url: `${BASE_URL}/favicon.png` },
             },
@@ -80,7 +80,7 @@ export const Route = createFileRoute("/blog/")({
               dateModified: p.updated_at,
               author: p.author
                 ? { "@type": "Person", name: p.author.name }
-                : { "@type": "Organization", name: "MarkBook" },
+                : { "@type": "Organization", name: "TavBook" },
               description: p.excerpt,
             })),
           }),
@@ -176,7 +176,7 @@ function BlogIndex() {
             Updated Weekly
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            MarkBook AI Blog
+            TavBook AI Blog
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             In-depth guides, honest comparisons, and original research on the best AI
@@ -253,7 +253,7 @@ function BlogIndex() {
             <h2 className="text-xl font-semibold">Coming Soon</h2>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
               We're crafting in-depth guides and research. Check back soon for
-              the latest AI insights from the MarkBook team.
+              the latest AI insights from the TavBook team.
             </p>
             <Link
               to="/"

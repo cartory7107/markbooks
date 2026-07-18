@@ -24,7 +24,7 @@ type CompareResult = {
 export const Route = createFileRoute("/compare/")({
   head: () => ({
     meta: [
-      { title: "Compare AI Tools — MarkBook" },
+      { title: "Compare AI Tools — TavBook" },
       { name: "description", content: "Pick 2–4 AI tools and get an AI-researched side-by-side comparison with pros, cons, and a clear winner." },
     ],
   }),

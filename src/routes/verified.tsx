@@ -58,17 +58,17 @@ function extractDomain(url: string): string | null {
 export const Route = createFileRoute("/verified")({
   head: () => ({
     meta: [
-      { title: "Verified AI Tools — MarkBook" },
+      { title: "Verified AI Tools — TavBook" },
       {
         name: "description",
         content:
-          "Browse AI tools that have been hand-verified by the MarkBook editorial team. Every link is tested, every description is reviewed.",
+          "Browse AI tools that have been hand-verified by the TavBook editorial team. Every link is tested, every description is reviewed.",
       },
-      { property: "og:title", content: "Verified AI Tools — MarkBook" },
+      { property: "og:title", content: "Verified AI Tools — TavBook" },
       {
         property: "og:description",
         content:
-          "Hand-verified AI tools. Every link tested, every description reviewed by the MarkBook team.",
+          "Hand-verified AI tools. Every link tested, every description reviewed by the TavBook team.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -173,7 +173,7 @@ function VerifiedPage() {
               <BadgeCheck className="size-7 text-sky-500" />
             </div>
             <div>
-              <h2 className="text-xl font-extrabold tracking-tight">Hand-verified by MarkBook</h2>
+              <h2 className="text-xl font-extrabold tracking-tight">Hand-verified by TavBook</h2>
               <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
                 Every tool on this page has been checked by our editorial team. Links are live, descriptions are accurate, and the product actually exists.
               </p>

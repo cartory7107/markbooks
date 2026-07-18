@@ -77,8 +77,8 @@ export const Route = createFileRoute("/category/$slug")({
         const total = categoryTools.length;
 
         const emoji = emojis[matchedCategory] || "🤖";
-        const title = `Best ${matchedCategory} — ${total}+ Tools Compared | MarkBook AI Directory`;
-        const desc = `Compare ${total}+ ${matchedCategory.toLowerCase()}. Find the best free and paid ${matchedCategory.toLowerCase()} with reviews, features, and pricing. Updated daily on MarkBook AI.`;
+        const title = `Best ${matchedCategory} — ${total}+ Tools Compared | TavBook AI Directory`;
+        const desc = `Compare ${total}+ ${matchedCategory.toLowerCase()}. Find the best free and paid ${matchedCategory.toLowerCase()} with reviews, features, and pricing. Updated daily on TavBook AI.`;
 
         // Related categories
         const relatedCats = Object.entries(catalog.categories)
@@ -93,7 +93,7 @@ export const Route = createFileRoute("/category/$slug")({
           name: title,
           description: desc,
           url: `https://markbook.top/category/${slug}`,
-          isPartOf: { "@type": "WebSite", name: "MarkBook AI", url: "https://markbook.top" },
+          isPartOf: { "@type": "WebSite", name: "TavBook AI", url: "https://markbook.top" },
           mainEntity: {
             "@type": "ItemList",
             numberOfItems: total,
@@ -127,7 +127,7 @@ export const Route = createFileRoute("/category/$slug")({
         }).join("\n");
 
         // Keywords meta
-        const keywords = `${matchedCategory}, best ${matchedCategory.toLowerCase()}, free ${matchedCategory.toLowerCase()}, top ${matchedCategory.toLowerCase()}, ${matchedCategory.toLowerCase()} comparison, ${matchedCategory.toLowerCase()} reviews, ${matchedCategory.toLowerCase()} alternatives, AI tools directory, MarkBook`;
+        const keywords = `${matchedCategory}, best ${matchedCategory.toLowerCase()}, free ${matchedCategory.toLowerCase()}, top ${matchedCategory.toLowerCase()}, ${matchedCategory.toLowerCase()} comparison, ${matchedCategory.toLowerCase()} reviews, ${matchedCategory.toLowerCase()} alternatives, AI tools directory, TavBook`;
 
         return new Response(`<!DOCTYPE html>
 <html lang="en">
@@ -191,12 +191,12 @@ a{color:#6366f1;text-decoration:none}a:hover{color:#818cf8}
   <div id="done" class="done" style="display:none">&#10003; All ${total.toLocaleString()} ${matchedCategory.toLowerCase()} loaded!</div>
   <div class="sec"><h2>Related Categories</h2><p class="sub">Explore more AI tools</p><div class="rts">${relatedHtml}</div></div>
   <div class="seo">
-    <h2>About ${matchedCategory} on MarkBook</h2>
-    <p>MarkBook is the most comprehensive AI tools directory on the internet, featuring ${total.toLocaleString()}+ ${matchedCategory.toLowerCase()}. Whether you are looking for free ${matchedCategory.toLowerCase()}, paid options, or the latest ${matchedCategory.toLowerCase()} released in 2025, our curated directory helps you discover, compare, and choose the right AI tool.</p>
+    <h2>About ${matchedCategory} on TavBook</h2>
+    <p>TavBook is the most comprehensive AI tools directory on the internet, featuring ${total.toLocaleString()}+ ${matchedCategory.toLowerCase()}. Whether you are looking for free ${matchedCategory.toLowerCase()}, paid options, or the latest ${matchedCategory.toLowerCase()} released in 2025, our curated directory helps you discover, compare, and choose the right AI tool.</p>
     <p>Each tool in our ${matchedCategory} directory has been verified for quality with direct links to official websites. We update our ${matchedCategory.toLowerCase()} listings daily to ensure you always have access to the newest and most relevant AI tools.</p>
-    <p>Looking for the best ${matchedCategory.toLowerCase()}? MarkBook includes tools for every use case, from beginners to professionals. Filter by pricing and find exactly what you need.</p>
+    <p>Looking for the best ${matchedCategory.toLowerCase()}? TavBook includes tools for every use case, from beginners to professionals. Filter by pricing and find exactly what you need.</p>
   </div>
-  <div class="cta"><h2>Explore 116,000+ AI Tools</h2><p>Discover the full MarkBook AI tools directory</p><a href="/">Browse All AI Tools &rarr;</a></div>
+  <div class="cta"><h2>Explore 116,000+ AI Tools</h2><p>Discover the full TavBook AI tools directory</p><a href="/">Browse All AI Tools &rarr;</a></div>
 </div>
 <script>
 (function(){

@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rankings/")({
         const cats = Object.entries(catalog.categories).sort((a, b) => b[1] - a[1]);
 
         const canonical = "https://markbook.top/rankings";
-        const title = "AI Tool Rankings — Best & Top AI Tools of 2026 | MarkBook";
+        const title = "AI Tool Rankings — Best & Top AI Tools of 2026 | TavBook";
         const desc = `Ranked leaderboards of the best AI tools across ${cats.length} categories. Compare and pick the top AI tool for writing, image generation, coding, video, and more.`;
 
         const itemListLd = {
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/rankings/")({
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
-<meta property="og:site_name" content="MarkBook">
+<meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="${canonical}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -92,14 +92,14 @@ a{color:#4f46e5;text-decoration:none}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">MarkBook</a></div></nav>
+<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">TavBook</a></div></nav>
 <div class="c">
   <div class="hero">
     <h1>AI Tool Rankings</h1>
     <p>Curated leaderboards across ${cats.length} AI categories. Each ranking is refreshed with the catalog and ordered by verified quality, feature depth, and pricing accessibility.</p>
   </div>
   <div class="grid">${cardsHtml}</div>
-  <div class="footer">&copy; 2026 MarkBook — AI Tools Directory.</div>
+  <div class="footer">&copy; 2026 TavBook — AI Tools Directory.</div>
 </div>
 </body></html>`;
 

@@ -7,8 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — MarkBook" },
-      { name: "description", content: "Your MarkBook profile — view saved AI tools, reports, recommendations, and ad campaigns." },
+      { title: "My Profile — TavBook" },
+      { name: "description", content: "Your TavBook profile — view saved AI tools, reports, recommendations, and ad campaigns." },
     ],
   }),
   component: ProfilePage,
@@ -53,14 +53,14 @@ function ProfilePage() {
           </span>
           <h1 className="mt-5 text-2xl font-extrabold">Sign In Required</h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Sign in to view your profile, saved tools, and activity on MarkBook.
+            Sign in to view your profile, saved tools, and activity on TavBook.
           </p>
           <Button variant="brand" className="mt-7 gap-2" onClick={handleSignIn}>
             <LogIn className="size-4" /> Sign Up & Login
           </Button>
           <div className="mt-4">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/"><ArrowLeft className="size-4" /> Back to MarkBook</Link>
+              <Link to="/"><ArrowLeft className="size-4" /> Back to TavBook</Link>
             </Button>
           </div>
         </div>

@@ -132,8 +132,8 @@ function RankingToolIcon({ name, url, size = "sm" }: { name: string; url?: strin
 export const Route = createFileRoute("/ranking")({
   head: () => ({
     meta: [
-      { title: "AI Tools Ranking — MarkBook" },
-      { name: "description", content: "See the top-ranked AI tools on MarkBook." },
+      { title: "AI Tools Ranking — TavBook" },
+      { name: "description", content: "See the top-ranked AI tools on TavBook." },
     ],
   }),
   component: RankingPage,
