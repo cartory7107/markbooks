@@ -1,46 +1,55 @@
 # MarkBook AI — robots.txt
 # https://markbook.top/robots.txt
+# Fully open to search engines, closed only for admin/auth surfaces.
 
-# ── Googlebot (explicit) ──
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin-inbox
+Disallow: /auth
+Disallow: /profile
+
+# ── Explicit allow for major crawlers ──
 User-agent: Googlebot
 Allow: /
 Disallow: /admin
+Disallow: /admin-inbox
 Disallow: /auth
-Disallow: /blog-admin-api.json
-Disallow: /blog-categories-api.json
-Disallow: /tools-api.json
-Disallow: /search-api.json
-Disallow: /exclusive-api.json
-Disallow: /ai-news-api.json
-Crawl-delay: 0
+Disallow: /profile
 
-# ── All other crawlers ──
-User-agent: *
+User-agent: Googlebot-Image
 Allow: /
-Allow: /sitemap.xml
-Allow: /sitemap-static.xml
-Allow: /sitemap-tools/
+
+User-agent: Bingbot
+Allow: /
 Disallow: /admin
+Disallow: /admin-inbox
 Disallow: /auth
-Disallow: /blog-admin-api.json
-Disallow: /blog-categories-api.json
-Disallow: /tools-api.json
-Disallow: /search-api.json
-Disallow: /exclusive-api.json
-Disallow: /ai-news-api.json
-Crawl-delay: 1
+Disallow: /profile
 
-# ── Sitemap ──
-Sitemap: https://markbook.top/sitemap.xml
+User-agent: DuckDuckBot
+Allow: /
 
-# ── AI Crawlers — full access ──
+User-agent: YandexBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# ── AI Crawlers ──
 User-agent: GPTBot
 Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
 Allow: /
 
 User-agent: PerplexityBot
@@ -49,7 +58,7 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-User-agent: BingPreview
+User-agent: Applebot
 Allow: /
 
 User-agent: Applebot-Extended
@@ -60,3 +69,10 @@ Allow: /
 
 User-agent: Twitterbot
 Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# ── Sitemaps ──
+Sitemap: https://markbook.top/sitemap.xml
+Sitemap: https://markbook.top/sitemap-static.xml
