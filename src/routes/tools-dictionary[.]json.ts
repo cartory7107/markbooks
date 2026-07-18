@@ -24,7 +24,7 @@ export const Route = createFileRoute("/tools-dictionary.json")({
         const dictionary = {
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: "MarkBook AI Tools Dictionary",
+          name: "TavBook AI Tools Dictionary",
           description: "A comprehensive machine-readable directory of AI tools. Contains over 116,000 AI tools across 500+ categories including AI chatbots, AI image generators, AI video generators, AI code assistants, AI writing tools, AI music generators, AI voice generators, AI search engines, and more.",
           url: "https://markbook.top",
           numberOfItems: catalog.tools.length,
@@ -147,7 +147,7 @@ function generateKeywords(catalog: { tools: { n: string; c: string; g: string; d
     "ai tools no sign up", "ai tools online free", "best free ai tools 2025",
     "top rated ai tools", "most popular ai tools", "trending ai tools",
     "new ai tools 2025", "latest ai tools", "ai tools updated daily",
-    "markbook ai tools", "markbook directory", "markbook ai",
+    "tavbook ai tools", "tavbook directory", "tavbook ai",
   ];
   for (const k of generalKeywords) kw.add(k);
 

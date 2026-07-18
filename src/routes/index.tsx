@@ -39,7 +39,7 @@ import {
   Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoAsset from "@/assets/markbook-symbol-clean.png.asset.json";
+import logoAsset from "@/assets/tavbook-symbol.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 
 type Tool = {
@@ -153,11 +153,11 @@ function getToolGradientColors(name: string) {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MarkBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
+      { title: "TavBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
       {
         name: "description",
         content:
-          "MarkBook is the world's largest AI tools directory. Search, compare, and discover 116,000+ AI tools — chatbots, image, video, code, and writing — across 500+ categories.",
+          "TavBook is the world's largest AI tools directory. Search, compare, and discover 116,000+ AI tools — chatbots, image, video, code, and writing — across 500+ categories.",
       },
     ],
   }),
@@ -484,7 +484,7 @@ function Index() {
       {/* ─── Sponsored Banner ─── */}
       {showSponsor && (
         <div className="sponsor-glow py-2 text-center text-sm text-white relative">
-          <span className="font-medium">🔥 Sponsored by MarkBook AI</span>
+          <span className="font-medium">🔥 Sponsored by TavBook AI</span>
           <span className="mx-2 opacity-60">—</span>
           <span className="opacity-90">Discover 116,000+ AI tools. Updated daily.</span>
           <button
@@ -500,10 +500,10 @@ function Index() {
       <header className="glass-nav sticky top-0 z-50 w-full">
         <div className="mx-auto flex h-14 max-w-[1480px] items-center gap-2 px-4 lg:h-16 min-w-0 overflow-hidden">
           {/* Logo */}
-          <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="MarkBook home">
-            <img src={logoAsset.url} alt="MarkBook" className="h-8 w-8 object-contain" />
+          <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="TavBook home">
+            <img src={logoAsset.url} alt="TavBook" className="h-8 w-8 object-contain" />
             <span className="text-lg font-extrabold tracking-tight hidden sm:inline">
-              Mark<span className="gradient-text">Book</span>
+              Tav<span className="gradient-text">Book</span>
             </span>
           </Link>
 
@@ -943,7 +943,7 @@ function Index() {
                 to="/advertise"
                 className="mt-3 flex items-center justify-between text-xs font-medium text-muted-foreground hover:text-primary"
               >
-                Advertise on MarkBook <ArrowRight className="size-3" />
+                Advertise on TavBook <ArrowRight className="size-3" />
               </Link>
             </div>
           </div>
@@ -1323,7 +1323,7 @@ function Index() {
           <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => { setShowVisitorPopup(false); localStorage.setItem("mb-visitor-popup-seen", "1"); }} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
             <span className="mx-auto grid size-16 place-items-center rounded-2xl bg-primary/10 text-3xl">👋</span>
-            <h3 className="mt-5 text-xl font-extrabold">Welcome to MarkBook!</h3>
+            <h3 className="mt-5 text-xl font-extrabold">Welcome to TavBook!</h3>
             <p className="mt-3 text-sm text-muted-foreground leading-6">Join thousands of AI enthusiasts discovering the best tools. Sign in to save, recommend, and track your favorites.</p>
             <div className="mt-6 space-y-2">
               <Button variant="brand" className="w-full gap-2" onClick={() => { setShowVisitorPopup(false); localStorage.setItem("mb-visitor-popup-seen", "1"); handleSignIn(); }}>
@@ -1380,9 +1380,9 @@ function Index() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <img src={logoAsset.url} alt="MarkBook" className="h-8 w-8 object-contain" />
+                <img src={logoAsset.url} alt="TavBook" className="h-8 w-8 object-contain" />
                 <span className="text-lg font-extrabold">
-                  Mark<span className="gradient-text">Book</span>
+                  Tav<span className="gradient-text">Book</span>
                 </span>
               </div>
               <p className="text-sm text-muted-foreground leading-6">
@@ -1425,7 +1425,7 @@ function Index() {
           </div>
           <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
             <p className="text-xs text-muted-foreground">
-              &copy; {new Date().getFullYear()} MarkBook. All rights reserved.
+              &copy; {new Date().getFullYear()} TavBook. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <Globe className="size-4 text-muted-foreground" />

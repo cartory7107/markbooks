@@ -1,10 +1,10 @@
 ---
 Task ID: logo-fix-final
 Agent: main
-Task: Fix real brand logos for all AI tools on MarkBookAI
+Task: Fix real brand logos for all AI tools on TavBookAI
 
 Work Log:
-- Discovered the ACTUAL deployed repo is a git submodule at /home/z/my-project/markbookai-844c8143/
+- Discovered the ACTUAL deployed repo is a git submodule at /home/z/my-project/tavbookai-844c8143/
 - Previous 3 rounds of fixes were editing the PARENT repo, NOT the deployed submodule
 - The submodule originally used a server-side logo API (createServerFn + @/api/logo) that wasn't working
 - Replaced server-side approach with direct client-side <img> loading from icon.horse

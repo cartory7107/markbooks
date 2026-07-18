@@ -1,4 +1,4 @@
-# MarkBook AI — robots.txt
+# TavBook AI — robots.txt
 # https://markbook.top/robots.txt
 # Fully open to search engines, closed only for admin/auth surfaces.
 

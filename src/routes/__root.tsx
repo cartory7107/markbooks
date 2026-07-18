@@ -13,7 +13,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "../assets/markbook-symbol-clean.png.asset.json";
+import logoAsset from "../assets/tavbook-symbol.png.asset.json";
 import type { User } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
@@ -81,38 +81,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MarkBook AI — 116,000+ AI Tools Directory | Discover & Compare" },
+      { title: "TavBook AI — 116,000+ AI Tools Directory | Discover & Compare" },
       {
         name: "description",
         content:
-          "MarkBook AI is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. Search, compare, and discover the best AI chatbots, image generators, video tools, code assistants, and writing tools. Free & paid. Updated daily.",
+          "TavBook AI is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. Search, compare, and discover the best AI chatbots, image generators, video tools, code assistants, and writing tools. Free & paid. Updated daily.",
       },
       {
         name: "keywords",
         content:
-          "MarkBook, MarkBook AI, markbook.top, markbook ai tools, markbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, 116000 AI tools, AI finder, AI catalog, AI search platform",
+          "TavBook, TavBook AI, markbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, 116000 AI tools, AI finder, AI catalog, AI search platform",
       },
-      { name: "application-name", content: "MarkBook" },
-      { name: "apple-mobile-web-app-title", content: "MarkBook" },
-      { name: "author", content: "MarkBook" },
-      { name: "publisher", content: "MarkBook" },
+      { name: "application-name", content: "TavBook" },
+      { name: "apple-mobile-web-app-title", content: "TavBook" },
+      { name: "author", content: "TavBook" },
+      { name: "publisher", content: "TavBook" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "bingbot", content: "index, follow" },
-      { property: "og:title", content: "MarkBook AI — 116,000+ AI Tools Directory" },
+      { property: "og:title", content: "TavBook AI — 116,000+ AI Tools Directory" },
       { property: "og:description", content: "Discover, compare & search 116,000+ AI tools across 500+ categories. The world's largest AI directory." },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "MarkBook" },
+      { property: "og:site_name", content: "TavBook" },
       { property: "og:url", content: "https://markbook.top" },
       { property: "og:locale", content: "en_US" },
       { property: "og:image", content: "https://markbook.top/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MarkBook AI — 116,000+ AI Tools Directory" },
+      { property: "og:image:alt", content: "TavBook AI — 116,000+ AI Tools Directory" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@markbook" },
-      { name: "twitter:creator", content: "@markbook" },
-      { name: "twitter:title", content: "MarkBook AI — 116,000+ AI Tools Directory" },
+      { name: "twitter:site", content: "@tavbook" },
+      { name: "twitter:creator", content: "@tavbook" },
+      { name: "twitter:title", content: "TavBook AI — 116,000+ AI Tools Directory" },
       { name: "twitter:description", content: "Discover, compare & search 116,000+ AI tools across 500+ categories." },
       { name: "twitter:image", content: "https://markbook.top/og-image.png" },
       { name: "theme-color", content: "#0a0a0a" },
@@ -137,7 +137,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { rel: "apple-touch-icon", sizes: "180x180", href: "/favicon.png" },
       { rel: "mask-icon", href: "/favicon.png", color: "#0a0a0a" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "alternate", type: "application/rss+xml", title: "MarkBook Blog RSS", href: "https://markbook.top/rss.xml" },
+      { rel: "alternate", type: "application/rss+xml", title: "TavBook Blog RSS", href: "https://markbook.top/rss.xml" },
       { rel: "sitemap", type: "application/xml", href: "https://markbook.top/sitemap.xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -156,10 +156,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          "name": "MarkBook",
-          "alternateName": ["MarkBook AI", "MarkBook AI Tools Directory", "markbook.top"],
+          "name": "TavBook",
+          "alternateName": ["TavBook AI", "TavBook AI Tools Directory", "markbook.top"],
           "url": "https://markbook.top",
-          "description": "MarkBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories.",
+          "description": "TavBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories.",
           "potentialAction": {
             "@type": "SearchAction",
             "target": "https://markbook.top/?q={search_term_string}",
@@ -167,7 +167,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           },
           "publisher": {
             "@type": "Organization",
-            "name": "MarkBook",
+            "name": "TavBook",
             "url": "https://markbook.top",
             "logo": { "@type": "ImageObject", "url": "https://markbook.top/favicon.png" }
           }
@@ -179,18 +179,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "@context": "https://schema.org",
           "@type": "Organization",
           "@id": "https://markbook.top/#organization",
-          "name": "MarkBook",
-          "alternateName": ["MarkBook AI", "markbook.top", "MarkBook AI Tools Directory"],
+          "name": "TavBook",
+          "alternateName": ["TavBook AI", "markbook.top", "TavBook AI Tools Directory"],
           "url": "https://markbook.top",
           "logo": {
             "@type": "ImageObject",
             "url": "https://markbook.top/favicon.png",
             "width": 512,
             "height": 512,
-            "caption": "MarkBook logo"
+            "caption": "TavBook logo"
           },
           "image": "https://markbook.top/og-image.png",
-          "description": "MarkBook — the world's largest AI tools directory. Discover, compare, and search 116,000+ AI tools across 500+ categories.",
+          "description": "TavBook — the world's largest AI tools directory. Discover, compare, and search 116,000+ AI tools across 500+ categories.",
           "foundingDate": "2024",
           "sameAs": [
             "https://markbook.top",
@@ -204,10 +204,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Dataset",
-          "name": "MarkBook AI Tools Directory",
+          "name": "TavBook AI Tools Directory",
           "description": "A comprehensive directory of 116,000+ AI tools spanning 500+ categories, including pricing, descriptions, categories, and direct links.",
           "url": "https://markbook.top/tools-dictionary.json",
-          "creator": { "@type": "Organization", "name": "MarkBook" },
+          "creator": { "@type": "Organization", "name": "TavBook" },
           "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://markbook.top/tools-dictionary.json" },
           "temporalCoverage": "2024/2026",
           "spatialCoverage": "Worldwide"
@@ -221,26 +221,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "What is MarkBook?",
+              "name": "What is TavBook?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "MarkBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. It helps users discover, compare, and choose the best AI tools for any task."
+                "text": "TavBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. It helps users discover, compare, and choose the best AI tools for any task."
               }
             },
             {
               "@type": "Question",
-              "name": "Is MarkBook free to use?",
+              "name": "Is TavBook free to use?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, MarkBook is completely free. Search, browse, and compare AI tools without any cost."
+                "text": "Yes, TavBook is completely free. Search, browse, and compare AI tools without any cost."
               }
             },
             {
               "@type": "Question",
-              "name": "How many AI tools are on MarkBook?",
+              "name": "How many AI tools are on TavBook?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "MarkBook features over 116,000 AI tools spanning 500+ categories. New tools are added daily."
+                "text": "TavBook features over 116,000 AI tools spanning 500+ categories. New tools are added daily."
               }
             },
             {
@@ -248,7 +248,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
               "name": "How to find the best AI tool?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Use MarkBook's search to find by keyword, browse categories, or filter by pricing. Sort by popularity or newest."
+                "text": "Use TavBook's search to find by keyword, browse categories, or filter by pricing. Sort by popularity or newest."
               }
             }
           ]
@@ -334,7 +334,7 @@ function SplashOverlay() {
     >
       <img
         src={logoAsset.url}
-        alt="MarkBook"
+        alt="TavBook"
         width={88}
         height={88}
         style={{
@@ -348,7 +348,7 @@ function SplashOverlay() {
       <div className="mb-loader-bars" aria-label="Loading">
         <span /><span /><span /><span /><span />
       </div>
-      <div className="mb-loader-text">Loading MarkBook…</div>
+      <div className="mb-loader-text">Loading TavBook…</div>
     </div>
   );
 }

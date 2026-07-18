@@ -27,7 +27,7 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!data) {
       return {
         meta: [
-          { title: "Article not found — MarkBook AI" },
+          { title: "Article not found — TavBook AI" },
           { name: "robots", content: "noindex" },
         ],
       };
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const url =
       post.canonical_url || `${BASE_URL}/blog/${slug}`;
     const title =
-      post.meta_title || `${post.title} — MarkBook AI Blog`;
+      post.meta_title || `${post.title} — TavBook AI Blog`;
     const description = post.meta_description || post.excerpt || "";
     const ogTitle = post.og_title || title;
     const ogDescription = post.og_description || description;
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/blog/$slug")({
             sameAs: [post.author.twitter_url, post.author.linkedin_url].filter(Boolean),
           }),
         }
-      : { "@type": "Organization" as const, name: "MarkBook", url: BASE_URL };
+      : { "@type": "Organization" as const, name: "TavBook", url: BASE_URL };
 
     const scripts: Array<{ type: string; children: string }> = [
       {
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/blog/$slug")({
           author: authorLd,
           publisher: {
             "@type": "Organization",
-            name: "MarkBook",
+            name: "TavBook",
             url: BASE_URL,
             logo: { "@type": "ImageObject", url: `${BASE_URL}/favicon.png` },
           },
@@ -134,7 +134,7 @@ export const Route = createFileRoute("/blog/$slug")({
       { property: "og:type", content: "article" },
       { property: "og:url", content: url },
       { property: "og:image", content: ogImage },
-      { property: "og:site_name", content: "MarkBook" },
+      { property: "og:site_name", content: "TavBook" },
       ...(post.published_at
         ? [
             { property: "article:published_time", content: post.published_at },
@@ -148,7 +148,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "article:tag", content: t },
       ]),
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@markbook" },
+      { name: "twitter:site", content: "@tavbook" },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: ogDescription },
       { name: "twitter:image", content: ogImage },
@@ -494,7 +494,7 @@ function BlogPostPage() {
         {related.length > 0 && (
           <aside className="mt-16 border-t border-border pt-10">
             <h2 className="mb-6 text-xl font-bold tracking-tight sm:text-2xl">
-              More from the MarkBook AI Blog
+              More from the TavBook AI Blog
             </h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
@@ -550,7 +550,7 @@ function BlogPostPage() {
             <h2 className="text-2xl font-bold sm:text-3xl">Never miss an insight</h2>
             <p className="mt-3 text-indigo-100">
               Join thousands of AI professionals. Get weekly deep-dives,
-              comparisons, and research from the MarkBook editorial team.
+              comparisons, and research from the TavBook editorial team.
             </p>
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <input

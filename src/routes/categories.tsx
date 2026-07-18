@@ -40,10 +40,10 @@ export const Route = createFileRoute("/categories")({
   loader: () => loadCategories(),
   head: () => ({
     meta: [
-      { title: "All AI Categories — MarkBook" },
-      { name: "description", content: "Browse every AI tool category on MarkBook — from AI writing and image generation to marketing, productivity and business automation." },
-      { property: "og:title", content: "All AI Categories — MarkBook" },
-      { property: "og:description", content: "Every AI tool category tracked on MarkBook, with emoji icons and live counts." },
+      { title: "All AI Categories — TavBook" },
+      { name: "description", content: "Browse every AI tool category on TavBook — from AI writing and image generation to marketing, productivity and business automation." },
+      { property: "og:title", content: "All AI Categories — TavBook" },
+      { property: "og:description", content: "Every AI tool category tracked on TavBook, with emoji icons and live counts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -60,7 +60,7 @@ function CategoriesPage() {
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <Link to="/" className="text-lg font-extrabold">
-            Mark<span className="text-primary">Book</span>
+            Tav<span className="text-primary">Book</span>
           </Link>
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</Link>
         </div>

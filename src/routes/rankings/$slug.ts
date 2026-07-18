@@ -92,7 +92,7 @@ export const Route = createFileRoute("/rankings/$slug")({
           .join(" ")
           .replace(/^Best/, "Best")
           .replace(/^Top/, "Top");
-        const seoTitle = `${prettyTitle} of 2026 — Ranked | MarkBook`;
+        const seoTitle = `${prettyTitle} of 2026 — Ranked | TavBook`;
         const desc = `The ${prettyTitle.toLowerCase()} of 2026. We ranked the top ${ranked.length} ${category.toLowerCase()} by features, pricing, and user ratings.`;
 
         const itemListLd = {
@@ -160,7 +160,7 @@ export const Route = createFileRoute("/rankings/$slug")({
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
-<meta property="og:site_name" content="MarkBook">
+<meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="${canonical}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -227,7 +227,7 @@ a{color:#4f46e5;text-decoration:none}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">MarkBook</a><a href="/rankings" class="nav-back">← All rankings</a></div></nav>
+<nav class="nav"><div class="nav-inner"><a href="/" class="nav-logo">TavBook</a><a href="/rankings" class="nav-back">← All rankings</a></div></nav>
 <div class="c">
   <div class="bb"><a href="/">Home</a> › <a href="/rankings">Rankings</a> › <span>${esc(prettyTitle)}</span></div>
   <div class="hero">
@@ -249,7 +249,7 @@ a{color:#4f46e5;text-decoration:none}
 
   <div class="sec">
     <h2>How we rank</h2>
-    <p>MarkBook rankings blend user ratings, feature depth, data quality, and pricing accessibility. Verified tools with rich descriptions and working links appear first; repository-only listings are demoted. Rankings refresh with each catalog update.</p>
+    <p>TavBook rankings blend user ratings, feature depth, data quality, and pricing accessibility. Verified tools with rich descriptions and working links appear first; repository-only listings are demoted. Rankings refresh with each catalog update.</p>
   </div>
 
 
@@ -266,7 +266,7 @@ a{color:#4f46e5;text-decoration:none}
     </div>
   </div>
 
-  <div class="footer">&copy; 2026 MarkBook — AI Tools Directory.</div>
+  <div class="footer">&copy; 2026 TavBook — AI Tools Directory.</div>
 </div>
 <script id="rk-cats" type="application/json">${JSON.stringify(allRankings)}</script>
 <script>
@@ -310,7 +310,7 @@ a{color:#4f46e5;text-decoration:none}
     box.hidden = false;
     if (ranked.length === 0){
       var subj = encodeURIComponent('New ranking category suggestion: ' + q);
-      var body = encodeURIComponent('Hi MarkBook team,\\n\\nI searched for "' + q + '" on the "' + currentCat + '" ranking page but did not find a matching category. Please consider adding it.\\n\\nThanks!');
+      var body = encodeURIComponent('Hi TavBook team,\\n\\nI searched for "' + q + '" on the "' + currentCat + '" ranking page but did not find a matching category. Please consider adding it.\\n\\nThanks!');
       box.innerHTML = '<div class="sbempty">'
         + '<h3>No matching ranking for "' + esc(q) + '"</h3>'
         + '<p>We could not find a similar category. Want us to add one? Send a quick suggestion — it helps us prioritize.</p>'

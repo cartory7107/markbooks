@@ -8,8 +8,8 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/submit")({
   head: () => ({
     meta: [
-      { title: "Submit Your AI Tool — MarkBook" },
-      { name: "description", content: "Submit your AI tool to be listed on MarkBook." },
+      { title: "Submit Your AI Tool — TavBook" },
+      { name: "description", content: "Submit your AI tool to be listed on TavBook." },
     ],
   }),
   component: SubmitPage,
@@ -48,14 +48,14 @@ function SubmitPage() {
           </span>
           <h1 className="mt-5 text-2xl font-extrabold">Sign In Required</h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            You need to sign in with your Google account to submit an AI tool to MarkBook.
+            You need to sign in with your Google account to submit an AI tool to TavBook.
           </p>
           <Button variant="brand" className="mt-7 gap-2" onClick={handleSignIn}>
             <LogIn className="size-4" /> Sign In with Google
           </Button>
           <div className="mt-4">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/"><ArrowLeft className="size-4" /> Back to MarkBook</Link>
+              <Link to="/"><ArrowLeft className="size-4" /> Back to TavBook</Link>
             </Button>
           </div>
         </div>
@@ -75,7 +75,7 @@ function SubmitPage() {
             Our team will review your AI tool and contact you before it goes live. This usually takes 1-2 business days.
           </p>
           <Button variant="brand" className="mt-7" asChild>
-            <Link to="/">Back to MarkBook</Link>
+            <Link to="/">Back to TavBook</Link>
           </Button>
         </div>
       </main>
@@ -101,7 +101,7 @@ function SubmitPage() {
               Get discovered by thousands of AI enthusiasts.
             </h1>
             <p className="mt-5 leading-7 text-white/65">
-              List your tool on MarkBook and reach users actively searching for AI solutions.
+              List your tool on TavBook and reach users actively searching for AI solutions.
             </p>
             <div className="mt-10 space-y-4">
               {[

@@ -49,7 +49,7 @@ import { BlogManagement } from "@/components/admin/blog-management";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Panel — MarkBook" },
+      { title: "Admin Panel — TavBook" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -165,7 +165,7 @@ function AdminPage() {
           </p>
           <Button variant="brand" className="mt-7" asChild>
             <Link to="/">
-              <ArrowLeft className="size-4" /> Back to MarkBook
+              <ArrowLeft className="size-4" /> Back to TavBook
             </Link>
           </Button>
         </div>
@@ -299,7 +299,7 @@ function AdminDashboard() {
         <aside className="border-b border-border bg-card p-4 lg:w-64 lg:min-h-screen lg:border-b-0 lg:border-r">
           <div className="flex items-center gap-2 mb-6">
             <Link to="/" className="text-lg font-extrabold tracking-tight">
-              Mark<span className="text-primary">Book</span>
+              Tav<span className="text-primary">Book</span>
             </Link>
             <Badge variant="secondary" className="text-[10px]">
               Admin

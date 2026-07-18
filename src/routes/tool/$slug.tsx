@@ -7,7 +7,7 @@ import { getCatalog, getCategoryEmojis, normalizeCategory, type Tool } from "@/l
  * URL: /tool/slug (e.g. /tool/chatgpt-free, /tool/google-gemini)
  *
  * Pure server-rendered HTML for maximum SEO. Each page has:
- *   - Unique title with tool name + category + "MarkBook"
+ *   - Unique title with tool name + category + "TavBook"
  *   - Meta description with tool details
  *   - JSON-LD SoftwareApplication + FAQPage structured data
  *   - Related tools from the same category
@@ -540,9 +540,9 @@ export const Route = createFileRoute("/tool/$slug")({
           .slice(0, 8);
 
         const emoji = emojis[normCat] || "🤖";
-        const title = `${tool.n} — ${normCat} | ${pricingTag(tool.p)} AI Tool | MarkBook`;
-        const desc = `${tool.n}: ${tool.d} ${pricingTag(tool.p)} ${normCat.toLowerCase()} on MarkBook. Compare features, pricing, and find the best alternatives.`;
-        const keywords = `${tool.n}, ${tool.n} review, ${tool.n} alternative, ${tool.n} ${pricingTag(tool.p).toLowerCase()}, ${normCat}, best ${normCat.toLowerCase()}, AI tools directory, MarkBook`;
+        const title = `${tool.n} — ${normCat} | ${pricingTag(tool.p)} AI Tool | TavBook`;
+        const desc = `${tool.n}: ${tool.d} ${pricingTag(tool.p)} ${normCat.toLowerCase()} on TavBook. Compare features, pricing, and find the best alternatives.`;
+        const keywords = `${tool.n}, ${tool.n} review, ${tool.n} alternative, ${tool.n} ${pricingTag(tool.p).toLowerCase()}, ${normCat}, best ${normCat.toLowerCase()}, AI tools directory, TavBook`;
 
         const rating = randomRating(tool.n);
         const reviews = randomReviews(tool.n);
@@ -571,7 +571,7 @@ export const Route = createFileRoute("/tool/$slug")({
           "mainEntity": [
             { "@type": "Question", "name": `What is ${tool.n}?`, "acceptedAnswer": { "@type": "Answer", "text": tool.d } },
             { "@type": "Question", "name": `Is ${tool.n} free?`, "acceptedAnswer": { "@type": "Answer", "text": `${tool.n} is available as ${tool.p}. Check their website for the latest pricing details.` } },
-            { "@type": "Question", "name": `What are the best alternatives to ${tool.n}?`, "acceptedAnswer": { "@type": "Answer", "text": `You can find ${normCat.toLowerCase()} alternatives to ${tool.n} on MarkBook, which lists thousands of AI tools with comparisons.` } },
+            { "@type": "Question", "name": `What are the best alternatives to ${tool.n}?`, "acceptedAnswer": { "@type": "Answer", "text": `You can find ${normCat.toLowerCase()} alternatives to ${tool.n} on TavBook, which lists thousands of AI tools with comparisons.` } },
           ],
         });
 
@@ -607,7 +607,7 @@ export const Route = createFileRoute("/tool/$slug")({
         if (tool.u && tool.u !== "#" && domain) features.push(`Hosted at ${domain}`);
         features.push(`Listed in ${normCat}`);
         if (tool.g && tool.g !== tool.c) features.push(`Part of ${tool.g}`);
-        features.push("SEO-optimized listing on MarkBook");
+        features.push("SEO-optimized listing on TavBook");
 
         const featuresHtml = features.map(f => `<li class="fi"><span class="fc">&#10003;</span> ${esc(f)}</li>`).join("");
 
@@ -627,7 +627,7 @@ ${kws}
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://markbook.top/tool/${slug}">
-<meta property="og:site_name" content="MarkBook">
+<meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
@@ -774,14 +774,14 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 <!-- Top Nav -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">MarkBook</a>
+    <a href="/" class="nav-logo">TavBook</a>
     <a href="/" class="nav-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
       Back to Directory
     </a>
     <div class="nav-share">
       <button onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✓'" title="Copy link">&#128279;</button>
-      <button onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(window.location.href)+'&text='+encodeURIComponent('${esc(tool.n)} on MarkBook'),'_blank')" title="Share on X">&#120143;</button>
+      <button onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(window.location.href)+'&text='+encodeURIComponent('${esc(tool.n)} on TavBook'),'_blank')" title="Share on X">&#120143;</button>
     </div>
   </div>
 </nav>
@@ -901,8 +901,8 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
     <h2>About ${esc(tool.n)}</h2>
     <p class="sec-sub">Everything you need to know about this ${normCat.toLowerCase()} tool</p>
     <div class="seo-text">
-      <p>${esc(tool.n)} is a ${normCat.toLowerCase()} tool that ${esc(tool.d.toLowerCase().replace(/\.$/, ""))}. Available as ${pricingTag(tool.p).toLowerCase()}, it is listed in the MarkBook AI tools directory alongside ${sameCategoryCount} ${normCat.toLowerCase()} tools from top providers worldwide.</p>
-      <p>Looking for ${esc(tool.n)} alternatives or similar ${normCat.toLowerCase()}? MarkBook helps you compare features, pricing, and reviews across thousands of AI tools. Find the best ${normCat.toLowerCase()} for your specific needs and workflow.</p>
+      <p>${esc(tool.n)} is a ${normCat.toLowerCase()} tool that ${esc(tool.d.toLowerCase().replace(/\.$/, ""))}. Available as ${pricingTag(tool.p).toLowerCase()}, it is listed in the TavBook AI tools directory alongside ${sameCategoryCount} ${normCat.toLowerCase()} tools from top providers worldwide.</p>
+      <p>Looking for ${esc(tool.n)} alternatives or similar ${normCat.toLowerCase()}? TavBook helps you compare features, pricing, and reviews across thousands of AI tools. Find the best ${normCat.toLowerCase()} for your specific needs and workflow.</p>
     </div>
   </div>
 
@@ -929,14 +929,14 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
         What are the best ${esc(tool.n)} alternatives?
         <span class="faq-arrow">&#9660;</span>
       </div>
-      <div class="faq-a">You can find ${normCat.toLowerCase()} alternatives to ${esc(tool.n)} right here on MarkBook. Browse the related tools section below or explore the full ${esc(normCat)} category to compare options.</div>
+      <div class="faq-a">You can find ${normCat.toLowerCase()} alternatives to ${esc(tool.n)} right here on TavBook. Browse the related tools section below or explore the full ${esc(normCat)} category to compare options.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
         How is ${esc(tool.n)} rated?
         <span class="faq-arrow">&#9660;</span>
       </div>
-      <div class="faq-a">${esc(tool.n)} has an average rating of ${rating}/5 based on ${reviews} user reviews on MarkBook. Ratings are aggregated from user feedback across multiple sources.</div>
+      <div class="faq-a">${esc(tool.n)} has an average rating of ${rating}/5 based on ${reviews} user reviews on TavBook. Ratings are aggregated from user feedback across multiple sources.</div>
     </div>
   </div>
 
@@ -949,11 +949,11 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 
   <div class="cta">
     <h2>Explore ${catalog.tools.length.toLocaleString()}+ AI Tools</h2>
-    <p>Discover the full MarkBook AI directory &mdash; your gateway to the best AI tools</p>
+    <p>Discover the full TavBook AI directory &mdash; your gateway to the best AI tools</p>
     <a href="/">Browse All AI Tools &rarr;</a>
   </div>
 
-  <div class="footer">&copy; 2025 MarkBook &mdash; AI Tools Directory. All rights reserved.</div>
+  <div class="footer">&copy; 2025 TavBook &mdash; AI Tools Directory. All rights reserved.</div>
 </div>
 
 <script>

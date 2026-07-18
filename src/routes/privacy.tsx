@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — MarkBook" },
+      { title: "Privacy Policy — TavBook" },
       {
         name: "description",
         content:
-          "Read MarkBook's privacy policy. Learn how Cartory B.D. International collects, uses, and protects your data.",
+          "Read TavBook's privacy policy. Learn how Cartory B.D. International collects, uses, and protects your data.",
       },
-      { property: "og:title", content: "Privacy Policy — MarkBook" },
+      { property: "og:title", content: "Privacy Policy — TavBook" },
       {
         property: "og:description",
         content:
-          "MarkBook's privacy policy — how we handle your information and protect your privacy.",
+          "TavBook's privacy policy — how we handle your information and protect your privacy.",
       },
     ],
   }),
@@ -27,7 +27,7 @@ const sections = [
     id: "information-collection",
     title: "1. Information We Collect",
     content: [
-      "We collect information you provide directly to MarkBook, including your name, email address, and any other details you choose to share when creating an account, submitting an AI tool, contacting us, or using our services.",
+      "We collect information you provide directly to TavBook, including your name, email address, and any other details you choose to share when creating an account, submitting an AI tool, contacting us, or using our services.",
       "We automatically collect certain technical information when you visit our platform, including your IP address, browser type, operating system, referring URLs, pages viewed, and the dates and times of your visits.",
       "We may use cookies, web beacons, and similar tracking technologies to collect information about your browsing activity on our platform.",
     ],
@@ -36,7 +36,7 @@ const sections = [
     id: "how-we-use",
     title: "2. How We Use Your Information",
     content: [
-      "To provide, maintain, and improve the MarkBook platform and its features, including our AI tools directory, search, and comparison functionalities.",
+      "To provide, maintain, and improve the TavBook platform and its features, including our AI tools directory, search, and comparison functionalities.",
       "To personalize your experience, such as displaying AI tools and content relevant to your interests and previous interactions.",
       "To communicate with you about your account, submissions, updates to our platform, and respond to your inquiries or support requests.",
       "To analyze usage patterns and trends in order to improve our platform's performance, user experience, and content relevance.",
@@ -47,9 +47,9 @@ const sections = [
     id: "cookies",
     title: "3. Cookies and Tracking Technologies",
     content: [
-      "MarkBook uses cookies and similar technologies to enhance your browsing experience. Cookies are small data files stored on your device that help us remember your preferences and understand how you use our platform.",
+      "TavBook uses cookies and similar technologies to enhance your browsing experience. Cookies are small data files stored on your device that help us remember your preferences and understand how you use our platform.",
       "We use both session cookies (which expire when you close your browser) and persistent cookies (which remain until they expire or are deleted).",
-      "You can control cookies through your browser settings. However, disabling cookies may limit your ability to use certain features of MarkBook.",
+      "You can control cookies through your browser settings. However, disabling cookies may limit your ability to use certain features of TavBook.",
       "We may also use third-party analytics services that employ cookies and similar technologies to help us understand user engagement and platform performance.",
     ],
   },
@@ -57,7 +57,7 @@ const sections = [
     id: "third-party",
     title: "4. Third-Party Services",
     content: [
-      "MarkBook may contain links to third-party websites, services, and AI tool providers. We are not responsible for the privacy practices or content of these external sites. We encourage you to review the privacy policies of any third-party services you visit.",
+      "TavBook may contain links to third-party websites, services, and AI tool providers. We are not responsible for the privacy practices or content of these external sites. We encourage you to review the privacy policies of any third-party services you visit.",
       "We may integrate with third-party services for analytics, authentication, or other functionality. These services may collect information about your use of our platform in accordance with their own privacy policies.",
       "We do not sell, trade, or otherwise transfer your personally identifiable information to third parties without your consent, except as described in this policy or as required by law.",
     ],
@@ -75,7 +75,7 @@ const sections = [
     id: "childrens-privacy",
     title: "6. Children's Privacy",
     content: [
-      "MarkBook is not directed at children under the age of 13 (or the applicable age of consent in your jurisdiction). We do not knowingly collect personal information from children.",
+      "TavBook is not directed at children under the age of 13 (or the applicable age of consent in your jurisdiction). We do not knowingly collect personal information from children.",
       "If we become aware that we have inadvertently collected personal information from a child under the required age, we will take prompt steps to delete that information from our systems.",
       "If you believe that a child has provided us with personal information, please contact us immediately so we can take appropriate action.",
     ],
@@ -86,7 +86,7 @@ const sections = [
     content: [
       "We reserve the right to update or modify this Privacy Policy at any time. Any changes will be effective immediately upon posting the revised policy on this page with an updated \"Last updated\" date.",
       "We encourage you to review this Privacy Policy periodically to stay informed about how we collect, use, and protect your information.",
-      "Your continued use of MarkBook after any changes to this Privacy Policy constitutes your acceptance of the updated terms.",
+      "Your continued use of TavBook after any changes to this Privacy Policy constitutes your acceptance of the updated terms.",
     ],
   },
   {
@@ -122,8 +122,8 @@ function PrivacyPage() {
           <p className="mt-6 leading-7 text-muted-foreground">
             This Privacy Policy describes how <strong className="text-foreground">Cartory B.D. International</strong>{" "}
             (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) collects, uses, discloses, and protects your
-            personal information when you use <strong className="text-foreground">MarkBook</strong>{" "}
-            (the &quot;Platform&quot;). By accessing or using MarkBook, you agree to the practices described in this policy.
+            personal information when you use <strong className="text-foreground">TavBook</strong>{" "}
+            (the &quot;Platform&quot;). By accessing or using TavBook, you agree to the practices described in this policy.
           </p>
 
           <div className="mt-10 space-y-10">
@@ -143,9 +143,9 @@ function PrivacyPage() {
 
           <div className="mt-10 rounded-xl border border-border bg-muted/50 p-5">
             <h3 className="font-bold">Cartory B.D. International</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Operator of MarkBook</p>
+            <p className="mt-1 text-sm text-muted-foreground">Operator of TavBook</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Email: contact@markbook.ai
+              Email: contact@tavbook.ai
             </p>
           </div>
         </div>

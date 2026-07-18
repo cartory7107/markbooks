@@ -1,4 +1,4 @@
-// Blog posts registry — evergreen SEO articles authored for Markbook.
+// Blog posts registry — evergreen SEO articles authored for TavBook.
 // Each post is a self-contained module with SEO metadata + JSX-ready sections.
 
 export interface BlogFAQ {
@@ -40,11 +40,11 @@ export const blogPosts: BlogPost[] = [
     title: "Best AI Tools in 2026: The Complete Directory for Students, Creators & Businesses",
     metaTitle: "Best AI Tools in 2026 — Full Directory & Comparison Guide",
     metaDescription:
-      "Discover the best AI tools of 2026 across writing, image, video, coding, and business — with pricing, comparisons, and expert picks from Markbook AI's 116,000+ tool directory.",
-    ogTitle: "Best AI Tools in 2026 — The Complete Markbook AI Guide",
+      "Discover the best AI tools of 2026 across writing, image, video, coding, and business — with pricing, comparisons, and expert picks from TavBook AI's 116,000+ tool directory.",
+    ogTitle: "Best AI Tools in 2026 — The Complete TavBook AI Guide",
     ogDescription:
       "A 2026 field guide to the most useful AI tools for students, creators, and businesses. Compare ChatGPT, Claude, Gemini, Midjourney, and 116K+ alternatives.",
-    altText: "Grid of the best AI tools of 2026 featured on Markbook AI directory",
+    altText: "Grid of the best AI tools of 2026 featured on TavBook AI directory",
     primaryKeyword: "best AI tools 2026",
     tags: [
       "best AI tools",
@@ -61,24 +61,24 @@ export const blogPosts: BlogPost[] = [
       "best AI software",
       "AI apps",
       "AI search engine",
-      "Markbook AI",
+      "TavBook AI",
     ],
     publishedAt: "2026-01-08",
     updatedAt: "2026-07-02",
-    author: "Markbook Editorial",
+    author: "TavBook Editorial",
     readMinutes: 14,
     excerpt:
-      "The definitive 2026 guide to the best AI tools — hand-picked from Markbook AI's 116,000+ verified directory. Categories, comparisons, pricing, and honest picks for students, creators, and teams.",
+      "The definitive 2026 guide to the best AI tools — hand-picked from TavBook AI's 116,000+ verified directory. Categories, comparisons, pricing, and honest picks for students, creators, and teams.",
     intro: [
-      "AI tools multiplied faster than any software category in history. In 2023 you could list them in a spreadsheet. In 2026, the Markbook AI directory tracks more than 116,000 verified tools across 500+ categories — and roughly 40 new tools are launched every day. That growth is exciting, but it makes one question harder than ever: which AI tools are actually worth your time in 2026?",
-      "This guide is written for the person who is done reading hype threads. It is a practical, category-by-category walkthrough of the best AI tools in 2026 — with honest strengths, weaknesses, pricing, and links to full comparisons on Markbook. Every tool mentioned here is currently live in the Markbook AI directory, reviewed against real usage, and ranked by our editorial team.",
+      "AI tools multiplied faster than any software category in history. In 2023 you could list them in a spreadsheet. In 2026, the TavBook AI directory tracks more than 116,000 verified tools across 500+ categories — and roughly 40 new tools are launched every day. That growth is exciting, but it makes one question harder than ever: which AI tools are actually worth your time in 2026?",
+      "This guide is written for the person who is done reading hype threads. It is a practical, category-by-category walkthrough of the best AI tools in 2026 — with honest strengths, weaknesses, pricing, and links to full comparisons on TavBook. Every tool mentioned here is currently live in the TavBook AI directory, reviewed against real usage, and ranked by our editorial team.",
       "If you are a student, freelancer, indie hacker, marketer, developer, or business owner, you will find at least one tool in each section that is genuinely worth adopting this year.",
     ],
     sections: [
       {
         heading: "How we chose the best AI tools of 2026",
         paragraphs: [
-          "Markbook AI is the world's largest AI tools directory. Every tool in this article is drawn from our verified catalog and ranked using a repeatable framework, not vibes. We look at four signals: real-world reliability (does the model actually ship what it promises?), pricing transparency, ecosystem lock-in, and community trust (independent reviews, GitHub activity, retention data).",
+          "TavBook AI is the world's largest AI tools directory. Every tool in this article is drawn from our verified catalog and ranked using a repeatable framework, not vibes. We look at four signals: real-world reliability (does the model actually ship what it promises?), pricing transparency, ecosystem lock-in, and community trust (independent reviews, GitHub activity, retention data).",
           "We deliberately exclude tools that are essentially rebranded wrappers around a single API with no additional value, tools with predatory pricing, and tools that require you to hand over data with no clear retention policy. That leaves a shortlist of the most useful AI tools of 2026 — the ones you can actually build a workflow around.",
         ],
       },
@@ -87,7 +87,7 @@ export const blogPosts: BlogPost[] = [
         paragraphs: [
           "The general-purpose AI assistant category is the most competitive of 2026. Four models dominate: ChatGPT (OpenAI), Claude (Anthropic), Gemini (Google), and Perplexity for research-first workflows.",
           "ChatGPT remains the default for most people because of its ecosystem — Custom GPTs, native voice, Canvas, and the largest plugin marketplace. Claude wins for long-form writing, careful reasoning, and safe coding assistance; its 200K+ token context makes it the best AI for reading entire codebases or long PDFs. Gemini has the tightest integration with Google Workspace and the best free tier for casual users. Perplexity is the fastest way to get answers that cite live sources — it functions as an AI search engine more than a chatbot.",
-          "If you can only pay for one, most Markbook readers pick Claude for writing and coding, ChatGPT for versatility, or Gemini if they already live inside Google Docs and Gmail.",
+          "If you can only pay for one, most TavBook readers pick Claude for writing and coding, ChatGPT for versatility, or Gemini if they already live inside Google Docs and Gmail.",
         ],
         list: [
           "ChatGPT — best all-round AI assistant, deepest ecosystem",
@@ -107,7 +107,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Best AI image generators in 2026",
         paragraphs: [
           "Midjourney v7 still leads for aesthetic quality and consistent style, but 2026 is the year open-source caught up. FLUX and Stable Diffusion 3 produce commercially usable images with none of the licensing friction, and Ideogram is the current best for text-inside-images (posters, mockups, packaging).",
-          "For product teams and marketers, the workflow that produced the most reliable results in our Markbook testing was: Ideogram or DALL·E 3 for concepting with text, Midjourney for hero images, and FLUX (self-hosted or via a provider) for high-volume generation without per-image costs.",
+          "For product teams and marketers, the workflow that produced the most reliable results in our TavBook testing was: Ideogram or DALL·E 3 for concepting with text, Midjourney for hero images, and FLUX (self-hosted or via a provider) for high-volume generation without per-image costs.",
         ],
         list: [
           "Midjourney — best aesthetic quality and style consistency",
@@ -154,11 +154,11 @@ export const blogPosts: BlogPost[] = [
         heading: "Free AI tools worth using in 2026",
         paragraphs: [
           "The free tier landscape has never been better. Gemini's free tier includes the flagship model, Claude offers a generous free plan for reading and writing, and Perplexity's free tier is enough for most research needs. For image generation, FLUX Schnell and Bing Image Creator (DALL·E 3) are both free with no meaningful limits for casual use.",
-          "If you want to explore many AI tools without paying anything, Markbook lets you filter the entire 116,000+ directory to free-only with one click.",
+          "If you want to explore many AI tools without paying anything, TavBook lets you filter the entire 116,000+ directory to free-only with one click.",
         ],
       },
       {
-        heading: "How to pick the right AI tool (the Markbook framework)",
+        heading: "How to pick the right AI tool (the TavBook framework)",
         paragraphs: [
           "After reviewing thousands of tools, our editorial team uses a three-question filter to recommend anything: (1) What is the single job you want AI to do this week? (2) Do you already use software that could do it with an AI feature turned on? (3) What is the cost of the tool being wrong once? Those three questions rule out most tools in seconds.",
           "The mistake most people make in 2026 is subscribing to too many AI tools. The winners are the people who pick two or three that fit their workflow and go deep, not the people who collect twenty and use none.",
@@ -172,7 +172,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         q: "Which AI tools are free in 2026?",
-        a: "Gemini, Claude, ChatGPT (basic), Perplexity, FLUX Schnell, Bing Image Creator, and NotebookLM all offer meaningful free tiers in 2026. You can filter the full Markbook AI directory to free-only tools with a single click.",
+        a: "Gemini, Claude, ChatGPT (basic), Perplexity, FLUX Schnell, Bing Image Creator, and NotebookLM all offer meaningful free tiers in 2026. You can filter the full TavBook AI directory to free-only tools with a single click.",
       },
       {
         q: "What is the best AI tool for students?",
@@ -183,8 +183,8 @@ export const blogPosts: BlogPost[] = [
         a: "Claude by Anthropic is the closest ChatGPT alternative for writing, reading, and reasoning. Gemini is the best alternative if you live inside Google Workspace. Perplexity is the best alternative if you mainly want AI-powered search with citations.",
       },
       {
-        q: "How many AI tools does Markbook AI list?",
-        a: "Markbook AI is the world's largest AI tools directory with over 116,000 verified AI tools across 500+ categories, updated daily.",
+        q: "How many AI tools does TavBook AI list?",
+        a: "TavBook AI is the world's largest AI tools directory with over 116,000 verified AI tools across 500+ categories, updated daily.",
       },
       {
         q: "Are AI writing tools worth paying for in 2026?",

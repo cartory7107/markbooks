@@ -16,13 +16,13 @@ const PLACEMENT_OPTIONS = ["Sidebar", "Featured AI", "Homepage", "Category Spotl
 export const Route = createFileRoute("/advertise")({
   head: () => ({
     meta: [
-      { title: "Advertise on MarkBook" },
+      { title: "Advertise on TavBook" },
       {
         name: "description",
         content:
-          "Reach people actively researching and buying AI tools with premium MarkBook placements.",
+          "Reach people actively researching and buying AI tools with premium TavBook placements.",
       },
-      { property: "og:title", content: "Advertise on MarkBook" },
+      { property: "og:title", content: "Advertise on TavBook" },
       {
         property: "og:description",
         content: "Put your AI product in front of high-intent customers.",
@@ -49,7 +49,7 @@ function AdvertisePage() {
             Our team will verify your AI tool and contact you with payment details before anything goes live.
           </p>
           <Button variant="brand" className="mt-7" asChild>
-            <Link to="/">Back to MarkBook</Link>
+            <Link to="/">Back to TavBook</Link>
           </Button>
         </div>
       </main>
@@ -72,7 +72,7 @@ function AdvertisePage() {
               <Megaphone className="size-6" />
             </span>
             <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-              Advertise on MarkBook
+              Advertise on TavBook
             </p>
             <h1 className="mt-3 text-3xl font-extrabold tracking-tight">
               Meet users while they're choosing their next AI tool.
