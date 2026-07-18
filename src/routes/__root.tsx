@@ -178,14 +178,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
+          "@id": "https://markbook.top/#organization",
           "name": "MarkBook",
-          "alternateName": "MarkBook AI",
+          "alternateName": ["MarkBook AI", "markbook.top", "MarkBook AI Tools Directory"],
           "url": "https://markbook.top",
-          "logo": "https://markbook.top/favicon.png",
-          "description": "MarkBook — the world's largest AI tools directory. Discover, compare, and search 116,000+ AI tools.",
-          "sameAs": ["https://markbook.top"]
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://markbook.top/favicon.png",
+            "width": 512,
+            "height": 512,
+            "caption": "MarkBook logo"
+          },
+          "image": "https://markbook.top/og-image.png",
+          "description": "MarkBook — the world's largest AI tools directory. Discover, compare, and search 116,000+ AI tools across 500+ categories.",
+          "foundingDate": "2024",
+          "sameAs": [
+            "https://markbook.top",
+            "https://markbooks.lovable.app"
+          ]
         }),
       },
+
       {
         type: "application/ld+json",
         children: JSON.stringify({
