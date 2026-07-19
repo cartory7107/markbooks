@@ -16,7 +16,7 @@ export const Route = createFileRoute("/blog/")({
     const { getPublishedPosts, getAllCategories, getPostCountByCategory } =
       await import("@/lib/blog.server");
     const [postsRes, categories, counts] = await Promise.all([
-      getPublishedPosts({ limit: 12 }),
+      getPublishedPosts({ limit: 500 }),
       getAllCategories(),
       getPostCountByCategory(),
     ]);
