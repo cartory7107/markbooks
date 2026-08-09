@@ -943,11 +943,26 @@ function SubmissionsTab({
   const [rejectNotes, setRejectNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
-    if (statusFilter === "all") return submissions;
-    return submissions.filter((s) => s.status === statusFilter);
-  }, [submissions, statusFilter]);
+    let result = submissions;
+    if (statusFilter !== "all") {
+      result = result.filter((s) => s.status === statusFilter);
+    }
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (s) =>
+          s.tool_name.toLowerCase().includes(q) ||
+          s.tool_url.toLowerCase().includes(q) ||
+          (s.submitter_name || "").toLowerCase().includes(q) ||
+          (s.submitter_email || "").toLowerCase().includes(q) ||
+          (s.category || "").toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [submissions, statusFilter, search]);
 
   const handleApprove = async (sub: SubmissionRow) => {
     setSaving(true);
@@ -1025,7 +1040,17 @@ function SubmissionsTab({
         Review tool submissions from users.
       </p>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <Input
+          placeholder="Search by tool name, URL, submitter name or email..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9 h-11"
+        />
+      </div>
+
+      <div className="mt-4 flex gap-2 flex-wrap">
         {["all", "pending", "approved", "rejected"].map((s) => (
           <Button
             key={s}
@@ -1073,11 +1098,20 @@ function SubmissionsTab({
                     <span>Category: {sub.category}</span>
                     <span>Pricing: {sub.pricing}</span>
                   </div>
-                  {sub.submitter_name && (
-                    <div className="mt-2 text-[11px] text-muted-foreground">
-                      By {sub.submitter_name} {sub.submitter_email ? `(${sub.submitter_email})` : ""}
-                    </div>
-                  )}
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    {sub.submitter_email ? (
+                      <Badge variant="secondary" className="text-[10px] gap-1 font-mono">
+                        <span className="text-muted-foreground">From:</span> {sub.submitter_email}
+                      </Badge>
+                    ) : sub.submitter_name ? (
+                      <span className="text-[11px] text-muted-foreground">By {sub.submitter_name}</span>
+                    ) : null}
+                    {sub.status === "approved" && (
+                      <Badge className="text-[10px] bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+                        Live in catalog
+                      </Badge>
+                    )}
+                  </div>
                   {sub.admin_notes && (
                     <div className="mt-2 rounded bg-muted px-3 py-1.5 text-[11px] text-muted-foreground">
                       <strong>Admin notes:</strong> {sub.admin_notes}
