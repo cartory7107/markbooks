@@ -1098,11 +1098,20 @@ function SubmissionsTab({
                     <span>Category: {sub.category}</span>
                     <span>Pricing: {sub.pricing}</span>
                   </div>
-                  {sub.submitter_name && (
-                    <div className="mt-2 text-[11px] text-muted-foreground">
-                      By {sub.submitter_name} {sub.submitter_email ? `(${sub.submitter_email})` : ""}
-                    </div>
-                  )}
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    {sub.submitter_email ? (
+                      <Badge variant="secondary" className="text-[10px] gap-1 font-mono">
+                        <span className="text-muted-foreground">From:</span> {sub.submitter_email}
+                      </Badge>
+                    ) : sub.submitter_name ? (
+                      <span className="text-[11px] text-muted-foreground">By {sub.submitter_name}</span>
+                    ) : null}
+                    {sub.status === "approved" && (
+                      <Badge className="text-[10px] bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+                        Live in catalog
+                      </Badge>
+                    )}
+                  </div>
                   {sub.admin_notes && (
                     <div className="mt-2 rounded bg-muted px-3 py-1.5 text-[11px] text-muted-foreground">
                       <strong>Admin notes:</strong> {sub.admin_notes}
