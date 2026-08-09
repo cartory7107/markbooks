@@ -1040,7 +1040,17 @@ function SubmissionsTab({
         Review tool submissions from users.
       </p>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <Input
+          placeholder="Search by tool name, URL, submitter name or email..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9 h-11"
+        />
+      </div>
+
+      <div className="mt-4 flex gap-2 flex-wrap">
         {["all", "pending", "approved", "rejected"].map((s) => (
           <Button
             key={s}
