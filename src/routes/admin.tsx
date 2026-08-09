@@ -943,11 +943,26 @@ function SubmissionsTab({
   const [rejectNotes, setRejectNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
-    if (statusFilter === "all") return submissions;
-    return submissions.filter((s) => s.status === statusFilter);
-  }, [submissions, statusFilter]);
+    let result = submissions;
+    if (statusFilter !== "all") {
+      result = result.filter((s) => s.status === statusFilter);
+    }
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (s) =>
+          s.tool_name.toLowerCase().includes(q) ||
+          s.tool_url.toLowerCase().includes(q) ||
+          (s.submitter_name || "").toLowerCase().includes(q) ||
+          (s.submitter_email || "").toLowerCase().includes(q) ||
+          (s.category || "").toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [submissions, statusFilter, search]);
 
   const handleApprove = async (sub: SubmissionRow) => {
     setSaving(true);
