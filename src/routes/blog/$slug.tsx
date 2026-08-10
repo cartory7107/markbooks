@@ -1,27 +1,36 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import type { BlogPostRow } from "@/lib/blog.server";
+import type { RelatedTool } from "@/lib/blog-related.server";
+import { SITE_URL, SITE_NAME, SITE_TWITTER, OG_IMAGE, LOGO_URL } from "@/lib/site";
 
-const BASE_URL = "https://tavbook.top";
+const BASE_URL = SITE_URL;
 
 type LoaderData = {
   post: BlogPostRow;
   related: BlogPostRow[];
+  relatedTools: RelatedTool[];
 };
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    const { getPublishedPostBySlug, getPublishedPosts } =
-      await import("@/lib/blog.server");
+    const { getPublishedPostBySlug } = await import("@/lib/blog.server");
 
     const post = await getPublishedPostBySlug(params.slug);
     if (!post) throw notFound();
 
-    const relatedRes = await getPublishedPosts({ limit: 4 });
-    const related = relatedRes.posts.filter((p) => p.id !== post.id).slice(0, 3);
+    const { getRelatedPosts, getRelatedTools } = await import(
+      "@/lib/blog-related.server"
+    );
 
-    return { post, related } satisfies LoaderData;
+    const [related, relatedTools] = await Promise.all([
+      getRelatedPosts(post, 3),
+      Promise.resolve(getRelatedTools(post, 6)),
+    ]);
+
+    return { post, related, relatedTools } satisfies LoaderData;
   },
+
   head: ({ params, loaderData }) => {
     const data = loaderData as LoaderData | undefined;
     if (!data) {
