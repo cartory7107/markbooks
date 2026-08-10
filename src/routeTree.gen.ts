@@ -24,6 +24,7 @@ import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ModelsRouteImport } from './routes/models'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CollectionsRouteImport } from './routes/collections'
@@ -121,6 +122,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
+  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/collections'
     | '/contact'
     | '/exclusive-api.json'
+    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -419,6 +429,7 @@ export interface FileRouteTypes {
     | '/collections'
     | '/contact'
     | '/exclusive-api.json'
+    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -459,6 +470,7 @@ export interface FileRouteTypes {
     | '/collections'
     | '/contact'
     | '/exclusive-api.json'
+    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -500,6 +512,7 @@ export interface RootRouteChildren {
   CollectionsRoute: typeof CollectionsRoute
   ContactRoute: typeof ContactRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
+  ModelsRoute: typeof ModelsRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
@@ -631,6 +644,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exclusive-api.json': {
@@ -812,6 +832,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollectionsRoute: CollectionsRoute,
   ContactRoute: ContactRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
+  ModelsRoute: ModelsRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
