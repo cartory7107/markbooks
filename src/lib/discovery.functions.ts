@@ -30,7 +30,14 @@ function rootDomain(url: string): string {
   try {
     const host = new URL(url).hostname.replace(/^www\./, "");
     const parts = host.split(".");
-    return parts.length > 2 ? parts.slice(-2).join(".") : host;
+    if (parts.length <= 2) return host;
+    // Keep three labels for public suffixes like co.uk / com.br / co.in.
+    const suffix2 = parts.slice(-2).join(".");
+    const MULTI = new Set([
+      "co.uk", "org.uk", "ac.uk", "com.au", "com.br", "co.in", "co.jp",
+      "co.nz", "com.mx", "com.tr", "co.za", "com.cn", "com.sg",
+    ]);
+    return MULTI.has(suffix2) ? parts.slice(-3).join(".") : suffix2;
   } catch {
     return "";
   }
