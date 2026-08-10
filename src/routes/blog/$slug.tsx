@@ -16,7 +16,20 @@ export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
     const { getPublishedPostBySlug } = await import("@/lib/blog.server");
 
-    const post = await getPublishedPostBySlug(params.slug);
+    let post = await getPublishedPostBySlug(params.slug);
+
+    // Legacy brand slugs (/blog/...markbook...) resolve to the renamed article.
+    if (!post && params.slug.includes("markbook")) {
+      post = await getPublishedPostBySlug(params.slug.replace(/markbook/g, "tavbook"));
+      if (post) {
+        throw redirect({
+          to: "/blog/$slug",
+          params: { slug: post.slug },
+          statusCode: 301,
+        });
+      }
+    }
+
     if (!post) throw notFound();
 
     const { getRelatedPosts, getRelatedTools } = await import(
@@ -43,9 +56,14 @@ export const Route = createFileRoute("/blog/$slug")({
     }
 
     const { post } = data;
-    const slug = params.slug;
+    const slug = post.slug || params.slug;
+    // Always self-referencing and always on the canonical TavBook domain.
+    const canonicalPath = `/blog/${slug}`;
     const url =
-      post.canonical_url || `${BASE_URL}/blog/${slug}`;
+      post.canonical_url && post.canonical_url.startsWith(BASE_URL)
+        ? post.canonical_url
+        : `${BASE_URL}${canonicalPath}`;
+
     const title =
       post.meta_title || `${post.title} — TavBook AI Blog`;
     const description = post.meta_description || post.excerpt || "";
