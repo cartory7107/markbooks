@@ -51,7 +51,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const description = post.meta_description || post.excerpt || "";
     const ogTitle = post.og_title || title;
     const ogDescription = post.og_description || description;
-    const ogImage = post.og_image_url || post.featured_image_url || `${BASE_URL}/og-image.png`;
+    const ogImage = post.og_image_url || post.featured_image_url || OG_IMAGE;
 
     const authorLd = post.author
       ? {
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/blog/$slug")({
             sameAs: [post.author.twitter_url, post.author.linkedin_url].filter(Boolean),
           }),
         }
-      : { "@type": "Organization" as const, name: "TavBook", url: BASE_URL };
+      : { "@type": "Organization" as const, name: SITE_NAME, url: BASE_URL };
 
     const scripts: Array<{ type: string; children: string }> = [
       {
@@ -77,9 +77,9 @@ export const Route = createFileRoute("/blog/$slug")({
           author: authorLd,
           publisher: {
             "@type": "Organization",
-            name: "TavBook",
+            name: SITE_NAME,
             url: BASE_URL,
-            logo: { "@type": "ImageObject", url: `${BASE_URL}/favicon.png` },
+            logo: { "@type": "ImageObject", url: LOGO_URL },
           },
           datePublished: post.published_at,
           dateModified: post.updated_at,
@@ -143,7 +143,7 @@ export const Route = createFileRoute("/blog/$slug")({
       { property: "og:type", content: "article" },
       { property: "og:url", content: url },
       { property: "og:image", content: ogImage },
-      { property: "og:site_name", content: "TavBook" },
+      { property: "og:site_name", content: SITE_NAME },
       ...(post.published_at
         ? [
             { property: "article:published_time", content: post.published_at },
@@ -157,7 +157,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "article:tag", content: t },
       ]),
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@tavbook" },
+      { name: "twitter:site", content: SITE_TWITTER },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: ogDescription },
       { name: "twitter:image", content: ogImage },
@@ -205,9 +205,8 @@ function formatDate(iso: string | null) {
 /* ------------------------------------------------------------------ */
 
 function BlogPostPage() {
-  const { post, related } = Route.useLoaderData() as LoaderData;
+  const { post, related, relatedTools } = Route.useLoaderData() as LoaderData;
   const [copied, setCopied] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const shareUrl = `${BASE_URL}/blog/${post.slug}`;
   const shareTitle = post.title;
