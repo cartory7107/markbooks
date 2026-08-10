@@ -19,7 +19,6 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         try {
-          const now = new Date().toISOString().split("T")[0];
           const toolCount = getIndexableToolSlugs().length;
           const chunks = Math.max(1, Math.ceil(toolCount / URLS_PER_SITEMAP));
 
@@ -33,7 +32,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
             ...sitemaps.map(
               (loc) =>
-                `  <sitemap>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>`,
+                `  <sitemap>\n    <loc>${loc}</loc>\n  </sitemap>`,
             ),
             `</sitemapindex>`,
           ].join("\n");

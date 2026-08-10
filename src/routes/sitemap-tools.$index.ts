@@ -28,12 +28,10 @@ export const Route = createFileRoute("/sitemap-tools/$index")({
             return new Response("Sitemap not found", { status: 404 });
           }
 
-          const now = new Date().toISOString().split("T")[0];
           const xml = renderUrlset(
             SITE_URL,
             slugs.slice(start, start + URLS_PER_SITEMAP).map((slug) => ({
               path: `/tool/${slug}`,
-              lastmod: now,
               changefreq: "monthly",
               priority: "0.6",
             })),
