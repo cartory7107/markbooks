@@ -68,10 +68,17 @@ export const Route = createFileRoute("/category/$slug")({
         }
 
         // Get first batch of tools (60) — verified+rich first, repos last
-        const { rankBrowseList } = await import("@/lib/catalog-server");
+        const { rankBrowseList, normalizeCategory } = await import("@/lib/catalog-server");
         let categoryTools = rankBrowseList(
-          catalog.tools.filter(t => t.c === matchedCategory || t.g === matchedCategory),
+          catalog.tools.filter(
+            t =>
+              t.c === matchedCategory ||
+              t.g === matchedCategory ||
+              normalizeCategory(t.c) === matchedCategory ||
+              normalizeCategory(t.g) === matchedCategory,
+          ),
         );
+
 
 
         const firstBatch = categoryTools.slice(0, 60);
