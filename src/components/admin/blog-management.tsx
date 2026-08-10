@@ -466,9 +466,16 @@ export function BlogManagement() {
     }
     setAiGenerating(true);
     try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) throw new Error("Your session expired — please sign in again.");
       const res = await fetch("/blog-ai-generate-api.json", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
           topic: aiTopic,
           category: aiCategory || undefined,
@@ -476,6 +483,7 @@ export function BlogManagement() {
           targetWords: Number(aiTargetWords) || 1500,
         }),
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
