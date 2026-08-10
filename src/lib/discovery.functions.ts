@@ -80,6 +80,15 @@ export const getCollections = createServerFn({ method: "GET" }).handler(async ()
   return { groups };
 });
 
+// Shared hosting/repo platforms are not companies behind a product.
+const PLATFORM_DOMAINS = new Set([
+  "github.io", "github.com", "gitlab.io", "vercel.app", "netlify.app",
+  "streamlit.app", "herokuapp.com", "replit.app", "repl.co", "web.app",
+  "firebaseapp.com", "notion.site", "wixsite.com", "wordpress.com",
+  "blogspot.com", "pages.dev", "workers.dev", "glitch.me", "gumroad.com",
+  "producthunt.com", "apps.apple.com", "play.google.com", "huggingface.co",
+]);
+
 /** Companies = real domains that own more than one indexed product. */
 export const getCompanies = createServerFn({ method: "GET" }).handler(async () => {
   const { getCatalog, rankBrowseList } = await import("@/lib/catalog-server");
@@ -88,7 +97,7 @@ export const getCompanies = createServerFn({ method: "GET" }).handler(async () =
   const byDomain = new Map<string, typeof catalog.tools>();
   for (const tool of catalog.tools) {
     const domain = rootDomain(tool.u);
-    if (!domain) continue;
+    if (!domain || PLATFORM_DOMAINS.has(domain)) continue;
     const bucket = byDomain.get(domain);
     if (bucket) bucket.push(tool);
     else byDomain.set(domain, [tool]);
