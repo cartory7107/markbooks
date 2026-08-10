@@ -296,8 +296,10 @@ export function BlogManagement() {
   const fetchArticles = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await apiCall<BlogArticle[]>("list");
-      setArticles(Array.isArray(data) ? data : []);
+      const data = await apiCall<BlogArticle[] | { posts?: BlogArticle[] }>("list", { limit: 100 });
+      const list = Array.isArray(data) ? data : data.posts ?? [];
+      setArticles(list);
+
     } catch (err) {
       toast.error("Failed to load articles: " + (err as Error).message);
     } finally {
