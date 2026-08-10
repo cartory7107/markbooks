@@ -228,6 +228,8 @@ function Index() {
   const topRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const navSearchRef = useRef<HTMLInputElement>(null);
+  const heroSearchRef = useRef<HTMLInputElement>(null);
 
   // Auto-scroll to search results when user types
   const scrollToResults = useCallback(() => {
@@ -725,9 +727,8 @@ function Index() {
                     key={item.label}
                     to={item.href}
                     onClick={() => setMobileMenu(false)}
-                    className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                    className="flex min-h-11 items-center justify-center rounded-md border border-border bg-card px-3 py-2.5 text-sm font-medium active:bg-elevated"
                   >
-                    <span className="text-sm">{item.icon}</span>
                     {item.label}
                   </Link>
                 ) : (
@@ -740,9 +741,8 @@ function Index() {
                       else if (item.action === "news") { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); }
                       setMobileMenu(false);
                     }}
-                    className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                    className="flex min-h-11 items-center justify-center rounded-md border border-border bg-card px-3 py-2.5 text-sm font-medium active:bg-elevated"
                   >
-                    <span className="text-sm">{item.icon}</span>
                     {item.label}
                   </button>
                 ),
