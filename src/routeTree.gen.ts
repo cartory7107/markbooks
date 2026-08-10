@@ -27,6 +27,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ModelsRouteImport } from './routes/models'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CompaniesRouteImport } from './routes/companies'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
@@ -137,6 +138,11 @@ const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesRoute = CompaniesRouteImport.update({
+  id: '/companies',
+  path: '/companies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionsRoute = CollectionsRouteImport.update({
@@ -260,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/collections': typeof CollectionsRoute
+  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/models': typeof ModelsRoute
@@ -301,6 +308,7 @@ export interface FileRoutesByTo {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/collections': typeof CollectionsRoute
+  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/models': typeof ModelsRoute
@@ -343,6 +351,7 @@ export interface FileRoutesById {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/collections': typeof CollectionsRoute
+  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/models': typeof ModelsRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/collections'
+    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
     | '/models'
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/collections'
+    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
     | '/models'
@@ -468,6 +479,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/collections'
+    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
     | '/models'
@@ -510,6 +522,7 @@ export interface RootRouteChildren {
   BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
   CollectionsRoute: typeof CollectionsRoute
+  CompaniesRoute: typeof CompaniesRoute
   ContactRoute: typeof ContactRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
   ModelsRoute: typeof ModelsRoute
@@ -665,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies': {
+      id: '/companies'
+      path: '/companies'
+      fullPath: '/companies'
+      preLoaderRoute: typeof CompaniesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collections': {
@@ -830,6 +850,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
   CollectionsRoute: CollectionsRoute,
+  CompaniesRoute: CompaniesRoute,
   ContactRoute: ContactRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
   ModelsRoute: ModelsRoute,
@@ -861,3 +882,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
