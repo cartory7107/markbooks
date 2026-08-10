@@ -404,9 +404,23 @@ function Index() {
     setShowUserMenu(false);
   };
 
+  // TavBook ships a single premium dark theme — keep the class pinned.
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
+    document.documentElement.classList.add("dark");
+  }, []);
+
+  // ⌘K / Ctrl+K focuses global search; Esc clears focus.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        (navSearchRef.current ?? heroSearchRef.current)?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
 
   const CATEGORY_PRIORITY = [
     "AI Chatbot",
