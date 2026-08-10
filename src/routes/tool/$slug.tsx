@@ -967,14 +967,13 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 </div>
 
 <script>
-// Try loading real favicon from icon.horse then Google fallback
+// Load the TavBook-hosted logo (single request, CDN cached, initials stay if it fails)
 (function(){
   var logo = document.getElementById('tool-logo');
   if(!logo) return;
   var domain = ${JSON.stringify(domain)};
   if(!domain) return;
   var img = new Image();
-  img.crossOrigin = 'anonymous';
   img.onload = function(){
     logo.innerHTML = '';
     logo.style.padding = '10px';
@@ -985,14 +984,10 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
     i.style.cssText = 'width:100%;height:100%;border-radius:20px;object-fit:contain;';
     logo.appendChild(i);
   };
-  img.onerror = function(){
-    var img2 = new Image();
-    img2.onload = img.onload;
-    img2.onerror = function(){};
-    img2.src = 'https://www.google.com/s2/favicons?domain=' + domain + '&sz=128';
-  };
-  img.src = 'https://icon.horse/icon/' + domain;
+  img.onerror = function(){};
+  img.src = '/api/public/logo/' + encodeURIComponent(domain);
 })();
+
 
 // FAQ accordion
 document.querySelectorAll('.faq-q').forEach(function(q){
