@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import type { BlogPostRow } from "@/lib/blog.server";
 import type { RelatedTool } from "@/lib/blog-related.server";
