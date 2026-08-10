@@ -3,7 +3,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import type { BlogPostRow, BlogCategoryRow } from "@/lib/blog.server";
 
-const BASE_URL = "https://tavbook.top";
+import { SITE_URL } from "@/lib/site";
+
+const BASE_URL = SITE_URL;
 
 type LoaderData = {
   posts: BlogPostRow[];
