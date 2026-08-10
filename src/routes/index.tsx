@@ -813,7 +813,7 @@ function Index() {
                   onChange={(e) => handleSearchChange(e.target.value)}
                   onFocus={() => setHeroFocused(true)}
                   onBlur={() => setTimeout(() => setHeroFocused(false), 180)}
-                  placeholder="Search 96k+ AI tools — try “video translation”"
+                  placeholder={`Search ${TOTAL_TOOLS_SHORT} AI tools — try “video translation”`}
                   aria-label="Search AI tools"
                   className="h-14 w-full rounded-xl border border-border bg-card pl-12 pr-28 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
                 />
@@ -1726,15 +1726,8 @@ const ToolCard = memo(function ToolCard({
     return () => document.removeEventListener("mousedown", handler);
   }, [showReactionPopup, tool.n, onToggleReactionPopup]);
 
-  const cardStyle: React.CSSProperties = exclusive
-    ? {
-        backgroundImage: "url('/holographic-card.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        contentVisibility: "auto",
-        containIntrinsicSize: "260px",
-      } as React.CSSProperties
-    : ({ contentVisibility: "auto", containIntrinsicSize: "260px" } as React.CSSProperties);
+  // content-visibility keeps long feeds cheap to render; no per-card imagery.
+  const cardStyle = { contentVisibility: "auto", containIntrinsicSize: "230px" } as React.CSSProperties;
 
   const toolSlug = tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -1747,10 +1740,8 @@ const ToolCard = memo(function ToolCard({
         window.location.href = `/tool/${toolSlug}`;
       }}
       style={cardStyle}
-      className={`tool-lift flex min-w-0 flex-col rounded-xl border-2 p-4 cursor-pointer ${
-        exclusive
-          ? "border-fuchsia-400/60 ring-1 ring-fuchsia-400/30 shadow-[0_0_24px_-12px_rgba(217,70,239,0.45)]"
-          : `border-zinc-300 dark:border-zinc-600 bg-card ${featured ? "ring-1 ring-primary/20" : ""}`
+      className={`tool-lift flex min-w-0 cursor-pointer flex-col rounded-lg border p-3.5 ${
+        exclusive ? "holographic-bg" : "border-border bg-card"
       }`}
     >
       <div className="flex min-w-0 items-start gap-3">
@@ -1760,10 +1751,10 @@ const ToolCard = memo(function ToolCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <a href={tool.u} target="_blank" rel="noopener noreferrer" className="hover:underline" onClick={(e) => e.stopPropagation()}>
-              <h3 className={`truncate font-semibold text-sm ${exclusive ? "text-white drop-shadow" : ""}`}>{tool.n}</h3>
+              <h3 className="truncate font-display text-[15px] font-semibold">{tool.n}</h3>
             </a>
             {isRecommended && (
-              <span className="shrink-0 rounded-md bg-gradient-to-r from-emerald-500 to-green-500 px-2 py-0.5 text-[10px] font-extrabold text-white shadow-sm">
+              <span className="shrink-0 rounded border border-success/40 px-1.5 py-0.5 text-[10px] font-semibold text-success">
                 Recommended
               </span>
             )}
@@ -1779,25 +1770,18 @@ const ToolCard = memo(function ToolCard({
                 return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
               });
               const STYLE: Record<string, string> = {
-                "Verified": "bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 ring-1 ring-sky-300/60 shadow-[0_0_14px_-3px_rgba(56,189,248,0.75)]",
-                "Exclusive": "bg-gradient-to-r from-fuchsia-500 via-pink-500 to-violet-500 ring-1 ring-fuchsia-400/60 shadow-[0_0_12px_-2px_rgba(217,70,239,0.7)]",
-                "Trending": "bg-gradient-to-r from-orange-500 to-amber-500 ring-1 ring-orange-400/60 shadow-[0_0_12px_-2px_rgba(249,115,22,0.6)]",
-                "Super Valuable": "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 ring-1 ring-emerald-300/60 shadow-[0_0_12px_-2px_rgba(16,185,129,0.6)]",
-                "Underrated": "bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-400 ring-1 ring-amber-300/60 shadow-[0_0_12px_-2px_rgba(245,158,11,0.6)]",
-              };
-              const ICON: Record<string, string> = {
-                "Verified": "✓",
-                "Exclusive": "✨",
-                "Trending": "🔥",
-                "Super Valuable": "💎",
-                "Underrated": "⭐",
+                "Verified": "border-primary/50 bg-primary/12 text-primary",
+                "Exclusive": "border-accent2/50 bg-accent2/10 text-accent2",
+                "Trending": "border-amber-400/40 bg-amber-400/10 text-amber-300",
+                "Super Valuable": "border-success/40 bg-success/10 text-success",
+                "Underrated": "border-border bg-elevated text-muted-foreground",
               };
               return list.map((b) => (
                 <span
                   key={b}
-                  className={`shrink-0 rounded-md px-2 py-0.5 text-[10px] font-extrabold text-white ${STYLE[b] || "bg-gradient-to-r from-slate-500 to-slate-700"}`}
+                  className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-semibold ${STYLE[b] || "border-border bg-elevated text-muted-foreground"}`}
                 >
-                  {ICON[b] || "🏅"} {b}
+                  {b === "Verified" ? "✓ " : ""}{b}
                 </span>
               ));
             })()}
@@ -1806,13 +1790,13 @@ const ToolCard = memo(function ToolCard({
               const style = PRICING_STYLES[tool.p];
               if (!style) return null;
               return (
-                <span className={`shrink-0 rounded-md px-2 py-0.5 text-[10px] font-extrabold shadow-sm ${style.bg} ${style.text}`}>
-                  {style.label}
+                <span className="shrink-0 rounded border border-border bg-elevated px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                  {style.label.replace(/^[^A-Za-z]+/, "")}
                 </span>
               );
             })()}
           </div>
-          <p className={`mt-1 truncate text-xs ${exclusive ? "text-white/85" : "text-muted-foreground"}`}>{tool.c}</p>
+          <p className="mt-1 truncate text-xs text-muted-foreground">{tool.c}</p>
         </div>
 
         {/* Three-dot menu button */}
@@ -1855,7 +1839,7 @@ const ToolCard = memo(function ToolCard({
       {hashtags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
           {hashtags.map((tag) => (
-            <span key={tag} className="rounded-md bg-gradient-to-r from-primary/15 to-primary/5 px-1.5 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
+            <span key={tag} className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
               #{tag}
             </span>
           ))}
@@ -1863,12 +1847,12 @@ const ToolCard = memo(function ToolCard({
       )}
       <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
         <div className="flex items-center gap-2 min-w-0 max-w-[55%]">
-          <span className="truncate rounded-md bg-gradient-to-r from-violet-500/15 to-indigo-500/10 px-1.5 py-0.5 text-[10px] font-bold text-violet-600 dark:text-violet-400 border border-violet-500/20">
-            🏷️ {tool.c.replace(/\s+/g, "").replace(/^AI/i, "AI")}
+          <span className="truncate rounded border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {tool.c}
           </span>
           {tool.g && tool.g !== tool.c && (
-            <span className="truncate rounded-md bg-gradient-to-r from-indigo-500/15 to-blue-500/10 px-1.5 py-0.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hidden sm:inline">
-              📂 {tool.g.replace(/\s+/g, "").replace(/^FreeAI/i, "AI")}
+            <span className="hidden truncate rounded border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground sm:inline">
+              {tool.g}
             </span>
           )}
         </div>
@@ -1915,8 +1899,8 @@ const ToolCard = memo(function ToolCard({
           </button>
           {/* Visit button */}
           <a href={tool.u} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
-            <span className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-1.5 text-xs font-bold text-primary transition-all hover:from-primary/20 hover:to-primary/10 hover:shadow-[0_0_12px_-4px_rgba(var(--primary),0.4)]">
-              🌐 Visit <ExternalLink className="size-3" />
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-primary/50 bg-primary/10 px-2.5 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/20">
+              Visit <ExternalLink className="size-3" />
             </span>
           </a>
         </div>
