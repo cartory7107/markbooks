@@ -212,6 +212,7 @@ function Index() {
   const [aiNews, setAiNews] = useState<Array<{ title: string; time: string; url?: string; source?: string }>>([]);
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [heroFocused, setHeroFocused] = useState(false);
   const [savedTools, setSavedTools] = useState<Set<string>>(new Set());
   const [showSponsor, setShowSponsor] = useState(true);
   const [activeFilter, setActiveFilter] = useState<"today" | "new" | "saved" | "popular">("today");
@@ -776,108 +777,147 @@ function Index() {
         )}
       </header>
 
-      {/* ─── Hero Section ─── */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
-        <div className="relative mx-auto max-w-[1480px] px-4 py-12 text-center sm:py-16 lg:py-20">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-primary/70">
-            🔍 The AI Discovery Engine
-          </p>
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            Discover The Best{" "}
-            <span className="gradient-text">AI Websites</span>
-            <br />
-            & Tools
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
-            {catalogLoaded ? (
-              <>
-                {TOTAL_TOOLS_LABEL} AI tools and {categories.length} categories in the best AI tools directory.
-                Updated daily.
-              </>
-            ) : (
-              <>
-                <span className="mb-skeleton" style={{ width: "3ch", display: "inline-block", height: "1.2em", verticalAlign: "text-bottom" }}>&nbsp;</span>{" "}
-                AIs and{" "}
-                <span className="mb-skeleton" style={{ width: "2ch", display: "inline-block", height: "1.2em", verticalAlign: "text-bottom" }}>&nbsp;</span>{" "}
-                categories in the best AI tools directory. Updated daily.
-              </>
-            )}
-          </p>
+      {/* ─── Hero: search is the primary interaction ─── */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-[1480px] px-4 py-10 sm:py-14 lg:py-16">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+              AI Discovery Platform
+            </p>
+            <h1 className="mt-4 font-display text-[2rem] font-bold leading-[1.1] sm:text-5xl lg:text-[3.4rem]">
+              Discover the AI tools, models and ideas shaping what&apos;s next.
+            </h1>
+            <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+              {catalogLoaded ? (
+                <>
+                  Search {TOTAL_TOOLS_LABEL} indexed AI products across {categories.length} categories —
+                  filter by pricing, compare alternatives, and track what launched today.
+                </>
+              ) : (
+                <>
+                  <span className="mb-skeleton" style={{ width: "5ch", display: "inline-block", height: "1.1em", verticalAlign: "text-bottom" }}>&nbsp;</span>{" "}
+                  indexed AI products across{" "}
+                  <span className="mb-skeleton" style={{ width: "3ch", display: "inline-block", height: "1.1em", verticalAlign: "text-bottom" }}>&nbsp;</span>{" "}
+                  categories — filter by pricing, compare alternatives, and track what launched today.
+                </>
+              )}
+            </p>
 
-          {/* Search Bar */}
-          <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row">
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-              <input
-                value={query}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                placeholder="Search by AI, e.g Video Translation AI Tool"
-                className="h-12 w-full rounded-xl border border-border bg-card pl-12 pr-4 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 shadow-sm"
-              />
+            {/* Primary search */}
+            <div className="relative mx-auto mt-8 max-w-2xl">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  ref={heroSearchRef}
+                  value={query}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onFocus={() => setHeroFocused(true)}
+                  onBlur={() => setTimeout(() => setHeroFocused(false), 180)}
+                  placeholder="Search 96k+ AI tools — try “video translation”"
+                  aria-label="Search AI tools"
+                  className="h-14 w-full rounded-xl border border-border bg-card pl-12 pr-28 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
+                />
+                <button
+                  onClick={() => { if (query) scrollToResults(); else heroSearchRef.current?.focus(); }}
+                  className="absolute right-2 top-2 h-10 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  Search
+                </button>
+              </div>
+
+              {/* Autocomplete */}
+              {heroFocused && query.trim().length > 1 && results.length > 0 && (
+                <div className="absolute left-0 right-0 top-16 z-40 overflow-hidden rounded-xl border border-border bg-popover text-left shadow-2xl">
+                  {results.slice(0, 6).map((tool) => (
+                    <Link
+                      key={`ac-${tool.n}-${tool.c}`}
+                      to="/tool/$slug"
+                      params={{ slug: tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") }}
+                      className="flex w-full items-center gap-3 border-b border-border/60 px-3 py-2.5 last:border-0 hover:bg-elevated"
+                    >
+                      <ToolIcon name={tool.n} url={tool.u} small />
+                      <span className="min-w-0 flex-1">
+                        <b className="block truncate text-sm font-semibold">{tool.n}</b>
+                        <span className="block truncate text-xs text-muted-foreground">{tool.d}</span>
+                      </span>
+                      <span className="shrink-0 rounded border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                        Tool
+                      </span>
+                    </Link>
+                  ))}
+                  <button
+                    onClick={() => scrollToResults()}
+                    className="w-full bg-elevated px-3 py-2.5 text-xs font-semibold text-primary"
+                  >
+                    See all results for “{query}”
+                  </button>
+                </div>
+              )}
             </div>
-            <Button
-              variant="brand"
-              size="lg"
-              onClick={() => {
-                if (query) scrollToResults();
-              }}
-              className="h-12 rounded-xl px-8 shadow-sm"
-            >
-              <Search className="size-4" /> Search
-            </Button>
+
+            {/* Search suggestions */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-muted-foreground">Popular:</span>
+              {["Chatbot", "Image generator", "Video editing", "Code assistant", "Transcription"].map((q) => (
+                <button
+                  key={q}
+                  onClick={() => { handleSearchChange(q); }}
+                  className="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="mx-auto mt-8 flex max-w-3xl items-center justify-center gap-6 sm:gap-10">
+          {/* Discovery controls */}
+          <nav aria-label="Discovery sections" className="mx-auto mt-9 grid max-w-4xl grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
             {[
-              {
-                value: catalogLoaded ? TOTAL_TOOLS_SHORT : null,
-                label: "AI Tools",
-                skeletonWidth: "4ch",
-              },
-              {
-                value: catalogLoaded ? `${categories.length}` : null,
-                label: "Categories",
-                skeletonWidth: "3ch",
-              },
-              { value: "Daily", label: "Updates", skeletonWidth: "4ch" },
-              { value: "Free", label: "To Use", skeletonWidth: "3ch" },
+              { label: "Tools", to: undefined as string | undefined, action: true },
+              { label: "Models", to: "/models" },
+              { label: "News", to: "/blog" },
+              { label: "Companies", to: "/companies" },
+              { label: "Collections", to: "/collections" },
+              { label: "Categories", to: "/categories" },
+            ].map((item) =>
+              item.to ? (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className="rounded-lg border border-border bg-card px-3 py-2.5 text-center text-sm font-semibold text-foreground/90 transition-colors hover:border-primary/50 hover:bg-elevated"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" })}
+                  className="rounded-lg border border-primary/60 bg-primary/10 px-3 py-2.5 text-center text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+                >
+                  {item.label}
+                </button>
+              ),
+            )}
+          </nav>
+
+          {/* Real, database-backed stats */}
+          <dl className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { value: catalogLoaded ? TOTAL_TOOLS_SHORT : null, label: "AI tools indexed", w: "5ch" },
+              { value: catalogLoaded ? `${categories.length}` : null, label: "Categories", w: "3ch" },
+              { value: totalResults ? totalResults.toLocaleString() : null, label: "Matching your filters", w: "5ch" },
+              { value: "Daily", label: "Index refresh", w: "4ch" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-xl font-extrabold sm:text-2xl">
-                  {stat.value !== null ? (
-                    stat.value
-                  ) : (
-                    <span
-                      className="mb-skeleton"
-                      style={{ width: stat.skeletonWidth, height: "1em", display: "inline-block" }}
-                    >
-                      &nbsp;
-                    </span>
+              <div key={stat.label} className="rounded-lg border border-border bg-card px-4 py-3 text-center">
+                <dt className="font-display text-xl font-bold sm:text-2xl">
+                  {stat.value !== null ? stat.value : (
+                    <span className="mb-skeleton" style={{ width: stat.w, height: "1em", display: "inline-block" }}>&nbsp;</span>
                   )}
-                </div>
-                <div className="mt-1.5 text-xs text-muted-foreground">{stat.label}</div>
+                </dt>
+                <dd className="mt-1 text-[11px] text-muted-foreground">{stat.label}</dd>
               </div>
             ))}
-          </div>
-          {/* Submit AI CTA */}
-          <div className="mx-auto mt-6 flex max-w-xl flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <div className="text-center sm:text-left">
-              <p className="text-sm font-bold text-foreground">
-                🚀 Submit Your Unique AI Tool — Get Featured!
-              </p>
-              <p className="text-xs text-muted-foreground">
-                List your AI on the fastest-growing AI directory
-              </p>
-            </div>
-            <Link
-              to="/submit"
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-violet-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30"
-            >
-              Submit Now <ArrowRight className="size-4" />
-            </Link>
-          </div>
+          </dl>
         </div>
       </section>
 
