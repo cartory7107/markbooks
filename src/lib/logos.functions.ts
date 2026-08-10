@@ -1,15 +1,24 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+type AuthedContext = { supabase: { from: (t: "user_roles") => any }; userId: string };
+
+/** Role check through the caller's own RLS-scoped client (users can read their own roles). */
+async function assertAdmin(context: AuthedContext) {
+  const { data } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (!data) throw new Error("Forbidden");
+}
+
 /** Aggregate logo-pipeline metrics for the admin panel (admins only). */
 export const getLogoStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    await assertAdmin(context);
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const counts: Record<string, number> = { pending: 0, processing: 0, ready: 0, failed: 0 };
@@ -35,11 +44,7 @@ export const retryLogo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { domain: string; clear?: boolean }) => input)
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    await assertAdmin(context);
 
     const { normalizeDomain, processDomainLogo } = await import("@/lib/logo-pipeline.server");
     const domain = normalizeDomain(data.domain);
@@ -70,11 +75,7 @@ export const processLogoBatch = createServerFn({ method: "POST" })
     domains: (input.domains ?? []).slice(0, 100),
   }))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden");
+    await assertAdmin(context);
 
     const { normalizeDomain, processDomainLogo } = await import("@/lib/logo-pipeline.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
