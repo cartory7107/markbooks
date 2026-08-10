@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS, TOTAL_TOOLS_EXACT, TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -8,7 +9,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -81,16 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TavBook AI — 116,000+ AI Tools Directory | Discover & Compare" },
+      { title: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory | Discover & Compare` },
       {
         name: "description",
         content:
-          "TavBook AI is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. Search, compare, and discover the best AI chatbots, image generators, video tools, code assistants, and writing tools. Free & paid. Updated daily.",
+          `TavBook AI is the world's largest AI tools directory with ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories. Search, compare, and discover the best AI chatbots, image generators, video tools, code assistants, and writing tools. Free & paid. Updated daily.`,
       },
       {
         name: "keywords",
         content:
-          "TavBook, TavBook AI, markbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, 116000 AI tools, AI finder, AI catalog, AI search platform",
+          `TavBook, TavBook AI, markbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, ${TOTAL_TOOLS} AI tools, AI finder, AI catalog, AI search platform`,
       },
       { name: "application-name", content: "TavBook" },
       { name: "apple-mobile-web-app-title", content: "TavBook" },
@@ -99,8 +100,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "bingbot", content: "index, follow" },
-      { property: "og:title", content: "TavBook AI — 116,000+ AI Tools Directory" },
-      { property: "og:description", content: "Discover, compare & search 116,000+ AI tools across 500+ categories. The world's largest AI directory." },
+      { property: "og:title", content: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
+      { property: "og:description", content: `Discover, compare & search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories. The world's largest AI directory.` },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "TavBook" },
       { property: "og:url", content: "https://markbook.top" },
@@ -108,12 +109,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { property: "og:image", content: "https://markbook.top/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "TavBook AI — 116,000+ AI Tools Directory" },
+      { property: "og:image:alt", content: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@tavbook" },
       { name: "twitter:creator", content: "@tavbook" },
-      { name: "twitter:title", content: "TavBook AI — 116,000+ AI Tools Directory" },
-      { name: "twitter:description", content: "Discover, compare & search 116,000+ AI tools across 500+ categories." },
+      { name: "twitter:title", content: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
+      { name: "twitter:description", content: `Discover, compare & search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.` },
       { name: "twitter:image", content: "https://markbook.top/og-image.png" },
       { name: "theme-color", content: "#0a0a0a" },
       { name: "color-scheme", content: "dark light" },
@@ -159,7 +160,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "name": "TavBook",
           "alternateName": ["TavBook AI", "TavBook AI Tools Directory", "markbook.top"],
           "url": "https://markbook.top",
-          "description": "TavBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories.",
+          "description": `TavBook is the world's largest AI tools directory with ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.`,
           "potentialAction": {
             "@type": "SearchAction",
             "target": "https://markbook.top/?q={search_term_string}",
@@ -190,7 +191,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
             "caption": "TavBook logo"
           },
           "image": "https://markbook.top/og-image.png",
-          "description": "TavBook — the world's largest AI tools directory. Discover, compare, and search 116,000+ AI tools across 500+ categories.",
+          "description": `TavBook — the world's largest AI tools directory. Discover, compare, and search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.`,
           "foundingDate": "2024",
           "sameAs": [
             "https://markbook.top",
@@ -205,7 +206,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "@context": "https://schema.org",
           "@type": "Dataset",
           "name": "TavBook AI Tools Directory",
-          "description": "A comprehensive directory of 116,000+ AI tools spanning 500+ categories, including pricing, descriptions, categories, and direct links.",
+          "description": `A comprehensive directory of ${TOTAL_TOOLS_LABEL} AI tools spanning 500+ categories, including pricing, descriptions, categories, and direct links.`,
           "url": "https://markbook.top/tools-dictionary.json",
           "creator": { "@type": "Organization", "name": "TavBook" },
           "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://markbook.top/tools-dictionary.json" },
@@ -224,7 +225,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
               "name": "What is TavBook?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "TavBook is the world's largest AI tools directory with 116,000+ AI tools across 500+ categories. It helps users discover, compare, and choose the best AI tools for any task."
+                "text": `TavBook is the world's largest AI tools directory with ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories. It helps users discover, compare, and choose the best AI tools for any task.`
               }
             },
             {
@@ -240,7 +241,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
               "name": "How many AI tools are on TavBook?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "TavBook features over 116,000 AI tools spanning 500+ categories. New tools are added daily."
+                "text": `TavBook features ${TOTAL_TOOLS_EXACT} AI tools spanning 500+ categories. New tools are added daily.`
               }
             },
             {
@@ -294,24 +295,38 @@ function SplashOverlay() {
   const isLoading = status === "pending";
   const [visible, setVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const shownAtRef = useRef<number>(Date.now());
 
-  // Hide initial splash after first paint settles
+  // Minimum time the splash stays on screen so it never "flashes".
+  const MIN_VISIBLE = 900;
+  // Ignore very short navigations entirely (no flicker for instant routes).
+  const SHOW_DELAY = 400;
+
+  // Hide the initial splash after the first paint settles, but never sooner
+  // than MIN_VISIBLE so the animation can actually be seen.
   useEffect(() => {
     setMounted(true);
-    const t = window.setTimeout(() => setVisible(false), 350);
+    const remaining = Math.max(0, MIN_VISIBLE - (Date.now() - shownAtRef.current));
+    const t = window.setTimeout(() => setVisible(false), remaining);
     return () => window.clearTimeout(t);
   }, []);
 
-  // Show splash whenever router is navigating; hide shortly after it settles
+  // On navigation: only show the splash if the load takes a noticeable time,
+  // and once shown keep it up for MIN_VISIBLE before fading out.
   useEffect(() => {
     if (!mounted) return;
     if (isLoading) {
-      setVisible(true);
-      return;
+      const t = window.setTimeout(() => {
+        shownAtRef.current = Date.now();
+        setVisible(true);
+      }, SHOW_DELAY);
+      return () => window.clearTimeout(t);
     }
-    const t = window.setTimeout(() => setVisible(false), 180);
+    const remaining = Math.max(0, MIN_VISIBLE - (Date.now() - shownAtRef.current));
+    const t = window.setTimeout(() => setVisible(false), remaining);
     return () => window.clearTimeout(t);
   }, [isLoading, mounted]);
+
 
   return (
     <div
@@ -329,7 +344,7 @@ function SplashOverlay() {
         background: "var(--background)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
-        transition: "opacity 220ms ease",
+        transition: "opacity 420ms ease",
       }}
     >
       <img
@@ -342,7 +357,7 @@ function SplashOverlay() {
           height: 88,
           objectFit: "contain",
           filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
-          animation: "mb-logo-pulse 1.6s ease-in-out infinite",
+          animation: "mb-logo-pulse 2.2s ease-in-out infinite",
         }}
       />
       <div className="mb-loader-bars" aria-label="Loading">

@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { generateText } from "ai";
@@ -109,7 +110,7 @@ export const Route = createFileRoute("/blog-ai-generate-api.json")({
           ? `\nCategory: ${category}\nWrite as an article for the "${category}" section of an AI tools directory website.`
           : "";
 
-        const systemPrompt = `You are an expert SEO content writer for TavBook, the world's largest AI tools directory (116,000+ tools). Write authoritative, engaging blog content about AI tools, trends, and comparisons.
+        const systemPrompt = `You are an expert SEO content writer for TavBook, the world's largest AI tools directory (${TOTAL_TOOLS_LABEL} tools). Write authoritative, engaging blog content about AI tools, trends, and comparisons.
 
 Tone: ${tone}
 Target length: ~${targetWords} words of main content (excluding FAQ).

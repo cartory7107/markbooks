@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import type { BlogPostRow, BlogCategoryRow } from "@/lib/blog.server";
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/blog/")({
         {
           name: "description",
           content:
-            "Deep guides, comparisons, and research on the best AI tools of 2026. Written by the TavBook editorial team using our 116,000+ verified AI directory.",
+            `Deep guides, comparisons, and research on the best AI tools of 2026. Written by the TavBook editorial team using our ${TOTAL_TOOLS_LABEL} verified AI directory.`,
         },
         { property: "og:title", content: "TavBook AI Blog — AI Tool Guides & Research" },
         {
@@ -180,7 +181,7 @@ function BlogIndex() {
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             In-depth guides, honest comparisons, and original research on the best AI
-            tools of 2026 — powered by our 116,000+ verified directory.
+            tools of 2026 — powered by our {TOTAL_TOOLS_LABEL} verified directory.
           </p>
         </header>
 

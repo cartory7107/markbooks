@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import {
@@ -153,11 +154,11 @@ function getToolGradientColors(name: string) {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "TavBook — 116,000+ AI Tools Directory | Discover, Compare & Search the Best AI" },
+      { title: `TavBook — ${TOTAL_TOOLS_LABEL} AI Tools Directory | Discover, Compare & Search the Best AI` },
       {
         name: "description",
         content:
-          "TavBook is the world's largest AI tools directory. Search, compare, and discover 116,000+ AI tools — chatbots, image, video, code, and writing — across 500+ categories.",
+          `TavBook is the world's largest AI tools directory. Search, compare, and discover ${TOTAL_TOOLS_LABEL} AI tools — chatbots, image, video, code, and writing — across 500+ categories.`,
       },
     ],
   }),
@@ -486,7 +487,7 @@ function Index() {
         <div className="sponsor-glow py-2 text-center text-sm text-white relative">
           <span className="font-medium">🔥 Sponsored by TavBook AI</span>
           <span className="mx-2 opacity-60">—</span>
-          <span className="opacity-90">Discover 116,000+ AI tools. Updated daily.</span>
+          <span className="opacity-90">Discover {TOTAL_TOOLS_LABEL} AI tools. Updated daily.</span>
           <button
             onClick={() => setShowSponsor(false)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
@@ -498,7 +499,7 @@ function Index() {
 
       {/* ─── Glass Navigation Bar ─── */}
       <header className="glass-nav sticky top-0 z-50 w-full">
-        <div className="mx-auto flex h-14 max-w-[1480px] items-center gap-2 px-4 lg:h-16 min-w-0 overflow-hidden">
+        <div className="mx-auto flex h-14 max-w-[1480px] items-center gap-1.5 px-3 sm:gap-2 sm:px-4 lg:h-16 min-w-0">
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="TavBook home">
             <img src={logoAsset.url} alt="TavBook" className="h-8 w-8 object-contain" />
@@ -508,13 +509,13 @@ function Index() {
           </Link>
 
           {/* Nav Links */}
-          <nav className="ml-3 hidden items-center gap-0.5 xl:flex shrink min-w-0">
-            {topNavItems.map((item) =>
+          <nav className="ml-2 hidden items-center gap-0.5 xl:flex shrink min-w-0 overflow-hidden">
+            {topNavItems.map((item, navIdx) =>
               item.href ? (
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground"
+                  className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
                 >
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
@@ -534,7 +535,7 @@ function Index() {
                       document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground"
+                  className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
                 >
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
@@ -544,7 +545,7 @@ function Index() {
           </nav>
 
           {/* Search */}
-          <div className="relative ml-auto hidden max-w-sm flex-1 lg:block shrink-0">
+          <div className="relative ml-auto hidden w-[200px] shrink-0 md:block lg:w-[260px] 2xl:w-[300px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
@@ -554,7 +555,7 @@ function Index() {
               placeholder="Search AI tools, e.g. Video Translation..."
               className="h-9 w-full rounded-lg border border-border/60 bg-muted/40 pl-9 pr-10 text-sm outline-none transition focus:border-primary focus:bg-background focus:ring-2 focus:ring-primary/20"
             />
-            <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded border border-border/60 bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+            <kbd className="absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border/60 bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground xl:block">
               ⌘K
             </kbd>
             {suggestions.length > 0 && (
@@ -581,7 +582,7 @@ function Index() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-1">
+          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
             <Button
               variant="ghost"
               size="icon"
@@ -664,7 +665,7 @@ function Index() {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="shrink-0 xl:hidden"
               onClick={() => setMobileMenu(!mobileMenu)}
             >
               {mobileMenu ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -691,7 +692,7 @@ function Index() {
                     key={item.label}
                     to={item.href}
                     onClick={() => setMobileMenu(false)}
-                    className="flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent"
+                    className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
                   >
                     <span className="text-sm">{item.icon}</span>
                     {item.label}
@@ -706,7 +707,7 @@ function Index() {
                       else if (item.action === "news") { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); }
                       setMobileMenu(false);
                     }}
-                    className="flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent"
+                    className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
                   >
                     <span className="text-sm">{item.icon}</span>
                     {item.label}
@@ -758,7 +759,7 @@ function Index() {
           <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
             {catalogLoaded ? (
               <>
-                116,000+ AI tools and {categories.length} categories in the best AI tools directory.
+                {TOTAL_TOOLS_LABEL} AI tools and {categories.length} categories in the best AI tools directory.
                 Updated daily.
               </>
             ) : (
@@ -798,7 +799,7 @@ function Index() {
           <div className="mx-auto mt-8 flex max-w-3xl items-center justify-center gap-6 sm:gap-10">
             {[
               {
-                value: catalogLoaded ? "116K+" : null,
+                value: catalogLoaded ? TOTAL_TOOLS_SHORT : null,
                 label: "AI Tools",
                 skeletonWidth: "4ch",
               },
