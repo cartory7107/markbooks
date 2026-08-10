@@ -2,14 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, slugify } from "@/lib/catalog-server";
 import { getAllPublishedSlugs } from "@/lib/blog.server";
-
-const BASE_URL = "https://tavbook.top";
+import { SITE_URL } from "@/lib/site";
+import { XML_HEADERS, renderUrlset, type SitemapEntry } from "@/lib/sitemap.server";
 
 /**
- * Static pages + category landing pages + blog posts sitemap.
- *
- * Only includes real, crawlable HTML pages.
- * JSON API endpoints and non-existent routes are excluded.
+ * Public pages + category pages + ranking pages + published blog posts.
+ * Admin, auth, profile, JSON endpoints and filter URLs are intentionally absent.
  */
 export const Route = createFileRoute("/sitemap-static.xml")({
   server: {
@@ -18,97 +16,67 @@ export const Route = createFileRoute("/sitemap-static.xml")({
         try {
           const catalog = getCatalog();
           const now = new Date().toISOString().split("T")[0];
-
-          const urls: string[] = [];
-
-          // ── Core pages ──
-          const staticPages: Array<{
-            path: string;
-            priority: string;
-            freq: string;
-          }> = [
-            { path: "/", priority: "1.0", freq: "daily" },
-            { path: "/verified", priority: "0.95", freq: "weekly" },
-            { path: "/ranking", priority: "0.9", freq: "weekly" },
-            { path: "/rankings", priority: "0.9", freq: "weekly" },
-            { path: "/compare", priority: "0.8", freq: "weekly" },
-            { path: "/blog", priority: "0.9", freq: "weekly" },
-            { path: "/pricing", priority: "0.7", freq: "monthly" },
-            { path: "/contact", priority: "0.6", freq: "monthly" },
-            { path: "/about", priority: "0.6", freq: "monthly" },
-            { path: "/submit", priority: "0.7", freq: "monthly" },
-            { path: "/advertise", priority: "0.5", freq: "monthly" },
-            { path: "/privacy", priority: "0.3", freq: "yearly" },
-            { path: "/terms", priority: "0.3", freq: "yearly" },
+          const entries: SitemapEntry[] = [
+            { path: "/", changefreq: "daily", priority: "1.0", lastmod: now },
+            { path: "/verified", changefreq: "weekly", priority: "0.9", lastmod: now },
+            { path: "/categories", changefreq: "weekly", priority: "0.9", lastmod: now },
+            { path: "/rankings", changefreq: "weekly", priority: "0.9", lastmod: now },
+            { path: "/ranking", changefreq: "weekly", priority: "0.8", lastmod: now },
+            { path: "/compare", changefreq: "weekly", priority: "0.8", lastmod: now },
+            { path: "/blog", changefreq: "daily", priority: "0.9", lastmod: now },
+            { path: "/pricing", changefreq: "monthly", priority: "0.6" },
+            { path: "/about", changefreq: "monthly", priority: "0.6" },
+            { path: "/contact", changefreq: "monthly", priority: "0.5" },
+            { path: "/submit", changefreq: "monthly", priority: "0.6" },
+            { path: "/advertise", changefreq: "monthly", priority: "0.5" },
+            { path: "/refund", changefreq: "yearly", priority: "0.3" },
+            { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+            { path: "/terms", changefreq: "yearly", priority: "0.3" },
           ];
 
-          // ── Ranking pages per category ──
-          const rankingCategories = Object.entries(catalog.categories)
+          const topCategories = Object.entries(catalog.categories)
             .sort((a, b) => b[1] - a[1])
-            .slice(0, 200); // cap to avoid oversized sitemap
+            .slice(0, 300);
 
-          for (const [cat] of rankingCategories) {
-            const s = slugify(cat);
-            if (!s) continue;
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/rankings/best-${s}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
-
-          // ── Static pages ──
-          for (const p of staticPages) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}${p.path}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>${p.freq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`,
-            );
-          }
-
-          // ── Blog posts from DB (published only) ──
-          try {
-            const blogSlugs = await getAllPublishedSlugs();
-            for (const slug of blogSlugs) {
-              urls.push(
-                `  <url>\n    <loc>${BASE_URL}/blog/${slug}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
-              );
-            }
-          } catch (err) {
-            console.error("[sitemap-static] Warning: could not fetch blog slugs:", err);
-          }
-
-          // ── Tool category pages ──
-          const toolCategories = Object.entries(catalog.categories)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 200);
-
-          for (const [name] of toolCategories) {
+          for (const [name] of topCategories) {
             const slug = slugify(name);
             if (!slug) continue;
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/category/${slug}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>`,
-            );
+            entries.push({
+              path: `/category/${slug}`,
+              lastmod: now,
+              changefreq: "weekly",
+              priority: "0.7",
+            });
+            entries.push({
+              path: `/rankings/best-${slug}`,
+              lastmod: now,
+              changefreq: "weekly",
+              priority: "0.7",
+            });
           }
 
-          const xml = [
-            `<?xml version="1.0" encoding="UTF-8"?>`,
-            `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-            ...urls,
-            `</urlset>`,
-          ].join("\n");
+          try {
+            for (const slug of await getAllPublishedSlugs()) {
+              entries.push({
+                path: `/blog/${slug}`,
+                lastmod: now,
+                changefreq: "monthly",
+                priority: "0.8",
+              });
+            }
+          } catch (err) {
+            console.error("[sitemap-static] blog slugs unavailable:", err);
+          }
 
-          return new Response(xml, {
+          return new Response(renderUrlset(SITE_URL, entries), {
             status: 200,
-            headers: {
-              "Content-Type": "application/xml; charset=utf-8",
-              "Cache-Control": "public, max-age=3600",
-            },
+            headers: XML_HEADERS,
           });
         } catch (err) {
-          console.error("[sitemap-static.xml] Error generating sitemap:", err);
+          console.error("[sitemap-static.xml] failed:", err);
           return new Response(
-            `<?xml version="1.0" encoding="UTF-8"?><error>Failed to generate static sitemap</error>`,
-            {
-              status: 500,
-              headers: { "Content-Type": "application/xml; charset=utf-8" },
-            },
+            renderUrlset(SITE_URL, [{ path: "/", priority: "1.0" }]),
+            { status: 200, headers: XML_HEADERS },
           );
         }
       },
