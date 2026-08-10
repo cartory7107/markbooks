@@ -10,8 +10,9 @@ export const LOGO_BUCKET = "tool-logos";
 const MAX_BYTES = 300 * 1024; // 300 KB hard cap
 const HTML_BYTES = 180 * 1024; // only read the head-ish part of the page
 const FETCH_TIMEOUT = 8000;
+// Browser-like UA: many vendor sites (Cloudflare-fronted) reject obvious bots.
 const UA =
-  "Mozilla/5.0 (compatible; TavBookLogoBot/1.0; +https://tavbook.top/about)";
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
 export type LogoStatus = "pending" | "processing" | "ready" | "failed";
 
@@ -63,7 +64,11 @@ async function safeFetch(url: string, accept: string): Promise<Response | null> 
     const res = await fetch(url, {
       redirect: "follow",
       signal: t.signal,
-      headers: { "user-agent": UA, accept },
+      headers: {
+        "user-agent": UA,
+        accept,
+        "accept-language": "en-US,en;q=0.9",
+      },
     });
     return res.ok ? res : null;
   } catch {
@@ -127,7 +132,11 @@ async function discoverCandidates(domain: string): Promise<string[]> {
 
   candidates.push(`https://${domain}/apple-touch-icon.png`);
   candidates.push(`https://${domain}/favicon.ico`);
-  return [...new Set(candidates)].slice(0, 6);
+  // Last-resort SERVER-SIDE sources only: downloaded once, then hosted by TavBook.
+  // Visitors never request these hosts directly.
+  candidates.push(`https://www.google.com/s2/favicons?domain=${domain}&sz=128`);
+  candidates.push(`https://icon.horse/icon/${domain}`);
+  return [...new Set(candidates)].slice(0, 8);
 }
 
 /** Sniff real image type from magic bytes; never trust extension or header alone. */
