@@ -1,0 +1,140 @@
+import { createServerFn } from "@tanstack/react-start";
+
+/**
+ * Public discovery aggregations (collections, companies, model-centric tools).
+ * Everything here is derived from the real catalog — no invented entities.
+ */
+
+export type DiscoveryTool = {
+  name: string;
+  slug: string;
+  url: string;
+  desc: string;
+  category: string;
+  pricing: string;
+};
+
+export type DiscoveryGroup = {
+  title: string;
+  slug: string;
+  subtitle: string;
+  total: number;
+  tools: DiscoveryTool[];
+};
+
+function slugify(input: string): string {
+  return input.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function rootDomain(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    const parts = host.split(".");
+    return parts.length > 2 ? parts.slice(-2).join(".") : host;
+  } catch {
+    return "";
+  }
+}
+
+/** Collections = the largest real categories, each with a ranked sample. */
+export const getCollections = createServerFn({ method: "GET" }).handler(async () => {
+  const { getCatalog, rankBrowseList, getCategoryEmojis, normalizeCategory } = await import(
+    "@/lib/catalog-server"
+  );
+  const catalog = getCatalog();
+  const emojis = getCategoryEmojis();
+
+  const top = Object.entries(catalog.categories)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 18);
+
+  const groups: DiscoveryGroup[] = top.map(([category, total]) => {
+    const pool = rankBrowseList(
+      catalog.tools.filter(
+        (t) => normalizeCategory(t.c) === category || normalizeCategory(t.g) === category,
+      ),
+    ).slice(0, 6);
+    return {
+      title: category,
+      slug: slugify(category),
+      subtitle: `${emojis[category] ?? ""} ${total.toLocaleString("en-US")} tools indexed`.trim(),
+      total,
+      tools: pool.map((t) => ({
+        name: t.n,
+        slug: slugify(t.n),
+        url: t.u,
+        desc: t.d,
+        category: t.c,
+        pricing: t.p,
+      })),
+    };
+  });
+
+  return { groups };
+});
+
+/** Companies = real domains that own more than one indexed product. */
+export const getCompanies = createServerFn({ method: "GET" }).handler(async () => {
+  const { getCatalog, rankBrowseList } = await import("@/lib/catalog-server");
+  const catalog = getCatalog();
+
+  const byDomain = new Map<string, typeof catalog.tools>();
+  for (const tool of catalog.tools) {
+    const domain = rootDomain(tool.u);
+    if (!domain) continue;
+    const bucket = byDomain.get(domain);
+    if (bucket) bucket.push(tool);
+    else byDomain.set(domain, [tool]);
+  }
+
+  const companies = [...byDomain.entries()]
+    .filter(([, tools]) => tools.length > 1)
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, 96)
+    .map(([domain, tools]) => {
+      const ranked = rankBrowseList(tools);
+      return {
+        domain,
+        name: domain.replace(/\.[a-z.]+$/, "").replace(/(^|[-.])([a-z])/g, (_m, p, c) => p.replace(/[-.]/g, " ") + c.toUpperCase()).trim(),
+        total: tools.length,
+        categories: [...new Set(tools.map((t) => t.c))].slice(0, 3),
+        tools: ranked.slice(0, 4).map((t) => ({
+          name: t.n,
+          slug: slugify(t.n),
+          url: t.u,
+          desc: t.d,
+          category: t.c,
+          pricing: t.p,
+        })),
+      };
+    });
+
+  return { companies };
+});
+
+const MODEL_PATTERN =
+  /(llm|large language|foundation model|model|gpt|llama|mistral|diffusion|stable diffusion|embedding|transformer)/i;
+
+/** Model-centric tools: real catalog entries whose name/category is model-focused. */
+export const getModelTools = createServerFn({ method: "GET" }).handler(async () => {
+  const { getCatalog, rankBrowseList } = await import("@/lib/catalog-server");
+  const catalog = getCatalog();
+
+  const matched = rankBrowseList(
+    catalog.tools.filter(
+      (t) => MODEL_PATTERN.test(t.n) || MODEL_PATTERN.test(t.c) || MODEL_PATTERN.test(t.d),
+    ),
+  );
+
+  return {
+    total: matched.length,
+    tools: matched.slice(0, 120).map((t) => ({
+      name: t.n,
+      slug: slugify(t.name ?? t.n),
+      url: t.u,
+      desc: t.d,
+      category: t.c,
+      pricing: t.p,
+    })) as DiscoveryTool[],
+  };
+});
