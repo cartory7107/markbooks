@@ -86,19 +86,18 @@ type Catalog = {
 
 
 
-const topNavItems = [
-  { label: "Verified", icon: "✅", href: "/verified" },
-  { label: "Free Tools", icon: "🆓", action: "free" },
-  { label: "Categories", icon: "📂", action: "categories" },
-  { label: "Ranking", icon: "🏆", href: "/ranking" },
-  { label: "Compare", icon: "⚖️", href: "/compare" },
-  { label: "Blog", icon: "📝", href: "/blog" },
-  { label: "Pricing", icon: "💎", href: "/pricing" },
-  { label: "Contact", icon: "📬", href: "/contact" },
-  { label: "Latest AI", icon: "⚡", action: "latest" },
-  { label: "AI News", icon: "📰", action: "news" },
-  { label: "Submit", icon: "➕", href: "/submit" },
-  { label: "Advertise", icon: "📢", href: "/advertise" },
+/** Primary discovery surfaces. Order = priority when the viewport narrows. */
+const topNavItems: Array<{ label: string; href?: string; action?: string }> = [
+  { label: "Tools", action: "latest" },
+  { label: "Categories", href: "/categories" },
+  { label: "Collections", href: "/collections" },
+  { label: "Models", href: "/models" },
+  { label: "Companies", href: "/companies" },
+  { label: "News", href: "/blog" },
+  { label: "Rankings", href: "/ranking" },
+  { label: "Verified", href: "/verified" },
+  { label: "Compare", href: "/compare" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 function initials(name: string) {
@@ -512,13 +511,14 @@ function Index() {
       <div className="relative z-10 max-w-full overflow-x-hidden">
       {/* ─── Sponsored Banner ─── */}
       {showSponsor && (
-        <div className="sponsor-glow py-2 text-center text-sm text-white relative">
-          <span className="font-medium">🔥 Sponsored by TavBook AI</span>
-          <span className="mx-2 opacity-60">—</span>
-          <span className="opacity-90">Discover {TOTAL_TOOLS_LABEL} AI tools. Updated daily.</span>
+        <div className="sponsor-glow relative py-2 text-center text-[13px] text-muted-foreground">
+          <span className="font-semibold text-foreground">TavBook</span>
+          <span className="mx-2 opacity-50">·</span>
+          <span>{TOTAL_TOOLS_LABEL} AI tools, models and companies — updated daily.</span>
           <button
             onClick={() => setShowSponsor(false)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+            aria-label="Dismiss announcement"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
             <X className="size-3.5" />
           </button>
@@ -537,15 +537,14 @@ function Index() {
           </Link>
 
           {/* Nav Links */}
-          <nav className="ml-2 hidden items-center gap-0.5 xl:flex shrink min-w-0 overflow-hidden">
+          <nav className="ml-3 hidden min-w-0 shrink items-center gap-0.5 overflow-hidden lg:flex">
             {topNavItems.map((item, navIdx) =>
               item.href ? (
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
+                  className={`${navIdx >= 5 ? "hidden 2xl:flex" : navIdx >= 3 ? "hidden xl:flex" : "flex"} shrink-0 items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground`}
                 >
-                  <span className="text-sm">{item.icon}</span>
                   {item.label}
                 </Link>
               ) : (
@@ -563,9 +562,8 @@ function Index() {
                       document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
+                  className={`${navIdx >= 5 ? "hidden 2xl:flex" : navIdx >= 3 ? "hidden xl:flex" : "flex"} shrink-0 items-center whitespace-nowrap rounded-md px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground`}
                 >
-                  <span className="text-sm">{item.icon}</span>
                   {item.label}
                 </button>
               ),
@@ -576,14 +574,16 @@ function Index() {
           <div className="relative ml-auto hidden w-[200px] shrink-0 md:block lg:w-[260px] 2xl:w-[300px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
+              ref={navSearchRef}
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-              placeholder="Search AI tools, e.g. Video Translation..."
-              className="h-9 w-full rounded-lg border border-border/60 bg-muted/40 pl-9 pr-10 text-sm outline-none transition focus:border-primary focus:bg-background focus:ring-2 focus:ring-primary/20"
+              placeholder="Search tools, models, companies…"
+              aria-label="Search TavBook"
+              className="h-9 w-full rounded-md border border-border bg-elevated pl-9 pr-12 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
             />
-            <kbd className="absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border/60 bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground xl:block">
+            <kbd className="absolute right-2 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-card px-1.5 py-0.5 font-sans text-[10px] text-muted-foreground xl:block">
               ⌘K
             </kbd>
             {suggestions.length > 0 && (
@@ -611,15 +611,6 @@ function Index() {
 
           {/* Right Actions */}
           <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setDark(!dark)}
-              aria-label="Toggle theme"
-              className="size-9"
-            >
-              {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-            </Button>
             <Link
               to="/submit"
               className="hidden items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:flex"
@@ -693,7 +684,7 @@ function Index() {
             <Button
               variant="ghost"
               size="icon"
-              className="shrink-0 xl:hidden"
+              className="shrink-0 lg:hidden"
               onClick={() => setMobileMenu(!mobileMenu)}
             >
               {mobileMenu ? <X className="size-5" /> : <Menu className="size-5" />}
