@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       {
         name: "keywords",
         content:
-          `TavBook, TavBook AI, tavbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, ${TOTAL_TOOLS} AI tools, AI finder, AI catalog, AI search platform`,
+          `TavBook, TavBook AI, TavBook AI tools directory, TavBook AI discovery platform, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, ${TOTAL_TOOLS} AI tools, AI finder, AI catalog, AI search platform`,
       },
       { name: "application-name", content: "TavBook" },
       { name: "apple-mobile-web-app-title", content: "TavBook" },
@@ -151,6 +151,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
+          "@id": "https://tavbook.top/#website",
           "name": "TavBook",
           "alternateName": ["TavBook AI", "TavBook AI Tools Directory", "tavbook.top"],
           "url": "https://tavbook.top",
@@ -162,6 +163,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           },
           "publisher": {
             "@type": "Organization",
+            "@id": "https://tavbook.top/#organization",
             "name": "TavBook",
             "url": "https://tavbook.top",
             "logo": { "@type": "ImageObject", "url": "https://tavbook.top/favicon.png" }
