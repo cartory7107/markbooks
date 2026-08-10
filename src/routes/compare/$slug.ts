@@ -78,7 +78,7 @@ export const Route = createFileRoute("/compare/$slug")({
         const names = tools.map(t => t.n).join(" vs ");
         const title = `${names} — AI Tool Comparison 2026 | TavBook`;
         const desc = `Side-by-side comparison of ${names}. Compare features, pricing, pros, cons, and pick the best AI tool for your workflow.`;
-        const canonical = `https://markbook.top/compare/${slug}`;
+        const canonical = `https://tavbook.top/compare/${slug}`;
 
         // Winner = highest rating (deterministic)
         const rated = tools.map(t => ({ t, r: randomRating(t.n) }));
@@ -105,7 +105,7 @@ export const Route = createFileRoute("/compare/$slug")({
           itemListElement: tools.map((t, i) => ({
             "@type": "ListItem",
             position: i + 1,
-            url: `https://markbook.top/tool/${slugify(t.n)}`,
+            url: `https://tavbook.top/tool/${slugify(t.n)}`,
             name: t.n,
           })),
         };
@@ -114,8 +114,8 @@ export const Route = createFileRoute("/compare/$slug")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://markbook.top/" },
-            { "@type": "ListItem", position: 2, name: "Compare", item: "https://markbook.top/compare" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://tavbook.top/" },
+            { "@type": "ListItem", position: 2, name: "Compare", item: "https://tavbook.top/compare" },
             { "@type": "ListItem", position: 3, name: names, item: canonical },
           ],
         };

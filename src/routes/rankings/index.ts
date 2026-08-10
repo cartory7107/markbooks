@@ -19,7 +19,7 @@ export const Route = createFileRoute("/rankings/")({
         const emojis = getCategoryEmojis();
         const cats = Object.entries(catalog.categories).sort((a, b) => b[1] - a[1]);
 
-        const canonical = "https://markbook.top/rankings";
+        const canonical = "https://tavbook.top/rankings";
         const title = "AI Tool Rankings — Best & Top AI Tools of 2026 | TavBook";
         const desc = `Ranked leaderboards of the best AI tools across ${cats.length} categories. Compare and pick the top AI tool for writing, image generation, coding, video, and more.`;
 
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/rankings/")({
           itemListElement: cats.slice(0, 50).map(([cat], i) => ({
             "@type": "ListItem",
             position: i + 1,
-            url: `https://markbook.top/rankings/best-${slugify(cat)}`,
+            url: `https://tavbook.top/rankings/best-${slugify(cat)}`,
             name: `Best ${cat}`,
           })),
         };
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/rankings/")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://markbook.top/" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://tavbook.top/" },
             { "@type": "ListItem", position: 2, name: "Rankings", item: canonical },
           ],
         };

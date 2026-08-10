@@ -1,3 +1,4 @@
+import { SITE_URL, OG_IMAGE } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
@@ -159,6 +160,33 @@ export const Route = createFileRoute("/")({
         name: "description",
         content:
           `TavBook is the world's largest AI tools directory. Search, compare, and discover ${TOTAL_TOOLS_LABEL} AI tools — chatbots, image, video, code, and writing — across 500+ categories.`,
+      },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:title", content: `TavBook — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
+      { property: "og:description", content: `Search and compare ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories on TavBook, the AI discovery platform.` },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "TavBook — AI Tools Directory" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": `${SITE_URL}/#webpage`,
+          name: `TavBook — ${TOTAL_TOOLS_LABEL} AI Tools Directory`,
+          url: SITE_URL,
+          description: `TavBook is an AI tools directory and AI discovery platform indexing ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.`,
+          isPartOf: { "@id": `${SITE_URL}/#website` },
+          about: { "@id": `${SITE_URL}/#organization` },
+          primaryImageOfPage: { "@type": "ImageObject", url: OG_IMAGE },
+        }),
       },
     ],
   }),

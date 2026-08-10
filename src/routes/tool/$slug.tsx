@@ -565,6 +565,15 @@ export const Route = createFileRoute("/tool/$slug")({
         });
 
         // FAQ schema for SEO
+        const breadcrumbLd = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "TavBook", item: "https://tavbook.top" },
+            { "@type": "ListItem", position: 2, name: normCat, item: `https://tavbook.top/category/${slugify(normCat)}` },
+            { "@type": "ListItem", position: 3, name: tool.n, item: `https://tavbook.top/tool/${slug}` },
+          ],
+        });
         const faqLd = JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
@@ -626,18 +635,19 @@ ${kws}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://markbook.top/tool/${slug}">
+<meta property="og:url" content="https://tavbook.top/tool/${slug}">
 <meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
-<link rel="canonical" href="https://markbook.top/tool/${slug}">
+<link rel="canonical" href="https://tavbook.top/tool/${slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://icon.horse">
 <script type="application/ld+json">${jsonLd}</script>
 <script type="application/ld+json">${faqLd}</script>
+<script type="application/ld+json">${breadcrumbLd}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{scroll-behavior:smooth}

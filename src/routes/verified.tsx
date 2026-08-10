@@ -72,7 +72,9 @@ export const Route = createFileRoute("/verified")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://tavbook.top/verified" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/verified" }],
   }),
   component: VerifiedPage,
 });
