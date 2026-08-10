@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, slugify } from "@/lib/catalog-server";
-import { getAllPublishedSlugs } from "@/lib/blog.server";
+import { getPublishedSitemapEntries } from "@/lib/blog.server";
 import { SITE_URL } from "@/lib/site";
 import { XML_HEADERS, renderUrlset, type SitemapEntry } from "@/lib/sitemap.server";
 
@@ -15,15 +15,14 @@ export const Route = createFileRoute("/sitemap-static.xml")({
       GET: async () => {
         try {
           const catalog = getCatalog();
-          const now = new Date().toISOString().split("T")[0];
           const entries: SitemapEntry[] = [
-            { path: "/", changefreq: "daily", priority: "1.0", lastmod: now },
-            { path: "/verified", changefreq: "weekly", priority: "0.9", lastmod: now },
-            { path: "/categories", changefreq: "weekly", priority: "0.9", lastmod: now },
-            { path: "/rankings", changefreq: "weekly", priority: "0.9", lastmod: now },
-            { path: "/ranking", changefreq: "weekly", priority: "0.8", lastmod: now },
-            { path: "/compare", changefreq: "weekly", priority: "0.8", lastmod: now },
-            { path: "/blog", changefreq: "daily", priority: "0.9", lastmod: now },
+            { path: "/", changefreq: "daily", priority: "1.0" },
+            { path: "/verified", changefreq: "weekly", priority: "0.9" },
+            { path: "/categories", changefreq: "weekly", priority: "0.9" },
+            { path: "/rankings", changefreq: "weekly", priority: "0.9" },
+            { path: "/ranking", changefreq: "weekly", priority: "0.8" },
+            { path: "/compare", changefreq: "weekly", priority: "0.8" },
+            { path: "/blog", changefreq: "daily", priority: "0.9" },
             { path: "/pricing", changefreq: "monthly", priority: "0.6" },
             { path: "/about", changefreq: "monthly", priority: "0.6" },
             { path: "/contact", changefreq: "monthly", priority: "0.5" },
@@ -42,23 +41,22 @@ export const Route = createFileRoute("/sitemap-static.xml")({
             if (!slug) continue;
             entries.push({
               path: `/category/${slug}`,
-              lastmod: now,
               changefreq: "weekly",
               priority: "0.7",
             });
             entries.push({
               path: `/rankings/best-${slug}`,
-              lastmod: now,
               changefreq: "weekly",
               priority: "0.7",
             });
           }
 
           try {
-            for (const slug of await getAllPublishedSlugs()) {
+            for (const post of await getPublishedSitemapEntries()) {
               entries.push({
-                path: `/blog/${slug}`,
-                lastmod: now,
+                path: `/blog/${post.slug}`,
+                // Real per-article timestamp — never build/generation time.
+                ...(post.lastmod ? { lastmod: post.lastmod } : {}),
                 changefreq: "monthly",
                 priority: "0.8",
               });
