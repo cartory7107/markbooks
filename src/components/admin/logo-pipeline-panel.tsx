@@ -68,6 +68,19 @@ export function LogoPipelinePanel() {
     }
   };
 
+  const handleQueue = async () => {
+    setBusy("queue");
+    try {
+      const res = await runBatch({ data: { fromQueue: true, limit: 25 } });
+      toast.success(`Queue: ${res.ready} hosted, ${res.failed} failed`);
+      refresh();
+    } catch {
+      toast.error("Queue run failed");
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const tiles: Array<{ key: string; label: string; className: string }> = [
     { key: "ready", label: "Hosted logos", className: "text-emerald-500" },
     { key: "pending", label: "Queued", className: "text-sky-500" },
@@ -108,9 +121,14 @@ export function LogoPipelinePanel() {
             placeholder="openai.com, notion.so, canva.com"
             className="flex-1 rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary"
           />
-          <Button onClick={handleBatch} disabled={busy === "batch" || !batchInput.trim()}>
-            {busy === "batch" ? <Loader2 className="size-4 animate-spin" /> : null} Process batch
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleBatch} disabled={busy === "batch" || !batchInput.trim()}>
+              {busy === "batch" ? <Loader2 className="size-4 animate-spin" /> : null} Process batch
+            </Button>
+            <Button variant="outline" onClick={handleQueue} disabled={busy === "queue"}>
+              {busy === "queue" ? <Loader2 className="size-4 animate-spin" /> : null} Process queue
+            </Button>
+          </div>
         </div>
 
         {failures.length > 0 && (

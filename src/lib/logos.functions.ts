@@ -71,8 +71,10 @@ export const retryLogo = createServerFn({ method: "POST" })
  */
 export const processLogoBatch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { domains: string[] }) => ({
+  .inputValidator((input: { domains?: string[]; fromQueue?: boolean; limit?: number }) => ({
     domains: (input.domains ?? []).slice(0, 100),
+    fromQueue: input.fromQueue ?? false,
+    limit: Math.min(input.limit ?? 25, 100),
   }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
@@ -80,7 +82,18 @@ export const processLogoBatch = createServerFn({ method: "POST" })
     const { normalizeDomain, processDomainLogo } = await import("@/lib/logo-pipeline.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const domains = [...new Set(data.domains.map(normalizeDomain).filter((d): d is string => !!d))];
+    let domains = [...new Set(data.domains.map(normalizeDomain).filter((d): d is string => !!d))];
+
+    if (data.fromQueue) {
+      const { data: queue } = await supabaseAdmin
+        .from("tool_logos")
+        .select("domain")
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(data.limit);
+      domains = [...new Set([...domains, ...(queue ?? []).map((r) => r.domain)])];
+    }
+
     if (domains.length === 0) return { processed: 0, ready: 0, failed: 0, skipped: 0 };
 
     const { data: existing } = await supabaseAdmin
