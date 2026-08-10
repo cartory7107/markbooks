@@ -3,7 +3,7 @@ import { ArrowLeft, Mail, Twitter, Rocket, Send, HelpCircle, Loader2, BadgeCheck
 import { Button } from "@/components/ui/button";
 import { useState, type FormEvent } from "react";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = "https://tavbook.top";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -40,8 +40,8 @@ const CONTACT_CHANNELS = [
   {
     icon: Mail,
     label: "Email",
-    value: "support@markbook.top",
-    href: "mailto:support@markbook.top",
+    value: "support@tavbook.top",
+    href: "mailto:support@tavbook.top",
     description: "General support and inquiries",
   },
   {
@@ -70,7 +70,7 @@ const FAQ_ITEMS = [
   {
     question: "Can I request a correction to an existing listing?",
     answer:
-      "Absolutely! Use the contact form below or email us at support@markbook.top with the tool name and the details that need updating.",
+      "Absolutely! Use the contact form below or email us at support@tavbook.top with the tool name and the details that need updating.",
   },
   {
     question: "I'm interested in a partnership or sponsorship. Who should I contact?",
@@ -133,7 +133,7 @@ function ContactPage() {
               {
                 "@type": "ContactPoint",
                 contactType: "customer support",
-                email: "support@markbook.top",
+                email: "support@tavbook.top",
                 availableLanguage: ["English"],
               },
             ],

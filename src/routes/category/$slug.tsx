@@ -88,13 +88,22 @@ export const Route = createFileRoute("/category/$slug")({
           .slice(0, 20);
 
         // JSON-LD
+        const breadcrumbLd = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "TavBook", item: "https://tavbook.top" },
+            { "@type": "ListItem", position: 2, name: "Categories", item: "https://tavbook.top/categories" },
+            { "@type": "ListItem", position: 3, name: matchedCategory, item: `https://tavbook.top/category/${slug}` },
+          ],
+        });
         const jsonLd = JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description: desc,
-          url: `https://markbook.top/category/${slug}`,
-          isPartOf: { "@type": "WebSite", name: "TavBook AI", url: "https://markbook.top" },
+          url: `https://tavbook.top/category/${slug}`,
+          isPartOf: { "@type": "WebSite", name: "TavBook AI", url: "https://tavbook.top" },
           mainEntity: {
             "@type": "ItemList",
             numberOfItems: total,
@@ -142,13 +151,14 @@ export const Route = createFileRoute("/category/$slug")({
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://markbook.top/category/${slug}">
+<meta property="og:url" content="https://tavbook.top/category/${slug}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://markbook.top/category/${slug}">
+<link rel="canonical" href="https://tavbook.top/category/${slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script type="application/ld+json">${jsonLd}</script>
+<script type="application/ld+json">${breadcrumbLd}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,system-ui,-apple-system,sans-serif;background:#09090b;color:#fafafa;line-height:1.6}

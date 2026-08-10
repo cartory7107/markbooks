@@ -1,27 +1,49 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import type { BlogPostRow } from "@/lib/blog.server";
+import type { RelatedTool } from "@/lib/blog-related.server";
+import { SITE_URL, SITE_NAME, SITE_TWITTER, OG_IMAGE, LOGO_URL } from "@/lib/site";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = SITE_URL;
 
 type LoaderData = {
   post: BlogPostRow;
   related: BlogPostRow[];
+  relatedTools: RelatedTool[];
 };
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    const { getPublishedPostBySlug, getPublishedPosts } =
-      await import("@/lib/blog.server");
+    const { getPublishedPostBySlug } = await import("@/lib/blog.server");
 
-    const post = await getPublishedPostBySlug(params.slug);
+    let post = await getPublishedPostBySlug(params.slug);
+
+    // Legacy brand slugs (/blog/...markbook...) resolve to the renamed article.
+    if (!post && params.slug.includes("markbook")) {
+      post = await getPublishedPostBySlug(params.slug.replace(/markbook/g, "tavbook"));
+      if (post) {
+        throw redirect({
+          to: "/blog/$slug",
+          params: { slug: post.slug },
+          statusCode: 301,
+        });
+      }
+    }
+
     if (!post) throw notFound();
 
-    const relatedRes = await getPublishedPosts({ limit: 4 });
-    const related = relatedRes.posts.filter((p) => p.id !== post.id).slice(0, 3);
+    const { getRelatedPosts, getRelatedTools } = await import(
+      "@/lib/blog-related.server"
+    );
 
-    return { post, related } satisfies LoaderData;
+    const [related, relatedTools] = await Promise.all([
+      getRelatedPosts(post, 3),
+      Promise.resolve(getRelatedTools(post, 6)),
+    ]);
+
+    return { post, related, relatedTools } satisfies LoaderData;
   },
+
   head: ({ params, loaderData }) => {
     const data = loaderData as LoaderData | undefined;
     if (!data) {
@@ -34,15 +56,20 @@ export const Route = createFileRoute("/blog/$slug")({
     }
 
     const { post } = data;
-    const slug = params.slug;
+    const slug = post.slug || params.slug;
+    // Always self-referencing and always on the canonical TavBook domain.
+    const canonicalPath = `/blog/${slug}`;
     const url =
-      post.canonical_url || `${BASE_URL}/blog/${slug}`;
+      post.canonical_url && post.canonical_url.startsWith(BASE_URL)
+        ? post.canonical_url
+        : `${BASE_URL}${canonicalPath}`;
+
     const title =
       post.meta_title || `${post.title} — TavBook AI Blog`;
     const description = post.meta_description || post.excerpt || "";
     const ogTitle = post.og_title || title;
     const ogDescription = post.og_description || description;
-    const ogImage = post.og_image_url || post.featured_image_url || `${BASE_URL}/og-image.png`;
+    const ogImage = post.og_image_url || post.featured_image_url || OG_IMAGE;
 
     const authorLd = post.author
       ? {
@@ -55,7 +82,7 @@ export const Route = createFileRoute("/blog/$slug")({
             sameAs: [post.author.twitter_url, post.author.linkedin_url].filter(Boolean),
           }),
         }
-      : { "@type": "Organization" as const, name: "TavBook", url: BASE_URL };
+      : { "@type": "Organization" as const, name: SITE_NAME, url: BASE_URL };
 
     const scripts: Array<{ type: string; children: string }> = [
       {
@@ -68,19 +95,30 @@ export const Route = createFileRoute("/blog/$slug")({
           author: authorLd,
           publisher: {
             "@type": "Organization",
-            name: "TavBook",
+            name: SITE_NAME,
             url: BASE_URL,
-            logo: { "@type": "ImageObject", url: `${BASE_URL}/favicon.png` },
+            logo: { "@type": "ImageObject", url: LOGO_URL },
           },
           datePublished: post.published_at,
           dateModified: post.updated_at,
-          mainEntityOfPage: url,
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": url,
+            url,
+            name: post.title,
+            isPartOf: { "@type": "Blog", name: `${SITE_NAME} AI Blog`, url: `${BASE_URL}/blog` },
+          },
+          url,
           image: ogImage,
+          inLanguage: "en",
+          isAccessibleForFree: true,
           keywords: post.keywords.join(", "),
           wordCount: post.word_count,
+          timeRequired: `PT${post.reading_minutes}M`,
           articleSection: post.category?.name || undefined,
           ...(post.tags.length > 0 && { about: post.tags }),
         }),
+
       },
     ];
 
@@ -134,7 +172,7 @@ export const Route = createFileRoute("/blog/$slug")({
       { property: "og:type", content: "article" },
       { property: "og:url", content: url },
       { property: "og:image", content: ogImage },
-      { property: "og:site_name", content: "TavBook" },
+      { property: "og:site_name", content: SITE_NAME },
       ...(post.published_at
         ? [
             { property: "article:published_time", content: post.published_at },
@@ -148,7 +186,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "article:tag", content: t },
       ]),
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@tavbook" },
+      { name: "twitter:site", content: SITE_TWITTER },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: ogDescription },
       { name: "twitter:image", content: ogImage },
@@ -196,9 +234,8 @@ function formatDate(iso: string | null) {
 /* ------------------------------------------------------------------ */
 
 function BlogPostPage() {
-  const { post, related } = Route.useLoaderData() as LoaderData;
+  const { post, related, relatedTools } = Route.useLoaderData() as LoaderData;
   const [copied, setCopied] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const shareUrl = `${BASE_URL}/blog/${post.slug}`;
   const shareTitle = post.title;
@@ -436,59 +473,101 @@ function BlogPostPage() {
               </button>
             </div>
 
-            {/* ── FAQ Section ── */}
+            {/* ── FAQ Section (native <details> so answers are always in the HTML) ── */}
             {post.faq && post.faq.length > 0 && (
               <section className="mt-12 border-t border-border pt-10">
                 <h2 className="mb-6 text-2xl font-bold tracking-tight">
                   Frequently Asked Questions
                 </h2>
                 <div className="flex flex-col gap-3">
-                  {post.faq.map((faq, i) => {
-                    const isOpen = openFaq === i;
-                    return (
-                      <div
-                        key={i}
-                        className="overflow-hidden rounded-xl border border-border transition-colors"
-                      >
-                        <button
-                          onClick={() => setOpenFaq(isOpen ? null : i)}
-                          className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold transition-colors hover:bg-slate-50 sm:text-base"
-                          aria-expanded={isOpen}
+                  {post.faq.map((faq, i) => (
+                    <details
+                      key={i}
+                      open={i === 0}
+                      className="group overflow-hidden rounded-xl border border-border"
+                    >
+                      <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold transition-colors hover:bg-slate-50 sm:text-base">
+                        <h3 className="flex-1 text-sm font-semibold sm:text-base">
+                          {faq.q}
+                        </h3>
+                        <svg
+                          className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
                         >
-                          <span className="flex-1">{faq.q}</span>
-                          <svg
-                            className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${
-                              isOpen ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </button>
-                        <div
-                          className={`overflow-hidden transition-all ${
-                            isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                          }`}
-                        >
-                          <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                            {faq.a}
-                          </div>
-                        </div>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </summary>
+                      <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                        {faq.a}
                       </div>
-                    );
-                  })}
+                    </details>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* ── Related AI tools (internal links into the directory) ── */}
+            {relatedTools.length > 0 && (
+              <section className="mt-12 border-t border-border pt-10">
+                <h2 className="mb-2 text-2xl font-bold tracking-tight">
+                  AI tools mentioned in this article
+                </h2>
+                <p className="mb-6 text-sm text-muted-foreground">
+                  Explore full profiles, pricing and alternatives in the TavBook
+                  directory.
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {relatedTools.map((t) => (
+                    <Link
+                      key={t.slug}
+                      to="/tool/$slug"
+                      params={{ slug: t.slug }}
+                      className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-indigo-300/60"
+                    >
+                      {t.favicon ? (
+                        <img
+                          src={t.favicon}
+                          alt={`${t.name} logo`}
+                          width={32}
+                          height={32}
+                          loading="lazy"
+                          className="h-8 w-8 shrink-0 rounded-md object-contain"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden="true"
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-indigo-50 text-sm"
+                        >
+                          🤖
+                        </span>
+                      )}
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-semibold">
+                          {t.name}
+                        </span>
+                        <span className="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-muted-foreground">
+                          {t.description}
+                        </span>
+                        <span className="mt-1 block text-[11px] uppercase tracking-wide text-muted-foreground/80">
+                          {t.category}
+                          {t.pricing ? ` · ${t.pricing}` : ""}
+                        </span>
+                      </span>
+                    </Link>
+                  ))}
                 </div>
               </section>
             )}
           </article>
         </div>
+
 
         {/* ── Related articles ── */}
         {related.length > 0 && (

@@ -1,6 +1,7 @@
-# TavBook AI — robots.txt
-# https://markbook.top/robots.txt
-# Fully open to search engines, closed only for admin/auth surfaces.
+# TavBook — robots.txt
+# https://tavbook.top/robots.txt
+# Open to search engines and AI crawlers; closed on admin/auth/private surfaces
+# and on internal JSON endpoints and filter/query URLs.
 
 User-agent: *
 Allow: /
@@ -8,8 +9,15 @@ Disallow: /admin
 Disallow: /admin-inbox
 Disallow: /auth
 Disallow: /profile
+Disallow: /*.json$
+Disallow: /*?q=
+Disallow: /*?category=
+Disallow: /*?pricing=
+Disallow: /*?page=
+Disallow: /*?ref=
+Disallow: /*?utm_
 
-# ── Explicit allow for major crawlers ──
+# ── Major search crawlers ──
 User-agent: Googlebot
 Allow: /
 Disallow: /admin
@@ -36,7 +44,7 @@ Allow: /
 User-agent: Baiduspider
 Allow: /
 
-# ── AI Crawlers ──
+# ── AI crawlers ──
 User-agent: GPTBot
 Allow: /
 
@@ -74,5 +82,4 @@ User-agent: LinkedInBot
 Allow: /
 
 # ── Sitemaps ──
-Sitemap: https://markbook.top/sitemap.xml
-Sitemap: https://markbook.top/sitemap-static.xml
+Sitemap: https://tavbook.top/sitemap.xml

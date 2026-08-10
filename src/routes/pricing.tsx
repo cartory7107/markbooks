@@ -3,7 +3,7 @@ import { ArrowLeft, Check, Sparkles, Rocket, Building2, HelpCircle } from "lucid
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = "https://tavbook.top";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -108,7 +108,7 @@ const FAQ_ITEMS = [
   {
     question: "Do you offer discounts for startups or open-source projects?",
     answer:
-      "We plan to offer special pricing for qualifying startups and open-source AI projects. Contact us at support@markbook.top to discuss your situation.",
+      "We plan to offer special pricing for qualifying startups and open-source AI projects. Contact us at support@tavbook.top to discuss your situation.",
   },
 ];
 

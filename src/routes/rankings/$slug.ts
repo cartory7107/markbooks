@@ -83,7 +83,7 @@ export const Route = createFileRoute("/rankings/$slug")({
         const inCat = catalog.tools.filter(t => normalizeCategory(t.c) === category || t.c === category || t.g === category);
         const ranked = rankBrowseList(inCat, "ranking").slice(0, 25);
         const emoji = emojis[category] || "🤖";
-        const canonical = `https://markbook.top/rankings/${slug}`;
+        const canonical = `https://tavbook.top/rankings/${slug}`;
 
         // Pretty title
         const prettyTitle = slug
@@ -103,7 +103,7 @@ export const Route = createFileRoute("/rankings/$slug")({
           itemListElement: ranked.map((t, i) => ({
             "@type": "ListItem",
             position: i + 1,
-            url: `https://markbook.top/tool/${slugify(t.n)}`,
+            url: `https://tavbook.top/tool/${slugify(t.n)}`,
             name: t.n,
           })),
         };
@@ -111,8 +111,8 @@ export const Route = createFileRoute("/rankings/$slug")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://markbook.top/" },
-            { "@type": "ListItem", position: 2, name: "Rankings", item: "https://markbook.top/rankings" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://tavbook.top/" },
+            { "@type": "ListItem", position: 2, name: "Rankings", item: "https://tavbook.top/rankings" },
             { "@type": "ListItem", position: 3, name: prettyTitle, item: canonical },
           ],
         };

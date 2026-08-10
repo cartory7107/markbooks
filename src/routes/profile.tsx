@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "My Profile — TavBook" },
       { name: "description", content: "Your TavBook profile — view saved AI tools, reports, recommendations, and ad campaigns." },
     ],
