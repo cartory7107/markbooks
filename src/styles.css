@@ -198,17 +198,11 @@
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 64px 64px;
   mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%);
-}
-
-.dark .moving-grid-bg::before {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
 /* Smooth category scroll */
@@ -331,10 +325,7 @@
 }
 
 #mb-initial-loader .mb-loader-logo .mb-accent {
-  background: linear-gradient(135deg, oklch(0.51 0.262 276), oklch(0.59 0.24 293));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary);
 }
 
 #mb-initial-loader .mb-loader-bars {
@@ -349,7 +340,7 @@
   width: 4px;
   height: 100%;
   border-radius: 2px;
-  background: linear-gradient(180deg, oklch(0.51 0.262 276), oklch(0.59 0.24 293));
+  background: var(--primary);
   transform-origin: bottom;
   animation: mb-bar-bounce 1.5s ease-in-out infinite;
 }
