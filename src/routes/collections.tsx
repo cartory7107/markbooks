@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { getCollections } from "@/lib/discovery.functions";
+import { getCollections, type DiscoveryGroup, type DiscoveryTool } from "@/lib/discovery.functions";
 import { absUrl, SITE_NAME } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { DiscoveryShell, ToolRow } from "@/components/discovery-shell";
@@ -43,7 +43,7 @@ function CollectionsPage() {
       subtitle={`Curated entry points into the largest parts of the ${TOTAL_TOOLS_LABEL} tool index.`}
     >
       <div className="grid gap-4 lg:grid-cols-2">
-        {groups.map((group) => (
+        {(groups as DiscoveryGroup[]).map((group) => (
           <section key={group.slug} className="rounded-lg border border-border bg-card p-4">
             <header className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -59,7 +59,7 @@ function CollectionsPage() {
               </Link>
             </header>
             <ul className="mt-3 divide-y divide-border/60">
-              {group.tools.map((tool) => (
+              {group.tools.map((tool: DiscoveryTool) => (
                 <ToolRow key={`${group.slug}-${tool.slug}`} tool={tool} />
               ))}
             </ul>
