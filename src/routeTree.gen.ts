@@ -49,6 +49,7 @@ import { Route as RankingsSlugRouteImport } from './routes/rankings/$slug'
 import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiPublicLogoWorkerRouteImport } from './routes/api/public/logo-worker'
 import { Route as ApiPublicLogoDomainRouteImport } from './routes/api/public/logo/$domain'
 
 const VerifiedRoute = VerifiedRouteImport.update({
@@ -253,6 +254,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLogoWorkerRoute = ApiPublicLogoWorkerRouteImport.update({
+  id: '/api/public/logo-worker',
+  path: '/api/public/logo-worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLogoDomainRoute = ApiPublicLogoDomainRouteImport.update({
   id: '/api/public/logo/$domain',
   path: '/api/public/logo/$domain',
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
+  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
   '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRoutesByTo {
@@ -343,6 +350,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/rankings': typeof RankingsIndexRoute
+  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
   '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRoutesById {
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
+  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
   '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRouteTypes {
@@ -432,6 +441,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
+    | '/api/public/logo-worker'
     | '/api/public/logo/$domain'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -475,6 +485,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/compare'
     | '/rankings'
+    | '/api/public/logo-worker'
     | '/api/public/logo/$domain'
   id:
     | '__root__'
@@ -518,6 +529,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
+    | '/api/public/logo-worker'
     | '/api/public/logo/$domain'
   fileRoutesById: FileRoutesById
 }
@@ -562,6 +574,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   RankingsIndexRoute: typeof RankingsIndexRoute
+  ApiPublicLogoWorkerRoute: typeof ApiPublicLogoWorkerRoute
   ApiPublicLogoDomainRoute: typeof ApiPublicLogoDomainRoute
 }
 
@@ -847,6 +860,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/logo-worker': {
+      id: '/api/public/logo-worker'
+      path: '/api/public/logo-worker'
+      fullPath: '/api/public/logo-worker'
+      preLoaderRoute: typeof ApiPublicLogoWorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/logo/$domain': {
       id: '/api/public/logo/$domain'
       path: '/api/public/logo/$domain'
@@ -898,6 +918,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   RankingsIndexRoute: RankingsIndexRoute,
+  ApiPublicLogoWorkerRoute: ApiPublicLogoWorkerRoute,
   ApiPublicLogoDomainRoute: ApiPublicLogoDomainRoute,
 }
 export const routeTree = rootRouteImport
