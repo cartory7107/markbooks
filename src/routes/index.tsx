@@ -1527,8 +1527,13 @@ function extractDomain(url: string): string | null {
   }
 }
 
-// Logo source stages: 0=icon.horse, 1=Google favicon, 2=DuckDuckGo, -1=all failed
+// Logo state: 0 = TavBook-hosted logo, -1 = local initials fallback.
+// Logos are served from /api/public/logo/{domain} (TavBook + CDN), never third-party hosts.
 const logoCache = new Map<string, number>();
+
+export function tavbookLogoSrc(domain: string): string {
+  return `/api/public/logo/${encodeURIComponent(domain)}`;
+}
 
 function ToolIcon({ name, url, small = false }: { name: string; url?: string; small?: boolean }) {
   const gradient = getToolGradient(name);
@@ -1540,24 +1545,15 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
   const [loaded, setLoaded] = useState(false);
 
   const getLogoSrc = useCallback((dom: string, s: number): string | null => {
-    if (s === 0) return `https://icon.horse/icon/${dom}`;
-    if (s === 1) return `https://www.google.com/s2/favicons?domain=${dom}&sz=64`;
-    if (s === 2) return `https://icons.duckduckgo.com/ip3/${dom}.ico`;
+    if (s === 0) return tavbookLogoSrc(dom);
     return null;
   }, []);
 
   const handleError = useCallback(() => {
-    const nextStage = stage + 1;
-    if (nextStage <= 2) {
-      if (cacheKey) logoCache.set(cacheKey, nextStage);
-      setStage(nextStage);
-      setLoaded(false);
-    } else {
-      // All sources failed — show clean initials fallback immediately
-      if (cacheKey) logoCache.set(cacheKey, -1);
-      setStage(-1);
-    }
-  }, [stage, cacheKey]);
+    if (cacheKey) logoCache.set(cacheKey, -1);
+    setStage(-1);
+  }, [cacheKey]);
+
 
   const handleLoad = useCallback(() => {
     if (cacheKey) logoCache.set(cacheKey, stage);
