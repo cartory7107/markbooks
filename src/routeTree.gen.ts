@@ -26,6 +26,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
 import { Route as BlogAiGenerateApiDotjsonRouteImport } from './routes/blog-ai-generate-api[.]json'
@@ -130,6 +131,11 @@ const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesRoute = CategoriesRouteImport.update({
@@ -247,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/pricing': typeof PricingRoute
@@ -286,6 +293,7 @@ export interface FileRoutesByTo {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/pricing': typeof PricingRoute
@@ -326,6 +334,7 @@ export interface FileRoutesById {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
+  '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/pricing': typeof PricingRoute
@@ -367,6 +376,7 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
+    | '/collections'
     | '/contact'
     | '/exclusive-api.json'
     | '/pricing'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
+    | '/collections'
     | '/contact'
     | '/exclusive-api.json'
     | '/pricing'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
+    | '/collections'
     | '/contact'
     | '/exclusive-api.json'
     | '/pricing'
@@ -485,6 +497,7 @@ export interface RootRouteChildren {
   BlogAiGenerateApiDotjsonRoute: typeof BlogAiGenerateApiDotjsonRoute
   BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
+  CollectionsRoute: typeof CollectionsRoute
   ContactRoute: typeof ContactRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
   PricingRoute: typeof PricingRoute
@@ -632,6 +645,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories': {
@@ -789,6 +809,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogAiGenerateApiDotjsonRoute: BlogAiGenerateApiDotjsonRoute,
   BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
+  CollectionsRoute: CollectionsRoute,
   ContactRoute: ContactRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
   PricingRoute: PricingRoute,
