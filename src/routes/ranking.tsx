@@ -48,7 +48,7 @@ function extractDomain(url: string): string | null {
   }
 }
 
-// Shared logo cache for ranking page
+// Shared logo cache for ranking page (0 = TavBook-hosted logo, -1 = initials fallback)
 const logoCache = new Map<string, number>();
 
 function RankingToolIcon({ name, url, size = "sm" }: { name: string; url?: string; size?: "sm" | "lg" }) {
@@ -61,23 +61,15 @@ function RankingToolIcon({ name, url, size = "sm" }: { name: string; url?: strin
   const [loaded, setLoaded] = useState(false);
 
   const getLogoSrc = useCallback((dom: string, s: number): string | null => {
-    if (s === 0) return `https://icon.horse/icon/${dom}`;
-    if (s === 1) return `https://www.google.com/s2/favicons?domain=${dom}&sz=64`;
-    if (s === 2) return `https://icons.duckduckgo.com/ip3/${dom}.ico`;
+    if (s === 0) return `/api/public/logo/${encodeURIComponent(dom)}`;
     return null;
   }, []);
 
   const handleError = useCallback(() => {
-    const nextStage = stage + 1;
-    if (nextStage <= 2) {
-      if (cacheKey) logoCache.set(cacheKey, nextStage);
-      setStage(nextStage);
-      setLoaded(false);
-    } else {
-      if (cacheKey) logoCache.set(cacheKey, -1);
-      setStage(-1);
-    }
-  }, [stage, cacheKey]);
+    if (cacheKey) logoCache.set(cacheKey, -1);
+    setStage(-1);
+  }, [cacheKey]);
+
 
   const handleLoad = useCallback(() => {
     if (cacheKey) logoCache.set(cacheKey, stage);
