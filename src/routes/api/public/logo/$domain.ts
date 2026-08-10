@@ -1,33 +1,32 @@
 /**
  * TavBook-hosted logo endpoint: /api/public/logo/{domain}
- * Serves the stored logo bytes from Supabase Storage with long-lived caching.
- * On first ever request for a domain it runs the one-time discovery pipeline;
- * every later request (for every visitor) is served from TavBook + CDN cache.
+ * - ready  → streams the stored bytes from Supabase Storage with immutable caching
+ * - not ready → enqueues the domain and instantly returns a lightweight placeholder
+ *   (the background worker at /api/public/logo-worker does the discovery work)
+ * Visitors never wait on third-party sites and never request a third-party host.
  */
 import { createFileRoute } from "@tanstack/react-router";
 
 const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
-const SHORT = "public, max-age=120, s-maxage=120";
+const QUEUED = "public, max-age=300, s-maxage=300";
 const PLACEHOLDER_CACHE = "public, max-age=86400, s-maxage=86400";
-const STALE_PROCESSING_MS = 3 * 60 * 1000;
 const RETRY_FAILED_MS = 14 * 24 * 60 * 60 * 1000;
-
-function svgResponse(seed: string, cache: string, placeholderSvg: (s: string) => string) {
-  return new Response(placeholderSvg(seed), {
-    headers: { "content-type": "image/svg+xml; charset=utf-8", "cache-control": cache },
-  });
-}
 
 export const Route = createFileRoute("/api/public/logo/$domain")({
   server: {
     handlers: {
-      GET: async ({ params }) => {
+      GET: async ({ params, request }) => {
         const { normalizeDomain, processDomainLogo, placeholderSvg, LOGO_BUCKET } = await import(
           "@/lib/logo-pipeline.server"
         );
+        const svg = (seed: string, cache: string) =>
+          new Response(placeholderSvg(seed), {
+            headers: { "content-type": "image/svg+xml; charset=utf-8", "cache-control": cache },
+          });
+
         const raw = decodeURIComponent(params.domain ?? "");
         const domain = normalizeDomain(raw);
-        if (!domain) return svgResponse(raw || "AI", PLACEHOLDER_CACHE, placeholderSvg);
+        if (!domain) return svg(raw || "AI", PLACEHOLDER_CACHE);
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -38,7 +37,7 @@ export const Route = createFileRoute("/api/public/logo/$domain")({
             headers: {
               "content-type": type || "image/png",
               "cache-control": IMMUTABLE,
-              "x-tavbook-logo": "stored",
+              "x-tavbook-logo": "hosted",
             },
           });
         };
@@ -56,27 +55,25 @@ export const Route = createFileRoute("/api/public/logo/$domain")({
 
         const age = row ? Date.now() - new Date(row.updated_at).getTime() : Infinity;
         if (row?.status === "failed" && age < RETRY_FAILED_MS) {
-          return svgResponse(domain, PLACEHOLDER_CACHE, placeholderSvg);
-        }
-        if (row?.status === "processing" && age < STALE_PROCESSING_MS) {
-          return svgResponse(domain, SHORT, placeholderSvg);
+          return svg(domain, PLACEHOLDER_CACHE);
         }
 
-        // One-time processing, bounded so a slow third-party site never stalls a visitor.
-        const result = await Promise.race([
-          processDomainLogo(domain),
-          new Promise<null>((resolve) => setTimeout(() => resolve(null), 9000)),
-        ]);
-
-        if (result?.status === "ready" && result.storage_path) {
-          const served = await serveStored(result.storage_path, result.content_type);
-          if (served) return served;
+        // Optional synchronous mode for admin tooling / warm-up scripts.
+        if (new URL(request.url).searchParams.get("sync") === "1") {
+          const result = await processDomainLogo(domain);
+          if (result.status === "ready" && result.storage_path) {
+            const served = await serveStored(result.storage_path, result.content_type);
+            if (served) return served;
+          }
+          return svg(domain, result.status === "failed" ? PLACEHOLDER_CACHE : QUEUED);
         }
-        return svgResponse(
-          domain,
-          result?.status === "failed" ? PLACEHOLDER_CACHE : SHORT,
-          placeholderSvg,
-        );
+
+        if (!row) {
+          await supabaseAdmin
+            .from("tool_logos")
+            .upsert({ domain, status: "pending" }, { onConflict: "domain", ignoreDuplicates: true });
+        }
+        return svg(domain, QUEUED);
       },
     },
   },
