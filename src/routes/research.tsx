@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getCatalog, slugify } from "@/lib/catalog-server";
 import { createServerFn } from "@tanstack/react-start";
@@ -24,10 +25,10 @@ export const Route = createFileRoute("/research")({
       { title: "AI Research Hub — Trends, Data & Reports | TavBook AI" },
       {
         name: "description",
-        content: `TavBook's AI research hub tracks ${loaderData?.totalTools?.toLocaleString?.() ?? "116,000+"} AI tools across ${loaderData?.totalCategories ?? 500}+ categories. Explore trends, category leaders, and independent research on the AI industry.`,
+        content: `TavBook's AI research hub tracks ${loaderData?.totalTools?.toLocaleString?.() ?? TOTAL_TOOLS_LABEL} AI tools across ${loaderData?.totalCategories ?? 500}+ categories. Explore trends, category leaders, and independent research on the AI industry.`,
       },
       { property: "og:title", content: "AI Research Hub — TavBook AI" },
-      { property: "og:description", content: "Independent research and data on the AI tools industry from TavBook's 116,000+ verified directory." },
+      { property: "og:description", content: `Independent research and data on the AI tools industry from TavBook's ${TOTAL_TOOLS_LABEL} verified directory.` },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE_URL}/research` },
     ],

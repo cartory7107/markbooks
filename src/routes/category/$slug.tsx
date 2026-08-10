@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_LABEL } from "@/lib/tool-count";
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, getCategoryEmojis, type Tool } from "@/lib/catalog-server";
@@ -196,7 +197,7 @@ a{color:#6366f1;text-decoration:none}a:hover{color:#818cf8}
     <p>Each tool in our ${matchedCategory} directory has been verified for quality with direct links to official websites. We update our ${matchedCategory.toLowerCase()} listings daily to ensure you always have access to the newest and most relevant AI tools.</p>
     <p>Looking for the best ${matchedCategory.toLowerCase()}? TavBook includes tools for every use case, from beginners to professionals. Filter by pricing and find exactly what you need.</p>
   </div>
-  <div class="cta"><h2>Explore 116,000+ AI Tools</h2><p>Discover the full TavBook AI tools directory</p><a href="/">Browse All AI Tools &rarr;</a></div>
+  <div class="cta"><h2>Explore ${TOTAL_TOOLS_LABEL} AI Tools</h2><p>Discover the full TavBook AI tools directory</p><a href="/">Browse All AI Tools &rarr;</a></div>
 </div>
 <script>
 (function(){

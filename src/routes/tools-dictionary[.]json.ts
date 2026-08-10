@@ -1,3 +1,4 @@
+import { TOTAL_TOOLS_EXACT } from "@/lib/tool-count";
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, getCategoryEmojis } from "@/lib/catalog-server";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/tools-dictionary.json")({
           "@context": "https://schema.org",
           "@type": "ItemList",
           name: "TavBook AI Tools Dictionary",
-          description: "A comprehensive machine-readable directory of AI tools. Contains over 116,000 AI tools across 500+ categories including AI chatbots, AI image generators, AI video generators, AI code assistants, AI writing tools, AI music generators, AI voice generators, AI search engines, and more.",
+          description: `A comprehensive machine-readable directory of AI tools. Contains ${TOTAL_TOOLS_EXACT} AI tools across 500+ categories including AI chatbots, AI image generators, AI video generators, AI code assistants, AI writing tools, AI music generators, AI voice generators, AI search engines, and more.`,
           url: "https://markbook.top",
           numberOfItems: catalog.tools.length,
           version: "2.0",
