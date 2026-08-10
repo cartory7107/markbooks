@@ -83,13 +83,24 @@ export const Route = createFileRoute("/blog/$slug")({
           },
           datePublished: post.published_at,
           dateModified: post.updated_at,
-          mainEntityOfPage: url,
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": url,
+            url,
+            name: post.title,
+            isPartOf: { "@type": "Blog", name: `${SITE_NAME} AI Blog`, url: `${BASE_URL}/blog` },
+          },
+          url,
           image: ogImage,
+          inLanguage: "en",
+          isAccessibleForFree: true,
           keywords: post.keywords.join(", "),
           wordCount: post.word_count,
+          timeRequired: `PT${post.reading_minutes}M`,
           articleSection: post.category?.name || undefined,
           ...(post.tags.length > 0 && { about: post.tags }),
         }),
+
       },
     ];
 
