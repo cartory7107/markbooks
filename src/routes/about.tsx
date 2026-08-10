@@ -17,7 +17,9 @@ export const Route = createFileRoute("/about")({
         content:
           "Learn about TavBook — the world's AI discovery and research platform making AI accessible to everyone.",
       },
+      { property: "og:url", content: "https://tavbook.top/about" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/about" }],
   }),
   component: AboutPage,
 });

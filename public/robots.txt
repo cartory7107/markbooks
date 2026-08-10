@@ -1,5 +1,5 @@
 # TavBook AI — robots.txt
-# https://markbook.top/robots.txt
+# https://tavbook.top/robots.txt
 # Fully open to search engines, closed only for admin/auth surfaces.
 
 User-agent: *
@@ -74,5 +74,5 @@ User-agent: LinkedInBot
 Allow: /
 
 # ── Sitemaps ──
-Sitemap: https://markbook.top/sitemap.xml
-Sitemap: https://markbook.top/sitemap-static.xml
+Sitemap: https://tavbook.top/sitemap.xml
+Sitemap: https://tavbook.top/sitemap-static.xml

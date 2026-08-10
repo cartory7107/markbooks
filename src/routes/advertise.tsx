@@ -27,7 +27,9 @@ export const Route = createFileRoute("/advertise")({
         property: "og:description",
         content: "Put your AI product in front of high-intent customers.",
       },
+      { property: "og:url", content: "https://tavbook.top/advertise" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/advertise" }],
   }),
   component: AdvertisePage,
 });

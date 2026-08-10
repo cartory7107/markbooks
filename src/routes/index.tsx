@@ -160,7 +160,9 @@ export const Route = createFileRoute("/")({
         content:
           `TavBook is the world's largest AI tools directory. Search, compare, and discover ${TOTAL_TOOLS_LABEL} AI tools — chatbots, image, video, code, and writing — across 500+ categories.`,
       },
+      { property: "og:url", content: "https://tavbook.top" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top" }],
   }),
   component: Index,
 });

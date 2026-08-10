@@ -7,6 +7,7 @@ import logoAsset from "@/assets/tavbook-symbol.png.asset.json";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Sign in — TavBook" },
       { name: "description", content: "Sign in to TavBook with Google." },
     ],

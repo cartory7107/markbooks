@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       {
         name: "keywords",
         content:
-          `TavBook, TavBook AI, markbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, ${TOTAL_TOOLS} AI tools, AI finder, AI catalog, AI search platform`,
+          `TavBook, TavBook AI, tavbook.top, tavbook ai tools, tavbook directory, AI tools, AI tools directory, best AI tools 2026, free AI tools, AI chatbot, AI image generator, AI video generator, AI code assistant, AI writing tool, ChatGPT alternatives, Midjourney alternatives, Claude alternatives, Gemini alternatives, generative AI tools, artificial intelligence tools, AI directory 2026, top AI tools, ${TOTAL_TOOLS} AI tools, AI finder, AI catalog, AI search platform`,
       },
       { name: "application-name", content: "TavBook" },
       { name: "apple-mobile-web-app-title", content: "TavBook" },
@@ -104,9 +104,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { property: "og:description", content: `Discover, compare & search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories. The world's largest AI directory.` },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "TavBook" },
-      { property: "og:url", content: "https://markbook.top" },
+      { property: "og:url", content: "https://tavbook.top" },
       { property: "og:locale", content: "en_US" },
-      { property: "og:image", content: "https://markbook.top/og-image.png" },
+      { property: "og:image", content: "https://tavbook.top/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
@@ -115,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { name: "twitter:creator", content: "@tavbook" },
       { name: "twitter:title", content: `TavBook AI — ${TOTAL_TOOLS_LABEL} AI Tools Directory` },
       { name: "twitter:description", content: `Discover, compare & search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.` },
-      { name: "twitter:image", content: "https://markbook.top/og-image.png" },
+      { name: "twitter:image", content: "https://tavbook.top/og-image.png" },
       { name: "theme-color", content: "#0a0a0a" },
       { name: "color-scheme", content: "dark light" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -127,7 +127,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "canonical", href: "https://markbook.top" },
+      { rel: "canonical", href: "https://tavbook.top" },
       // Favicon chain — multiple sizes so Google Search, browser tabs, and PWA all
       // resolve a valid logo even when a specific size fails or the CDN is slow.
       { rel: "icon", type: "image/png", sizes: "any", href: "/favicon.png" },
@@ -138,8 +138,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { rel: "apple-touch-icon", sizes: "180x180", href: "/favicon.png" },
       { rel: "mask-icon", href: "/favicon.png", color: "#0a0a0a" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "alternate", type: "application/rss+xml", title: "TavBook Blog RSS", href: "https://markbook.top/rss.xml" },
-      { rel: "sitemap", type: "application/xml", href: "https://markbook.top/sitemap.xml" },
+      { rel: "alternate", type: "application/rss+xml", title: "TavBook Blog RSS", href: "https://tavbook.top/rss.xml" },
+      { rel: "sitemap", type: "application/xml", href: "https://tavbook.top/sitemap.xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://icon.horse" },
@@ -158,19 +158,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "@context": "https://schema.org",
           "@type": "WebSite",
           "name": "TavBook",
-          "alternateName": ["TavBook AI", "TavBook AI Tools Directory", "markbook.top"],
-          "url": "https://markbook.top",
+          "alternateName": ["TavBook AI", "TavBook AI Tools Directory", "tavbook.top"],
+          "url": "https://tavbook.top",
           "description": `TavBook is the world's largest AI tools directory with ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.`,
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://markbook.top/?q={search_term_string}",
+            "target": "https://tavbook.top/?q={search_term_string}",
             "query-input": "required name=search_term_string"
           },
           "publisher": {
             "@type": "Organization",
             "name": "TavBook",
-            "url": "https://markbook.top",
-            "logo": { "@type": "ImageObject", "url": "https://markbook.top/favicon.png" }
+            "url": "https://tavbook.top",
+            "logo": { "@type": "ImageObject", "url": "https://tavbook.top/favicon.png" }
           }
         }),
       },
@@ -179,23 +179,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          "@id": "https://markbook.top/#organization",
+          "@id": "https://tavbook.top/#organization",
           "name": "TavBook",
-          "alternateName": ["TavBook AI", "markbook.top", "TavBook AI Tools Directory"],
-          "url": "https://markbook.top",
+          "alternateName": ["TavBook AI", "tavbook.top", "TavBook AI Tools Directory"],
+          "url": "https://tavbook.top",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://markbook.top/favicon.png",
+            "url": "https://tavbook.top/favicon.png",
             "width": 512,
             "height": 512,
             "caption": "TavBook logo"
           },
-          "image": "https://markbook.top/og-image.png",
+          "image": "https://tavbook.top/og-image.png",
           "description": `TavBook — the world's largest AI tools directory. Discover, compare, and search ${TOTAL_TOOLS_LABEL} AI tools across 500+ categories.`,
           "foundingDate": "2024",
           "sameAs": [
-            "https://markbook.top",
-            "https://markbooks.lovable.app"
+            "https://tavbook.top",
+            "https://tavbook.lovable.app"
           ]
         }),
       },
@@ -207,9 +207,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "@type": "Dataset",
           "name": "TavBook AI Tools Directory",
           "description": `A comprehensive directory of ${TOTAL_TOOLS_LABEL} AI tools spanning 500+ categories, including pricing, descriptions, categories, and direct links.`,
-          "url": "https://markbook.top/tools-dictionary.json",
+          "url": "https://tavbook.top/tools-dictionary.json",
           "creator": { "@type": "Organization", "name": "TavBook" },
-          "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://markbook.top/tools-dictionary.json" },
+          "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tavbook.top/tools-dictionary.json" },
           "temporalCoverage": "2024/2026",
           "spatialCoverage": "Worldwide"
         }),
@@ -261,8 +261,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://markbook.top" },
-            { "@type": "ListItem", "position": 2, "name": "AI Tools Directory", "item": "https://markbook.top" },
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://tavbook.top" },
+            { "@type": "ListItem", "position": 2, "name": "AI Tools Directory", "item": "https://tavbook.top" },
           ]
         }),
       },

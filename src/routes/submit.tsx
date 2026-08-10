@@ -10,7 +10,9 @@ export const Route = createFileRoute("/submit")({
     meta: [
       { title: "Submit Your AI Tool — TavBook" },
       { name: "description", content: "Submit your AI tool to be listed on TavBook." },
+      { property: "og:url", content: "https://tavbook.top/submit" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/submit" }],
   }),
   component: SubmitPage,
 });

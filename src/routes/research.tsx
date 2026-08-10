@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { getCatalog, slugify } from "@/lib/catalog-server";
 import { createServerFn } from "@tanstack/react-start";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = "https://tavbook.top";
 
 const getResearchSnapshot = createServerFn({ method: "GET" }).handler(() => {
   const catalog = getCatalog();

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { getCatalog, slugify } from "@/lib/catalog-server";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = "https://tavbook.top";
 const TOOLS_PER_SITEMAP = 50000;
 
 /**

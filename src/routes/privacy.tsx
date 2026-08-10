@@ -17,7 +17,9 @@ export const Route = createFileRoute("/privacy")({
         content:
           "TavBook's privacy policy — how we handle your information and protect your privacy.",
       },
+      { property: "og:url", content: "https://tavbook.top/privacy" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/privacy" }],
   }),
   component: PrivacyPage,
 });

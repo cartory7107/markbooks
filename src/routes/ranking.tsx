@@ -134,7 +134,9 @@ export const Route = createFileRoute("/ranking")({
     meta: [
       { title: "AI Tools Ranking — TavBook" },
       { name: "description", content: "See the top-ranked AI tools on TavBook." },
+      { property: "og:url", content: "https://tavbook.top/ranking" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/ranking" }],
   }),
   component: RankingPage,
 });

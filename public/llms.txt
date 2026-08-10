@@ -1,26 +1,26 @@
 # TavBook AI
 > The world's largest AI tools directory — 116,000+ verified AI tools across 500+ categories. Discover, compare, and search the best AI for any task.
 
-TavBook (https://markbook.top) is an independent AI tools directory. Content is editorially curated, updated daily, and free to use.
+TavBook (https://tavbook.top) is an independent AI tools directory. Content is editorially curated, updated daily, and free to use.
 
 ## Core
 
-- [Homepage — search 116,000+ AI tools](https://markbook.top): Full directory with live search, category browsing, and pricing filters.
-- [AI research hub](https://markbook.top/research): Data and trends across the tracked AI tools directory.
-- [Blog — guides and research](https://markbook.top/blog): Editorial guides on the best AI tools.
-- [Rankings by category](https://markbook.top/rankings): Category leaderboards for AI writing, image, video, coding, and more.
-- [Head-to-head comparisons](https://markbook.top/compare): Side-by-side AI tool comparisons.
+- [Homepage — search 116,000+ AI tools](https://tavbook.top): Full directory with live search, category browsing, and pricing filters.
+- [AI research hub](https://tavbook.top/research): Data and trends across the tracked AI tools directory.
+- [Blog — guides and research](https://tavbook.top/blog): Editorial guides on the best AI tools.
+- [Rankings by category](https://tavbook.top/rankings): Category leaderboards for AI writing, image, video, coding, and more.
+- [Head-to-head comparisons](https://tavbook.top/compare): Side-by-side AI tool comparisons.
 
 ## Data
 
-- [Tools dictionary (JSON)](https://markbook.top/tools-dictionary.json): Machine-readable index of every tool.
-- [Top tools bundle (JSON)](https://markbook.top/tools-api.json): Compact bundle with categories, top tools, and metadata.
-- [Search API (JSON)](https://markbook.top/search-api.json): Paginated server-side search over the full catalog.
-- [Sitemap index](https://markbook.top/sitemap.xml): Root sitemap with links to per-section sitemaps.
+- [Tools dictionary (JSON)](https://tavbook.top/tools-dictionary.json): Machine-readable index of every tool.
+- [Top tools bundle (JSON)](https://tavbook.top/tools-api.json): Compact bundle with categories, top tools, and metadata.
+- [Search API (JSON)](https://tavbook.top/search-api.json): Paginated server-side search over the full catalog.
+- [Sitemap index](https://tavbook.top/sitemap.xml): Root sitemap with links to per-section sitemaps.
 
 ## Featured guides
 
-- [Best AI Tools in 2026 — Complete Guide](https://markbook.top/blog/best-ai-tools-2026)
+- [Best AI Tools in 2026 — Complete Guide](https://tavbook.top/blog/best-ai-tools-2026)
 
 ## About
 

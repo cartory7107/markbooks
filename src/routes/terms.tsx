@@ -17,7 +17,9 @@ export const Route = createFileRoute("/terms")({
         content:
           "Terms of Service for TavBook — the world's AI discovery and research platform.",
       },
+      { property: "og:url", content: "https://tavbook.top/terms" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/terms" }],
   }),
   component: TermsPage,
 });

@@ -26,7 +26,9 @@ export const Route = createFileRoute("/compare/")({
     meta: [
       { title: "Compare AI Tools — TavBook" },
       { name: "description", content: "Pick 2–4 AI tools and get an AI-researched side-by-side comparison with pros, cons, and a clear winner." },
+      { property: "og:url", content: "https://tavbook.top/compare" },
     ],
+    links: [{ rel: "canonical", href: "https://tavbook.top/compare" }],
   }),
   component: ComparePage,
 });

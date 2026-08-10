@@ -626,12 +626,12 @@ ${kws}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://markbook.top/tool/${slug}">
+<meta property="og:url" content="https://tavbook.top/tool/${slug}">
 <meta property="og:site_name" content="TavBook">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
-<link rel="canonical" href="https://markbook.top/tool/${slug}">
+<link rel="canonical" href="https://tavbook.top/tool/${slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">

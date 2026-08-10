@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { getCatalog, slugify } from "@/lib/catalog-server";
 import { getAllPublishedSlugs } from "@/lib/blog.server";
 
-const BASE_URL = "https://markbook.top";
+const BASE_URL = "https://tavbook.top";
 
 /**
  * Static pages + category landing pages + blog posts sitemap.
