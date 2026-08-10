@@ -340,6 +340,76 @@ export async function getAllPublishedSlugs(): Promise<string[]> {
 }
 
 /**
+ * Published posts with their real per-post timestamps — used by the sitemap so
+ * <lastmod> reflects the article's own last content change (never build time).
+ */
+export async function getPublishedSitemapEntries(): Promise<
+  Array<{ slug: string; lastmod: string | null }>
+> {
+  try {
+    let query = supabaseAdmin
+      .from("blog_posts")
+      .select("slug,updated_at,published_at");
+
+    query = publishedFilter(query as ReturnType<typeof supabaseAdmin.from>);
+
+    const { data, error } = await (query as ReturnType<typeof supabaseAdmin.from>).order(
+      "published_at",
+      { ascending: false },
+    );
+
+    if (error) {
+      console.error("[blog.server] getPublishedSitemapEntries error:", error);
+      return [];
+    }
+
+    return (data ?? []).map(
+      (row: { slug: string; updated_at: string | null; published_at: string | null }) => ({
+        slug: row.slug,
+        lastmod: (row.updated_at ?? row.published_at ?? null)?.split("T")[0] ?? null,
+      }),
+    );
+  } catch (err) {
+    console.error("[blog.server] getPublishedSitemapEntries exception:", err);
+    return [];
+  }
+}
+
+/**
+ * Fetch published posts by an explicit list of slugs (editor-picked related posts).
+ */
+export async function getPostsBySlugs(slugs: string[]): Promise<BlogPostRow[]> {
+  const clean = slugs.map((s) => s.trim()).filter(Boolean);
+  if (clean.length === 0) return [];
+  try {
+    let query = supabaseAdmin
+      .from("blog_posts")
+      .select(POST_LIST_SELECT)
+      .in("slug", clean);
+
+    query = publishedFilter(query as ReturnType<typeof supabaseAdmin.from>);
+
+    const { data, error } = await (query as ReturnType<typeof supabaseAdmin.from>).limit(12);
+
+    if (error) {
+      console.error("[blog.server] getPostsBySlugs error:", error);
+      return [];
+    }
+
+    const rows = normalisePosts(data ?? []);
+    // Preserve the editor's ordering.
+    return clean
+      .map((s) => rows.find((r) => r.slug === s))
+      .filter((r): r is BlogPostRow => Boolean(r));
+  } catch (err) {
+    console.error("[blog.server] getPostsBySlugs exception:", err);
+    return [];
+  }
+}
+
+
+
+/**
  * Return all category slugs — useful for sitemap / route generation.
  */
 export async function getAllCategorySlugs(): Promise<string[]> {
