@@ -130,7 +130,7 @@ export const getModelTools = createServerFn({ method: "GET" }).handler(async () 
     total: matched.length,
     tools: matched.slice(0, 120).map((t) => ({
       name: t.n,
-      slug: slugify(t.name ?? t.n),
+      slug: slugify(t.n),
       url: t.u,
       desc: t.d,
       category: t.c,
