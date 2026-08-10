@@ -51,11 +51,28 @@ function randomRating(name: string): string {
  * Strips leading "best-", "top-", "leading-" and trailing type suffix.
  * Then matches against the catalog's category set (case-insensitive slug).
  */
+/** Common search-friendly words mapped onto real catalog category slugs. */
+const SLUG_ALIASES: Record<string, string> = {
+  coding: "code-assistant",
+  code: "code-assistant",
+  developer: "code-assistant",
+  programming: "code-assistant",
+  chatbots: "chatbot",
+  images: "image-generator",
+  image: "image-generator",
+  videos: "video-generator",
+  video: "video-generator",
+  music: "music-generator",
+  voice: "voice-generator",
+  seo: "marketing",
+};
+
 function slugToCategory(slug: string, allCats: string[]): string | null {
   let s = slug.toLowerCase();
   s = s.replace(/^(best|top|leading|greatest|popular)-/, "");
   s = s.replace(/-(tools|generators|apps|software|platforms|solutions|websites)$/, "");
-  const norm = s.replace(/^ai-/, "");
+  let norm = s.replace(/^ai-/, "");
+  norm = SLUG_ALIASES[norm] ?? norm;
   const catSlug = (c: string) => slugify(c).replace(/^ai-/, "");
   for (const c of allCats) {
     if (catSlug(c) === norm) return c;
@@ -66,6 +83,7 @@ function slugToCategory(slug: string, allCats: string[]): string | null {
   }
   return null;
 }
+
 
 export const Route = createFileRoute("/rankings/$slug")({
   server: {
