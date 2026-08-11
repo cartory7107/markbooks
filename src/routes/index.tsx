@@ -453,21 +453,8 @@ function Index() {
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
 
-  // ── Auto infinite scroll via IntersectionObserver ──
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !catalogLoaded) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loadingMore && results.length < displayedCount) {
-          loadMore();
-        }
-      },
-      { rootMargin: "500px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [catalogLoaded, loadingMore, results.length, displayedCount, loadMore]);
+  // ── Pagination is manual only: tools load when the user clicks "Show more" ──
+
 
   const suggestions = searchFocused && query.length > 1 ? results.slice(0, 8) : [];
 
