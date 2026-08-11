@@ -1,5 +1,7 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
+import { getSocialMeta, baseLikes } from "@/lib/social-meta";
+
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import {
@@ -468,7 +470,7 @@ function Index() {
 
   // Helper to generate ToolCard props for reaction/recommend/report features
   const getReactionProps = useCallback((tool: Tool) => ({
-    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: 0, dislike: 0 } },
+    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: baseLikes(tool.n), dislike: 0 } },
     onReaction: (_name: string, type: "like" | "dislike", emoji?: string) => {
       setReactions((prev) => {
         const name = tool.n;
@@ -1038,7 +1040,8 @@ function Index() {
           {!catalogLoaded || searchLoading ? (
             <ToolCardSkeletons />
           ) : results.length ? (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-3">
+
               {results.map((tool, index) => (
                 <ToolCard
                   key={`${tool.n}-${tool.c}-${index}`}
@@ -1564,7 +1567,9 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
         alt={name}
         width={pxSize}
         height={pxSize}
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
+
         onLoad={handleLoad}
         onError={handleError}
         decoding="async"
@@ -1925,7 +1930,7 @@ function ToolCardSkeletons() {
   // Render 6 skeleton cards matching the layout of ToolCard
   const cards = Array.from({ length: 6 });
   return (
-    <div className="grid gap-3 sm:grid-cols-2" aria-hidden="true">
+    <div className="flex flex-col gap-3" aria-hidden="true">
       {cards.map((_, i) => (
         <div
           key={i}
