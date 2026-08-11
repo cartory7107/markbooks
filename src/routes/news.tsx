@@ -80,7 +80,7 @@ function NewsPage() {
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-accent"
                 >
-                  <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                  <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold leading-none text-primary tabular-nums">
                     {i + 1}
                   </span>
                   <span className="min-w-0">
