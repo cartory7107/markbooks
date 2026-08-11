@@ -450,7 +450,20 @@ function Index() {
     });
   }, [catalog]);
 
-  // Results are served from the server (already filtered & sorted).
+  // ── Featured picks: Zenith AI is always first, then underrated real tools that
+  //    rotate on every page reload ──
+  const featuredPicks = useMemo(() => {
+    const seed = pageSeedRef.current;
+    const pool = [...UNDERRATED_FEATURED];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const x = Math.sin((i + 1) * 45.164 + seed * 91.777) * 43758.5453;
+      const j = Math.floor((x - Math.floor(x)) * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return [ZENITH_FEATURED, ...pool.slice(0, 5)];
+  }, []);
+
+
   // In browsing mode we reshuffle per page load so the feed never looks identical
   // after a reload: lower tools get surfaced, top tools get pushed down.
   const results = useMemo(() => {
