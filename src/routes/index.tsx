@@ -1703,6 +1703,8 @@ const ToolCard = memo(function ToolCard({
     : ({ contentVisibility: "auto", containIntrinsicSize: "260px" } as React.CSSProperties);
 
   const toolSlug = tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const social = useMemo(() => getSocialMeta(tool.n), [tool.n]);
+
 
   return (
     <article
