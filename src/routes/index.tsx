@@ -1315,7 +1315,7 @@ function Index() {
                     rel="noopener noreferrer"
                     className="flex items-start gap-2.5 px-3 py-2 transition-colors hover:bg-accent"
                   >
-                    <span className="mt-0.5 flex size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">
+                    <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold leading-none text-primary tabular-nums">
                       {i + 1}
                     </span>
                     <div className="min-w-0">
