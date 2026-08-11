@@ -228,7 +228,6 @@ function Index() {
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to search results when user types
   const scrollToResults = useCallback(() => {
@@ -453,21 +452,8 @@ function Index() {
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
 
-  // ── Auto infinite scroll via IntersectionObserver ──
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !catalogLoaded) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loadingMore && results.length < displayedCount) {
-          loadMore();
-        }
-      },
-      { rootMargin: "500px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [catalogLoaded, loadingMore, results.length, displayedCount, loadMore]);
+  // ── Pagination is manual only: tools load when the user clicks "Show more" ──
+
 
   const suggestions = searchFocused && query.length > 1 ? results.slice(0, 8) : [];
 
@@ -1088,8 +1074,6 @@ function Index() {
               >
                 {loadingMore ? "Loading..." : `Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`} <ChevronRight className="size-4" />
               </Button>
-              {/* Infinite scroll sentinel */}
-              <div ref={sentinelRef} className="h-1" />
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
@@ -1099,8 +1083,7 @@ function Index() {
               )}
             </>
           )}
-          {/* Always render sentinel for IntersectionObserver even when all loaded */}
-          {results.length >= displayedCount && <div ref={sentinelRef} className="h-1" />}
+
 
           {/* ─── Hidden Gems Section ─── */}
           {!query && activeCategory === "All" && (
@@ -1504,7 +1487,7 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
 
   const getLogoSrc = useCallback((dom: string, s: number): string | null => {
     if (s === 0) return `https://icon.horse/icon/${dom}`;
-    if (s === 1) return `https://www.google.com/s2/favicons?domain=${dom}&sz=64`;
+    if (s === 1) return `https://www.google.com/s2/favicons?domain=${dom}&sz=128`;
     if (s === 2) return `https://icons.duckduckgo.com/ip3/${dom}.ico`;
     return null;
   }, []);
@@ -1522,10 +1505,23 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
     }
   }, [stage, cacheKey]);
 
-  const handleLoad = useCallback(() => {
-    if (cacheKey) logoCache.set(cacheKey, stage);
-    setLoaded(true);
-  }, [stage, cacheKey]);
+  const handleLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      // Reject tiny (16px) favicons that would look blurry when scaled up —
+      // fall through to the next, higher-resolution source instead.
+      const w = e.currentTarget.naturalWidth;
+      if (w > 0 && w < 40 && stage < 2) {
+        const nextStage = stage + 1;
+        if (cacheKey) logoCache.set(cacheKey, nextStage);
+        setStage(nextStage);
+        setLoaded(false);
+        return;
+      }
+      if (cacheKey) logoCache.set(cacheKey, stage);
+      setLoaded(true);
+    },
+    [stage, cacheKey],
+  );
 
   const currentSrc = domain ? getLogoSrc(domain, stage) : null;
 
@@ -1571,6 +1567,8 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
         loading="lazy"
         onLoad={handleLoad}
         onError={handleError}
+        decoding="async"
+        style={{ imageRendering: "auto" }}
         className="absolute inset-0 z-10 size-full object-contain p-[3px]"
       />
     </span>
