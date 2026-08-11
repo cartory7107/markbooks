@@ -294,9 +294,9 @@ function SplashOverlay() {
   const shownAtRef = useRef<number>(Date.now());
 
   // Minimum time the splash stays on screen so it never "flashes".
-  const MIN_VISIBLE = 900;
+  const MIN_VISIBLE = 1500;
   // Ignore very short navigations entirely (no flicker for instant routes).
-  const SHOW_DELAY = 400;
+  const SHOW_DELAY = 500;
 
   // Hide the initial splash after the first paint settles, but never sooner
   // than MIN_VISIBLE so the animation can actually be seen.
@@ -340,7 +340,7 @@ function SplashOverlay() {
         background: "var(--background)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
-        transition: "opacity 420ms ease",
+        transition: "opacity 650ms ease",
       }}
     >
       <img
@@ -353,7 +353,7 @@ function SplashOverlay() {
           height: 88,
           objectFit: "contain",
           filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
-          animation: "mb-logo-pulse 2.2s ease-in-out infinite",
+          animation: "mb-logo-pulse 3s ease-in-out infinite",
         }}
       />
       <div className="mb-loader-bars" aria-label="Loading">
