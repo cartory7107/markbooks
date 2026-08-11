@@ -1075,8 +1075,6 @@ function Index() {
               >
                 {loadingMore ? "Loading..." : `Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`} <ChevronRight className="size-4" />
               </Button>
-              {/* Infinite scroll sentinel */}
-              <div ref={sentinelRef} className="h-1" />
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
@@ -1086,8 +1084,7 @@ function Index() {
               )}
             </>
           )}
-          {/* Always render sentinel for IntersectionObserver even when all loaded */}
-          {results.length >= displayedCount && <div ref={sentinelRef} className="h-1" />}
+
 
           {/* ─── Hidden Gems Section ─── */}
           {!query && activeCategory === "All" && (
