@@ -230,6 +230,9 @@ function Index() {
   const [reactions, setReactions] = useState<Record<string, { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } }>>({});
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
+  // Random seed created once per page load — used to reshuffle the feed & featured picks
+  const pageSeedRef = useRef<number>(Math.random() * 1000);
+
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-scroll to search results when user types
