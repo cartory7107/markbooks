@@ -8,21 +8,14 @@
  * (no hydration mismatch, no database round-trip).
  */
 
-import a01 from "@/assets/avatars/a01.jpg";
-import a02 from "@/assets/avatars/a02.jpg";
-import a03 from "@/assets/avatars/a03.jpg";
-import a04 from "@/assets/avatars/a04.jpg";
-import a05 from "@/assets/avatars/a05.jpg";
-import a06 from "@/assets/avatars/a06.jpg";
-import a07 from "@/assets/avatars/a07.jpg";
-import a08 from "@/assets/avatars/a08.jpg";
-import a09 from "@/assets/avatars/a09.jpg";
-import a10 from "@/assets/avatars/a10.jpg";
-import a11 from "@/assets/avatars/a11.jpg";
-import a12 from "@/assets/avatars/a12.jpg";
-import a13 from "@/assets/avatars/a13.jpg";
-import a14 from "@/assets/avatars/a14.jpg";
-import a15 from "@/assets/avatars/a15.jpg";
+import p01 from "@/assets/avatars/p01.webp";
+import p02 from "@/assets/avatars/p02.jpg";
+import p03 from "@/assets/avatars/p03.jpg";
+import p04 from "@/assets/avatars/p04.png";
+import p05 from "@/assets/avatars/p05.jpg";
+import p06 from "@/assets/avatars/p06.webp";
+import p07 from "@/assets/avatars/p07.webp";
+import p08 from "@/assets/avatars/p08.jpg";
 
 export interface Curator {
   name: string;
@@ -31,24 +24,18 @@ export interface Curator {
   verified: boolean;
 }
 
-/** The 15 verified curator accounts that publish tools on TavBook. */
+/** The verified curator accounts that publish tools on TavBook. */
 export const CURATORS: Curator[] = [
-  { name: "Arnab Sen", handle: "arnab.sen", avatar: a01, verified: true },
-  { name: "Mira Kovács", handle: "mira.k", avatar: a02, verified: true },
-  { name: "Pixel Whiskers", handle: "pixel.whiskers", avatar: a03, verified: true },
-  { name: "Tomas Novak", handle: "tomas.novak", avatar: a04, verified: true },
-  { name: "Peony Lab", handle: "peony.lab", avatar: a05, verified: true },
-  { name: "Hana Ito", handle: "hana.ito", avatar: a06, verified: true },
-  { name: "Marcus Ade", handle: "marcus.ade", avatar: a07, verified: true },
-  { name: "Rusty Paws", handle: "rusty.paws", avatar: a08, verified: true },
-  { name: "Camila Ruiz", handle: "camila.ruiz", avatar: a09, verified: true },
-  { name: "Anita Roy", handle: "anita.roy", avatar: a10, verified: true },
-  { name: "Blue Feather", handle: "blue.feather", avatar: a11, verified: true },
-  { name: "Erik Lund", handle: "erik.lund", avatar: a12, verified: true },
-  { name: "Layla Hasan", handle: "layla.hasan", avatar: a13, verified: true },
-  { name: "Sun Field", handle: "sun.field", avatar: a14, verified: true },
-  { name: "Jomar Cruz", handle: "jomar.cruz", avatar: a15, verified: true },
+  { name: "Mira Kovács", handle: "mira.k", avatar: p01, verified: true },
+  { name: "Ai Signal", handle: "ai.signal", avatar: p02, verified: true },
+  { name: "TA Team", handle: "ta.team", avatar: p03, verified: true },
+  { name: "Knotwork Labs", handle: "knotwork", avatar: p04, verified: true },
+  { name: "Orbit Studio", handle: "orbit.studio", avatar: p05, verified: true },
+  { name: "Mentra", handle: "mentra", avatar: p06, verified: true },
+  { name: "Memric", handle: "memric", avatar: p07, verified: true },
+  { name: "Memric Labs", handle: "memric.labs", avatar: p08, verified: true },
 ];
+
 
 /** Stable 32-bit string hash (FNV-1a) — same result on server and client. */
 function hash(str: string, seed = 2166136261): number {
