@@ -772,7 +772,15 @@ function Index() {
       </header>
 
       {/* ─── Hero Section ─── */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden border-b border-border bg-white">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+            backgroundSize: "44px 44px",
+          }}
+        />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
         <div className="relative mx-auto max-w-[1480px] px-4 py-12 text-center sm:py-16 lg:py-20">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-primary/70">

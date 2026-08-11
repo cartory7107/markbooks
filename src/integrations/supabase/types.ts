@@ -523,6 +523,57 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_logos: {
+        Row: {
+          attempts: number
+          byte_size: number | null
+          content_hash: string | null
+          content_type: string | null
+          created_at: string
+          domain: string
+          error: string | null
+          id: string
+          logo_updated_at: string | null
+          public_url: string | null
+          source: string | null
+          status: string
+          storage_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          byte_size?: number | null
+          content_hash?: string | null
+          content_type?: string | null
+          created_at?: string
+          domain: string
+          error?: string | null
+          id?: string
+          logo_updated_at?: string | null
+          public_url?: string | null
+          source?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          byte_size?: number | null
+          content_hash?: string | null
+          content_type?: string | null
+          created_at?: string
+          domain?: string
+          error?: string | null
+          id?: string
+          logo_updated_at?: string | null
+          public_url?: string | null
+          source?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tool_submissions: {
         Row: {
           admin_notes: string | null
