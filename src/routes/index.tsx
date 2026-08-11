@@ -396,6 +396,13 @@ function Index() {
   // ── Load more tools from server API ──
   const loadMore = useCallback(() => {
     setLoadingMore(true);
+    const startedAt = Date.now();
+    // Keep the indicator on screen long enough to be perceived (no flash)
+    const finish = () => {
+      const elapsed = Date.now() - startedAt;
+      const wait = Math.max(0, 350 - elapsed);
+      window.setTimeout(() => setLoadingMore(false), wait);
+    };
     const newOffset = searchOffset + 50;
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
@@ -412,9 +419,9 @@ function Index() {
           setCatalog((prev) => ({ ...prev, tools: [...prev.tools, ...data.results] }));
           setSearchOffset(newOffset);
         }
-        setLoadingMore(false);
+        finish();
       })
-      .catch(() => setLoadingMore(false));
+      .catch(() => finish());
   }, [query, activeCategory, pricing, activeFilter, searchOffset, catalogLoaded]);
 
   // Track auth state for navbar login/signup button
@@ -1177,22 +1184,39 @@ function Index() {
 
           {results.length < displayedCount && (
             <>
+              {/* Minimal load-more state: thin progress line + placeholder cards */}
+              {loadingMore && (
+                <div className="mt-3">
+                  <div className="mb-progress-line" aria-hidden="true">
+                    <span />
+                  </div>
+                  <div className="mt-3 opacity-70">
+                    <ToolCardSkeletons count={3} />
+                  </div>
+                </div>
+              )}
               <Button
                 variant="outline"
                 size="lg"
-                className="mt-5 w-full"
+                className="mt-4 w-full"
                 onClick={loadMore}
                 disabled={loadingMore}
+                aria-busy={loadingMore}
               >
-                {loadingMore ? "Loading..." : `Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`} <ChevronRight className="size-4" />
+                {loadingMore ? (
+                  <span className="flex items-center justify-center gap-2.5">
+                    <span className="mb-logo-loader" aria-hidden="true">
+                      <img src={logoAsset.url} alt="" />
+                    </span>
+                    <span className="text-sm text-muted-foreground">Loading more tools…</span>
+                  </span>
+                ) : (
+                  <>
+                    {`Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`}{" "}
+                    <ChevronRight className="size-4" />
+                  </>
+                )}
               </Button>
-              {/* Loading more indicator */}
-              {loadingMore && (
-                <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <span className="mb-logo-loader" aria-hidden="true"><img src={logoAsset.url} alt="" /></span>
-                  <span className="text-sm text-muted-foreground">Loading more tools...</span>
-                </div>
-              )}
             </>
           )}
 
@@ -2074,9 +2098,9 @@ function BackToTop() {
 }
 
 /** Skeleton placeholder grid shown while the AI catalog JSON is still being fetched. */
-function ToolCardSkeletons() {
-  // Render 6 skeleton cards matching the layout of ToolCard
-  const cards = Array.from({ length: 6 });
+function ToolCardSkeletons({ count = 6 }: { count?: number }) {
+  // Render skeleton cards matching the layout of ToolCard
+  const cards = Array.from({ length: count });
   return (
     <div className="flex flex-col gap-3" aria-hidden="true">
       {cards.map((_, i) => (
