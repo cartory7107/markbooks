@@ -255,8 +255,12 @@ function Index() {
   const [reactions, setReactions] = useState<Record<string, { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } }>>({});
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
-  // Random seed created once per page load — used to reshuffle the feed & featured picks
-  const pageSeedRef = useRef<number>(Math.random() * 1000);
+  // Random seed applied only after hydration (0 on server + first client render)
+  // so SSR markup matches and the page never flickers into a different order.
+  const [pageSeed, setPageSeed] = useState(0);
+  useEffect(() => {
+    setPageSeed(Math.random() * 1000);
+  }, []);
 
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -478,7 +482,7 @@ function Index() {
   // ── Featured picks: Zenith AI is always first, then underrated real tools that
   //    rotate on every page reload ──
   const featuredPicks = useMemo(() => {
-    const seed = pageSeedRef.current;
+    const seed = pageSeed;
     const pool = [...UNDERRATED_FEATURED];
     for (let i = pool.length - 1; i > 0; i--) {
       const x = Math.sin((i + 1) * 45.164 + seed * 91.777) * 43758.5453;
@@ -486,7 +490,7 @@ function Index() {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     return [ZENITH_FEATURED, ...pool.slice(0, 5)];
-  }, []);
+  }, [pageSeed]);
 
 
   // In browsing mode we reshuffle per page load so the feed never looks identical
@@ -495,7 +499,7 @@ function Index() {
     const list = catalog.tools;
     if (query || list.length < 4) return list;
 
-    const seed = pageSeedRef.current;
+    const seed = pageSeed;
     const rand = (i: number) => {
       const x = Math.sin((i + 1) * 12.9898 + seed * 78.233) * 43758.5453;
       return x - Math.floor(x);
@@ -515,7 +519,7 @@ function Index() {
       }
     }
     return rotated;
-  }, [catalog.tools, query]);
+  }, [catalog.tools, query, pageSeed]);
 
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
