@@ -447,11 +447,35 @@ function Index() {
     });
   }, [catalog]);
 
-  // Results are now served from the server (already filtered & sorted)
-  // In browsing mode, use the top-20 from tools-api; in search mode, use search-api results
+  // Results are served from the server (already filtered & sorted).
+  // In browsing mode we reshuffle per page load so the feed never looks identical
+  // after a reload: lower tools get surfaced, top tools get pushed down.
   const results = useMemo(() => {
-    return catalog.tools;
-  }, [catalog.tools]);
+    const list = catalog.tools;
+    if (query || list.length < 4) return list;
+
+    const seed = pageSeedRef.current;
+    const rand = (i: number) => {
+      const x = Math.sin((i + 1) * 12.9898 + seed * 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    };
+
+    // Rotate the whole list so a different slice leads on every reload,
+    // then shuffle inside windows of 8 to break predictable ordering.
+    const rotate = Math.floor(rand(0) * list.length);
+    const rotated = [...list.slice(rotate), ...list.slice(0, rotate)];
+
+    const WINDOW = 8;
+    for (let start = 0; start < rotated.length; start += WINDOW) {
+      const end = Math.min(start + WINDOW, rotated.length);
+      for (let i = end - 1; i > start; i--) {
+        const j = start + Math.floor(rand(start + i) * (i - start + 1));
+        [rotated[i], rotated[j]] = [rotated[j], rotated[i]];
+      }
+    }
+    return rotated;
+  }, [catalog.tools, query]);
+
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
 
