@@ -276,72 +276,26 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/* Branded first-paint overlay. It lives outside the React tree so it
+            can be dismissed the moment the HTML is painted — it never waits for
+            hydration and has no artificial minimum duration. */}
+        <div
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `<div id="mb-initial-loader" role="status"><img class="mb-loader-mark" src="${logoAsset.url}" alt="TavBook" width="72" height="72" decoding="async"/><div class="mb-loader-text">Loading TavBook\u2026</div></div>`,
+          }}
+        />
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){function h(){var e=document.getElementById('mb-initial-loader');if(!e)return;e.className='mb-hide';setTimeout(function(){e.parentNode&&e.parentNode.removeChild(e)},260)}requestAnimationFrame(function(){requestAnimationFrame(h)})})();",
+          }}
+        />
         {children}
         <Scripts />
-
-
       </body>
     </html>
-  );
-}
-
-function SplashOverlay() {
-  // Shown once on the very first load only. It never re-opens on navigation,
-  // so the loading screen can't flash on and off while browsing.
-  const [visible, setVisible] = useState(true);
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    const hide = window.setTimeout(() => setVisible(false), 1400);
-    const remove = window.setTimeout(() => setDone(true), 2200);
-    return () => {
-      window.clearTimeout(hide);
-      window.clearTimeout(remove);
-    };
-  }, []);
-
-  if (done) return null;
-
-
-
-
-  return (
-    <div
-      id="mb-initial-loader"
-      aria-hidden={!visible}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "14px",
-        background: "var(--background)",
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? "auto" : "none",
-        transition: "opacity 650ms ease",
-      }}
-    >
-      <img
-        src={logoAsset.url}
-        alt="TavBook"
-        width={88}
-        height={88}
-        style={{
-          width: 88,
-          height: 88,
-          objectFit: "contain",
-          filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
-          animation: "mb-logo-pulse 4.5s ease-in-out infinite",
-        }}
-      />
-      <div className="mb-loader-bars" aria-label="Loading">
-        <span /><span /><span /><span /><span />
-      </div>
-      <div className="mb-loader-text">Loading TavBook…</div>
-    </div>
   );
 }
 
@@ -370,7 +324,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SplashOverlay />
       <Outlet />
     </QueryClientProvider>
   );
