@@ -1,10 +1,13 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
+import { getSocialMeta, baseLikes } from "@/lib/social-meta";
+
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import {
   ArrowRight,
   Bot,
+  BadgeCheck,
   Bookmark,
   ChevronDown,
   ChevronRight,
@@ -468,7 +471,7 @@ function Index() {
 
   // Helper to generate ToolCard props for reaction/recommend/report features
   const getReactionProps = useCallback((tool: Tool) => ({
-    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: 0, dislike: 0 } },
+    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: baseLikes(tool.n), dislike: 0 } },
     onReaction: (_name: string, type: "like" | "dislike", emoji?: string) => {
       setReactions((prev) => {
         const name = tool.n;
@@ -546,7 +549,7 @@ function Index() {
                     } else if (item.action === "latest") {
                       document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" });
                     } else if (item.action === "news") {
-                      document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" });
+                      if (window.innerWidth < 1024) { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/news"; }
                     }
                   }}
                   className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
@@ -718,7 +721,7 @@ function Index() {
                       if (item.action === "free") { setPricing("Free"); setVisible(20); }
                       else if (item.action === "categories") { navigate({ to: "/categories" }); }
                       else if (item.action === "latest") { document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" }); }
-                      else if (item.action === "news") { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); }
+                      else if (item.action === "news") { if (window.innerWidth < 1024) { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/news"; } }
                       setMobileMenu(false);
                     }}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
@@ -1038,7 +1041,8 @@ function Index() {
           {!catalogLoaded || searchLoading ? (
             <ToolCardSkeletons />
           ) : results.length ? (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-3">
+
               {results.map((tool, index) => (
                 <ToolCard
                   key={`${tool.n}-${tool.c}-${index}`}
@@ -1167,7 +1171,7 @@ function Index() {
 
           {/* ─── AI News Section ─── */}
           {aiNews.length > 0 && (
-          <section id="ai-news-section" className="mt-10">
+          <section id="ai-news-section" className="mt-10 lg:hidden">
             <div className="mb-4 flex items-center gap-2">
               <Newspaper className="size-5 text-primary" />
               <h2 className="text-lg font-bold">AI News</h2>
@@ -1194,7 +1198,7 @@ function Index() {
                 ))}
               </div>
               <div className="border-t border-border p-3 text-center">
-                <a href="#" className="text-xs font-medium text-primary hover:underline">
+                <a href="/news" className="text-xs font-medium text-primary hover:underline">
                   Read More AI News →
                 </a>
               </div>
@@ -1233,7 +1237,7 @@ function Index() {
                 ))}
               </div>
               <div className="border-t border-border p-2 text-center">
-                <a href="#" className="text-[10px] font-medium text-primary hover:underline">
+                <a href="/news" className="text-[10px] font-medium text-primary hover:underline">
                   Read More AI News →
                 </a>
               </div>
@@ -1423,7 +1427,7 @@ function Index() {
               <h4 className="mb-3 text-sm font-bold">📚 Resources</h4>
               <div className="space-y-2">
                 {["AI News", "Blog", "Submit Tool", "Advertise", "Ranking", "Pricing"].map((label) => {
-                  const hrefs: Record<string, string> = { "AI News": "#", "Blog": "/blog", "Submit Tool": "/submit", "Advertise": "/advertise", "Ranking": "/ranking", "Pricing": "/pricing" };
+                  const hrefs: Record<string, string> = { "AI News": "/news", "Blog": "/blog", "Submit Tool": "/submit", "Advertise": "/advertise", "Ranking": "/ranking", "Pricing": "/pricing" };
                   return (
                     <Link key={label} to={hrefs[label] || "/"} className="block text-sm text-muted-foreground hover:text-primary">
                       {label}
@@ -1564,7 +1568,9 @@ function ToolIcon({ name, url, small = false }: { name: string; url?: string; sm
         alt={name}
         width={pxSize}
         height={pxSize}
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
+
         onLoad={handleLoad}
         onError={handleError}
         decoding="async"
@@ -1698,6 +1704,8 @@ const ToolCard = memo(function ToolCard({
     : ({ contentVisibility: "auto", containIntrinsicSize: "260px" } as React.CSSProperties);
 
   const toolSlug = tool.n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const social = useMemo(() => getSocialMeta(tool.n), [tool.n]);
+
 
   return (
     <article
@@ -1714,7 +1722,30 @@ const ToolCard = memo(function ToolCard({
           : `border-zinc-300 dark:border-zinc-600 bg-card ${featured ? "ring-1 ring-primary/20" : ""}`
       }`}
     >
+      {/* Poster row — who added this AI and when */}
+      <div className="mb-3 flex min-w-0 items-center gap-2">
+        <img
+          src={social.curator.avatar}
+          alt={`${social.curator.name} profile photo`}
+          width={28}
+          height={28}
+          loading="lazy"
+          decoding="async"
+          className="size-7 shrink-0 rounded-full object-cover ring-1 ring-border"
+        />
+        <div className="flex min-w-0 items-center gap-1">
+          <span className={`truncate text-xs font-semibold ${exclusive ? "text-white" : ""}`}>{social.curator.name}</span>
+          {social.curator.verified && (
+            <BadgeCheck className="size-3.5 shrink-0 fill-sky-500 text-white" aria-label="Verified curator" />
+          )}
+        </div>
+        <span className={`shrink-0 text-[11px] ${exclusive ? "text-white/70" : "text-muted-foreground"}`}>
+          · added {social.postedAgo} ago
+        </span>
+      </div>
+
       <div className="flex min-w-0 items-start gap-3">
+
         <a href={tool.u} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
           <ToolIcon name={tool.n} url={tool.u} />
         </a>
@@ -1874,7 +1905,21 @@ const ToolCard = memo(function ToolCard({
             <ThumbsDown className={`size-3.5 ${reactionData.type === "dislike" ? "fill-red-500" : ""}`} />
             <span className="text-[11px]">{reactionData.counts.dislike}</span>
           </button>
+          {/* Save button with count */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
+            title={saved ? "Unsave" : "Save"}
+            className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors ${
+              saved
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            }`}
+          >
+            <Bookmark className={`size-3.5 ${saved ? "fill-primary" : ""}`} />
+            <span className="text-[11px]">{social.saves + (saved ? 1 : 0)}</span>
+          </button>
           {/* Visit button */}
+
           <a href={tool.u} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-1.5 text-xs font-bold text-primary transition-all hover:from-primary/20 hover:to-primary/10 hover:shadow-[0_0_12px_-4px_rgba(var(--primary),0.4)]">
               🌐 Visit <ExternalLink className="size-3" />
@@ -1925,7 +1970,7 @@ function ToolCardSkeletons() {
   // Render 6 skeleton cards matching the layout of ToolCard
   const cards = Array.from({ length: 6 });
   return (
-    <div className="grid gap-3 sm:grid-cols-2" aria-hidden="true">
+    <div className="flex flex-col gap-3" aria-hidden="true">
       {cards.map((_, i) => (
         <div
           key={i}

@@ -10,17 +10,18 @@ import type {} from "@tanstack/react-start";
  */
 
 const FALLBACK_NEWS = [
-  { title: "OpenAI Launches GPT-5 with Enhanced Reasoning Capabilities", time: "2h ago", url: "https://openai.com", source: "AI News" },
-  { title: "Google DeepMind Unveils AlphaFold 4 for Drug Discovery", time: "3h ago", url: "https://deepmind.google", source: "AI News" },
-  { title: "Anthropic Claude Achieves New Benchmark in Code Generation", time: "5h ago", url: "https://anthropic.com", source: "AI News" },
-  { title: "Meta Releases Llama 5 as Open-Source AI Model", time: "6h ago", url: "https://ai.meta.com", source: "AI News" },
-  { title: "Microsoft Copilot Gets Major Enterprise Update", time: "8h ago", url: "https://microsoft.com", source: "AI News" },
-  { title: "Stability AI Announces Real-Time Video Generation", time: "10h ago", url: "https://stability.ai", source: "AI News" },
-  { title: "Apple Intelligence Expands to More Countries", time: "12h ago", url: "https://apple.com", source: "AI News" },
-  { title: "EU AI Act Enforcement Begins Across Member States", time: "14h ago", url: "https://europa.eu", source: "AI News" },
-  { title: "NVIDIA Announces Next-Gen AI Chips for Data Centers", time: "16h ago", url: "https://nvidia.com", source: "AI News" },
-  { title: "AI-Powered Code Editors See 300% Growth in Adoption", time: "18h ago", url: "#", source: "AI News" },
+  { title: "Frontier labs push agentic AI into everyday productivity apps", time: "2h ago", url: "https://openai.com/news", source: "AI News" },
+  { title: "Open-weight models keep closing the gap with closed frontier systems", time: "4h ago", url: "https://huggingface.co/blog", source: "AI News" },
+  { title: "AI coding assistants become the default developer workflow", time: "6h ago", url: "https://github.blog", source: "AI News" },
+  { title: "Real-time video generation moves from demo to production tooling", time: "8h ago", url: "https://stability.ai/news", source: "AI News" },
+  { title: "On-device AI assistants expand to more languages and regions", time: "10h ago", url: "https://blog.google/technology/ai/", source: "AI News" },
+  { title: "Enterprises shift budgets from pilots to deployed AI agents", time: "12h ago", url: "https://www.microsoft.com/en-us/ai", source: "AI News" },
+  { title: "AI data-centre demand reshapes chip roadmaps", time: "15h ago", url: "https://blogs.nvidia.com", source: "AI News" },
+  { title: "Regulators sharpen transparency rules for general-purpose AI", time: "18h ago", url: "https://digital-strategy.ec.europa.eu", source: "AI News" },
+  { title: "Voice AI quality improves as latency drops below human response time", time: "20h ago", url: "https://elevenlabs.io/blog", source: "AI News" },
+  { title: "AI research agents start co-authoring published papers", time: "1d ago", url: "https://www.anthropic.com/news", source: "AI News" },
 ];
+
 
 const AI_KEYWORDS = [
   "ai", "artificial intelligence", "llm", "gpt", "model", "machine learning",
