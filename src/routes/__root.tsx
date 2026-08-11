@@ -287,41 +287,23 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function SplashOverlay() {
-  const status = useRouterState({ select: (s) => s.status });
-  const isLoading = status === "pending";
+  // Shown once on the very first load only. It never re-opens on navigation,
+  // so the loading screen can't flash on and off while browsing.
   const [visible, setVisible] = useState(true);
-  const [mounted, setMounted] = useState(false);
-  const shownAtRef = useRef<number>(Date.now());
+  const [done, setDone] = useState(false);
 
-  // Minimum time the splash stays on screen so it never "flashes".
-  const MIN_VISIBLE = 1500;
-  // Ignore very short navigations entirely (no flicker for instant routes).
-  const SHOW_DELAY = 500;
-
-  // Hide the initial splash after the first paint settles, but never sooner
-  // than MIN_VISIBLE so the animation can actually be seen.
   useEffect(() => {
-    setMounted(true);
-    const remaining = Math.max(0, MIN_VISIBLE - (Date.now() - shownAtRef.current));
-    const t = window.setTimeout(() => setVisible(false), remaining);
-    return () => window.clearTimeout(t);
+    const hide = window.setTimeout(() => setVisible(false), 1400);
+    const remove = window.setTimeout(() => setDone(true), 2200);
+    return () => {
+      window.clearTimeout(hide);
+      window.clearTimeout(remove);
+    };
   }, []);
 
-  // On navigation: only show the splash if the load takes a noticeable time,
-  // and once shown keep it up for MIN_VISIBLE before fading out.
-  useEffect(() => {
-    if (!mounted) return;
-    if (isLoading) {
-      const t = window.setTimeout(() => {
-        shownAtRef.current = Date.now();
-        setVisible(true);
-      }, SHOW_DELAY);
-      return () => window.clearTimeout(t);
-    }
-    const remaining = Math.max(0, MIN_VISIBLE - (Date.now() - shownAtRef.current));
-    const t = window.setTimeout(() => setVisible(false), remaining);
-    return () => window.clearTimeout(t);
-  }, [isLoading, mounted]);
+  if (done) return null;
+
+
 
 
   return (
