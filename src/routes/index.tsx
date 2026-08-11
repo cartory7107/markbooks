@@ -970,7 +970,7 @@ function Index() {
       {/* ─── Main Content: 3-Column Layout ─── */}
       <main className="mx-auto grid max-w-[1480px] gap-0 px-4 py-5 lg:grid-cols-[250px_minmax(0,1fr)_280px] lg:px-6">
 
-        {/* ─── Left Sidebar: Featured (placeholder) ─── */}
+        {/* ─── Left Sidebar: Featured ─── */}
         <aside className="hidden lg:block">
           <div className="sticky top-20 space-y-4">
             <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -979,10 +979,34 @@ function Index() {
                   ⭐ Featured
                 </h2>
               </div>
-              <div className="flex min-h-[200px] items-center justify-center p-6">
-                <p className="text-center text-xs text-muted-foreground">Featured AI tools will appear here</p>
+              <div className="divide-y divide-border">
+                {featuredPicks.map((f, i) => (
+                  <a
+                    key={f.name}
+                    href={f.url}
+                    target={f.url.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2.5 px-3 py-2.5 transition-colors hover:bg-accent"
+                  >
+                    <ToolIcon name={f.name} url={f.url} small />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center gap-1.5">
+                        <span className="truncate text-xs font-semibold">{f.name}</span>
+                        {i === 0 && (
+                          <span className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary">#1</span>
+                        )}
+                      </span>
+                      <span className="mt-0.5 flex items-center gap-1">
+                        <span className="text-[10px] leading-none text-amber-500">★★★★★</span>
+                        <span className="text-[10px] leading-none text-muted-foreground">{f.rating.toFixed(1)}</span>
+                      </span>
+                      <span className="mt-1 block line-clamp-2 text-[10px] leading-3.5 text-muted-foreground">{f.tagline}</span>
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
+
 
             {/* Sponsored placeholder */}
             <div className="overflow-hidden rounded-xl border border-border bg-card p-4">
