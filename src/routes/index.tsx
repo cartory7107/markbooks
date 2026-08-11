@@ -1721,7 +1721,30 @@ const ToolCard = memo(function ToolCard({
           : `border-zinc-300 dark:border-zinc-600 bg-card ${featured ? "ring-1 ring-primary/20" : ""}`
       }`}
     >
+      {/* Poster row — who added this AI and when */}
+      <div className="mb-3 flex min-w-0 items-center gap-2">
+        <img
+          src={social.curator.avatar}
+          alt={`${social.curator.name} profile photo`}
+          width={28}
+          height={28}
+          loading="lazy"
+          decoding="async"
+          className="size-7 shrink-0 rounded-full object-cover ring-1 ring-border"
+        />
+        <div className="flex min-w-0 items-center gap-1">
+          <span className={`truncate text-xs font-semibold ${exclusive ? "text-white" : ""}`}>{social.curator.name}</span>
+          {social.curator.verified && (
+            <BadgeCheck className="size-3.5 shrink-0 fill-sky-500 text-white" aria-label="Verified curator" />
+          )}
+        </div>
+        <span className={`shrink-0 text-[11px] ${exclusive ? "text-white/70" : "text-muted-foreground"}`}>
+          · added {social.postedAgo} ago
+        </span>
+      </div>
+
       <div className="flex min-w-0 items-start gap-3">
+
         <a href={tool.u} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
           <ToolIcon name={tool.n} url={tool.u} />
         </a>
