@@ -1905,7 +1905,21 @@ const ToolCard = memo(function ToolCard({
             <ThumbsDown className={`size-3.5 ${reactionData.type === "dislike" ? "fill-red-500" : ""}`} />
             <span className="text-[11px]">{reactionData.counts.dislike}</span>
           </button>
+          {/* Save button with count */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
+            title={saved ? "Unsave" : "Save"}
+            className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors ${
+              saved
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            }`}
+          >
+            <Bookmark className={`size-3.5 ${saved ? "fill-primary" : ""}`} />
+            <span className="text-[11px]">{social.saves + (saved ? 1 : 0)}</span>
+          </button>
           {/* Visit button */}
+
           <a href={tool.u} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 px-3 py-1.5 text-xs font-bold text-primary transition-all hover:from-primary/20 hover:to-primary/10 hover:shadow-[0_0_12px_-4px_rgba(var(--primary),0.4)]">
               🌐 Visit <ExternalLink className="size-3" />
