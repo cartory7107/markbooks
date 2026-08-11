@@ -282,7 +282,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <div
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: `<div id="mb-initial-loader" role="status"><img class="mb-loader-mark" src="${logoAsset.url}" alt="TavBook" width="72" height="72" decoding="async"/><div class="mb-loader-text">Loading TavBook\u2026</div></div>`,
+            __html: `<div id="mb-initial-loader" role="status"><div class="mb-loader-stack"><div class="mb-loader-halo"></div><img class="mb-loader-mark" src="${logoAsset.url}" alt="TavBook" width="76" height="76" decoding="async"/></div><div class="mb-loader-word">TavBook</div><div class="mb-loader-bar"><span></span></div><div class="mb-loader-text">Loading TavBook\u2026</div></div>`,
           }}
         />
         <script

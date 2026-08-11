@@ -337,6 +337,27 @@
 }
 
 /* Branded initialization overlay */
+@keyframes mb-halo {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes mb-bar-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
 #mb-initial-loader {
   position: fixed;
   inset: 0;
@@ -346,10 +367,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  background: var(--background);
+  gap: 16px;
+  background:
+    radial-gradient(ellipse at 50% 42%, color-mix(in oklab, var(--brand) 12%, transparent), transparent 62%),
+    var(--background);
   opacity: 1;
-  transition: opacity 220ms ease-out;
+  transition: opacity 260ms ease-out;
 }
 
 #mb-initial-loader.mb-hide {
@@ -357,12 +380,59 @@
   pointer-events: none;
 }
 
-#mb-initial-loader .mb-loader-mark {
-  width: 72px;
-  height: 72px;
-  object-fit: contain;
+#mb-initial-loader .mb-loader-stack {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+}
+
+#mb-initial-loader .mb-loader-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--brand) 34%, transparent) 0%, transparent 68%);
+  filter: blur(6px);
+  animation: mb-halo 2.4s ease-in-out infinite;
   will-change: opacity, transform;
-  animation: mb-breathe 1.6s ease-in-out infinite;
+}
+
+#mb-initial-loader .mb-loader-mark {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  border-radius: 18px;
+  will-change: opacity, transform;
+  animation: mb-breathe 2.6s ease-in-out infinite;
+}
+
+#mb-initial-loader .mb-loader-word {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+#mb-initial-loader .mb-loader-bar {
+  position: relative;
+  width: 172px;
+  height: 3px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+#mb-initial-loader .mb-loader-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--brand), color-mix(in oklab, var(--brand) 55%, white));
+  animation: mb-bar-sweep 1.5s ease-in-out infinite;
+  will-change: transform;
 }
 
 #mb-initial-loader .mb-loader-text {
@@ -408,5 +478,43 @@
   }
   .mb-reveal {
     animation: none !important;
+  }
+}
+
+/* Branded inline loader: TavBook mark inside a rotating ring */
+.mb-logo-loader {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  vertical-align: middle;
+}
+.mb-logo-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid color-mix(in oklab, var(--primary) 18%, transparent);
+  border-top-color: var(--primary);
+  animation: mb-spin 1s linear infinite;
+}
+.mb-logo-loader img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  animation: mb-breathe 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mb-logo-loader img {
+    animation: none !important;
+  }
+  #mb-initial-loader .mb-loader-halo,
+  #mb-initial-loader .mb-loader-bar > span {
+    animation: none !important;
+  }
+  #mb-initial-loader .mb-loader-bar > span {
+    width: 100%;
   }
 }
