@@ -1137,7 +1137,7 @@ function Index() {
           {/* Inline search/refresh indicator — the feed below stays visible */}
           {searchLoading && feedReady && (
             <div className="mb-4 flex items-center justify-center gap-3 rounded-xl border border-primary/20 bg-primary/5 py-4">
-              <span className="mb-spinner" aria-hidden="true" />
+              <span className="mb-logo-loader" aria-hidden="true"><img src={logoAsset.url} alt="" /></span>
               <span className="text-sm font-medium text-primary">Searching...</span>
             </div>
           )}
@@ -1189,7 +1189,7 @@ function Index() {
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <span className="mb-spinner" aria-hidden="true" />
+                  <span className="mb-logo-loader" aria-hidden="true"><img src={logoAsset.url} alt="" /></span>
                   <span className="text-sm text-muted-foreground">Loading more tools...</span>
                 </div>
               )}

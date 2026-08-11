@@ -480,3 +480,41 @@
     animation: none !important;
   }
 }
+
+/* Branded inline loader: TavBook mark inside a rotating ring */
+.mb-logo-loader {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  vertical-align: middle;
+}
+.mb-logo-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid color-mix(in oklab, var(--primary) 18%, transparent);
+  border-top-color: var(--primary);
+  animation: mb-spin 1s linear infinite;
+}
+.mb-logo-loader img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  animation: mb-breathe 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mb-logo-loader img {
+    animation: none !important;
+  }
+  #mb-initial-loader .mb-loader-halo,
+  #mb-initial-loader .mb-loader-bar > span {
+    animation: none !important;
+  }
+  #mb-initial-loader .mb-loader-bar > span {
+    width: 100%;
+  }
+}
