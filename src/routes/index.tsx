@@ -396,6 +396,13 @@ function Index() {
   // ── Load more tools from server API ──
   const loadMore = useCallback(() => {
     setLoadingMore(true);
+    const startedAt = Date.now();
+    // Keep the indicator on screen long enough to be perceived (no flash)
+    const finish = () => {
+      const elapsed = Date.now() - startedAt;
+      const wait = Math.max(0, 350 - elapsed);
+      window.setTimeout(() => setLoadingMore(false), wait);
+    };
     const newOffset = searchOffset + 50;
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
@@ -412,9 +419,9 @@ function Index() {
           setCatalog((prev) => ({ ...prev, tools: [...prev.tools, ...data.results] }));
           setSearchOffset(newOffset);
         }
-        setLoadingMore(false);
+        finish();
       })
-      .catch(() => setLoadingMore(false));
+      .catch(() => finish());
   }, [query, activeCategory, pricing, activeFilter, searchOffset, catalogLoaded]);
 
   // Track auth state for navbar login/signup button
