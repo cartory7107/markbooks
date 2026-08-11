@@ -1198,7 +1198,7 @@ function Index() {
                 ))}
               </div>
               <div className="border-t border-border p-3 text-center">
-                <a href="#" className="text-xs font-medium text-primary hover:underline">
+                <a href="/news" className="text-xs font-medium text-primary hover:underline">
                   Read More AI News →
                 </a>
               </div>
