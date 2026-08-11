@@ -1177,22 +1177,39 @@ function Index() {
 
           {results.length < displayedCount && (
             <>
+              {/* Minimal load-more state: thin progress line + placeholder cards */}
+              {loadingMore && (
+                <div className="mt-3">
+                  <div className="mb-progress-line" aria-hidden="true">
+                    <span />
+                  </div>
+                  <div className="mt-3 opacity-70">
+                    <ToolCardSkeletons count={3} />
+                  </div>
+                </div>
+              )}
               <Button
                 variant="outline"
                 size="lg"
-                className="mt-5 w-full"
+                className="mt-4 w-full"
                 onClick={loadMore}
                 disabled={loadingMore}
+                aria-busy={loadingMore}
               >
-                {loadingMore ? "Loading..." : `Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`} <ChevronRight className="size-4" />
+                {loadingMore ? (
+                  <span className="flex items-center justify-center gap-2.5">
+                    <span className="mb-logo-loader" aria-hidden="true">
+                      <img src={logoAsset.url} alt="" />
+                    </span>
+                    <span className="text-sm text-muted-foreground">Loading more tools…</span>
+                  </span>
+                ) : (
+                  <>
+                    {`Show more tools (${results.length.toLocaleString()} of ${displayedCount.toLocaleString()})`}{" "}
+                    <ChevronRight className="size-4" />
+                  </>
+                )}
               </Button>
-              {/* Loading more indicator */}
-              {loadingMore && (
-                <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <span className="mb-logo-loader" aria-hidden="true"><img src={logoAsset.url} alt="" /></span>
-                  <span className="text-sm text-muted-foreground">Loading more tools...</span>
-                </div>
-              )}
             </>
           )}
 
