@@ -482,7 +482,7 @@ function Index() {
   // ── Featured picks: Zenith AI is always first, then underrated real tools that
   //    rotate on every page reload ──
   const featuredPicks = useMemo(() => {
-    const seed = pageSeedRef.current;
+    const seed = pageSeed;
     const pool = [...UNDERRATED_FEATURED];
     for (let i = pool.length - 1; i > 0; i--) {
       const x = Math.sin((i + 1) * 45.164 + seed * 91.777) * 43758.5453;
@@ -490,7 +490,7 @@ function Index() {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     return [ZENITH_FEATURED, ...pool.slice(0, 5)];
-  }, []);
+  }, [pageSeed]);
 
 
   // In browsing mode we reshuffle per page load so the feed never looks identical
@@ -499,7 +499,7 @@ function Index() {
     const list = catalog.tools;
     if (query || list.length < 4) return list;
 
-    const seed = pageSeedRef.current;
+    const seed = pageSeed;
     const rand = (i: number) => {
       const x = Math.sin((i + 1) * 12.9898 + seed * 78.233) * 43758.5453;
       return x - Math.floor(x);
@@ -519,7 +519,7 @@ function Index() {
       }
     }
     return rotated;
-  }, [catalog.tools, query]);
+  }, [catalog.tools, query, pageSeed]);
 
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
