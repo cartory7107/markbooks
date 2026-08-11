@@ -260,45 +260,25 @@
   scrollbar-color: color-mix(in oklab, var(--muted-foreground) 30%, transparent) transparent;
 }
 
-/* ─── Skeleton shimmer & loading scene ─── */
+/* ─── Unified loading system: shimmer, splash, spinner, content reveal ─── */
 @keyframes mb-shimmer {
   0% {
-    background-position: -200% 0;
-  }
-  100% {
     background-position: 200% 0;
   }
-}
-
-@keyframes mb-fade-out {
-  0% {
-    opacity: 1;
-  }
   100% {
-    opacity: 0;
-    visibility: hidden;
+    background-position: -200% 0;
   }
 }
 
-@keyframes mb-logo-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
+@keyframes mb-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: scale(0.985);
   }
   50% {
-    transform: scale(1.08);
-    opacity: 0.85;
-  }
-}
-
-@keyframes mb-bar-bounce {
-  0%, 80%, 100% {
-    transform: scaleY(0.4);
-    opacity: 0.5;
-  }
-  40% {
-    transform: scaleY(1);
     opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -308,15 +288,29 @@
   }
 }
 
+@keyframes mb-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* One shimmer definition used by every skeleton in the app */
 .mb-skeleton {
-  background: linear-gradient(
+  background-color: color-mix(in oklab, var(--muted) 82%, transparent);
+  background-image: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--muted) 70%, transparent) 25%,
-    color-mix(in oklab, var(--muted-foreground) 18%, transparent) 50%,
-    color-mix(in oklab, var(--muted) 70%, transparent) 75%
+    transparent 0%,
+    color-mix(in oklab, var(--foreground) 7%, transparent) 50%,
+    transparent 100%
   );
   background-size: 200% 100%;
-  animation: mb-shimmer 2.6s ease-in-out infinite;
+  background-repeat: no-repeat;
+  animation: mb-shimmer 1.6s ease-in-out infinite;
   border-radius: 6px;
   display: inline-block;
   color: transparent;
@@ -324,101 +318,71 @@
   -webkit-user-select: none;
 }
 
-/* ─── Logo shimmer — circular shimmer for loading logos ─── */
-@keyframes mb-logo-shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
 .mb-logo-shimmer {
-  background: linear-gradient(
+  background-color: color-mix(in oklab, var(--muted) 70%, transparent);
+  background-image: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--muted) 60%, transparent) 25%,
-    color-mix(in oklab, var(--muted-foreground) 22%, transparent) 50%,
-    color-mix(in oklab, var(--muted) 60%, transparent) 75%
+    transparent 0%,
+    color-mix(in oklab, var(--foreground) 8%, transparent) 50%,
+    transparent 100%
   );
   background-size: 200% 100%;
-  animation: mb-logo-shimmer 2.6s ease-in-out infinite;
+  background-repeat: no-repeat;
+  animation: mb-shimmer 1.6s ease-in-out infinite;
 }
 
-/* Initial full-screen splash shown before React hydrates */
+/* Smooth skeleton -> content handoff */
+.mb-reveal {
+  animation: mb-reveal 220ms ease-out both;
+}
+
+/* Branded initialization overlay */
 #mb-initial-loader {
   position: fixed;
   inset: 0;
+  min-height: 100dvh;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 14px;
   background: var(--background);
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  opacity: 1;
+  transition: opacity 220ms ease-out;
 }
 
 #mb-initial-loader.mb-hide {
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
 }
 
-#mb-initial-loader .mb-loader-logo {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  font-family: "Inter", system-ui, sans-serif;
-  animation: mb-logo-pulse 4.5s ease-in-out infinite;
+#mb-initial-loader .mb-loader-mark {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  will-change: opacity, transform;
+  animation: mb-breathe 1.6s ease-in-out infinite;
 }
-
-#mb-initial-loader .mb-loader-logo .mb-accent {
-  background: linear-gradient(135deg, oklch(0.51 0.262 276), oklch(0.59 0.24 293));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-#mb-initial-loader .mb-loader-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 22px;
-}
-
-#mb-initial-loader .mb-loader-bars span {
-  display: block;
-  width: 4px;
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(180deg, oklch(0.51 0.262 276), oklch(0.59 0.24 293));
-  transform-origin: bottom;
-  animation: mb-bar-bounce 3.2s ease-in-out infinite;
-}
-
-#mb-initial-loader .mb-loader-bars span:nth-child(1) { animation-delay: 0s; }
-#mb-initial-loader .mb-loader-bars span:nth-child(2) { animation-delay: 0.45s; }
-#mb-initial-loader .mb-loader-bars span:nth-child(3) { animation-delay: 0.9s; }
-#mb-initial-loader .mb-loader-bars span:nth-child(4) { animation-delay: 1.35s; }
-#mb-initial-loader .mb-loader-bars span:nth-child(5) { animation-delay: 1.8s; }
 
 #mb-initial-loader .mb-loader-text {
   font-size: 12px;
   color: var(--muted-foreground);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 0.04em;
 }
 
+/* Inline spinner: single smooth linear rotation, fixed size */
 .mb-spinner {
   width: 18px;
   height: 18px;
   border: 2px solid color-mix(in oklab, var(--muted-foreground) 25%, transparent);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: mb-spin 1.5s linear infinite;
+  animation: mb-spin 0.9s linear infinite;
   display: inline-block;
   vertical-align: middle;
+  flex: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -428,5 +392,21 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+  .mb-skeleton,
+  .mb-logo-shimmer {
+    background-image: none !important;
+    animation: none !important;
+  }
+  #mb-initial-loader .mb-loader-mark {
+    animation: none !important;
+    opacity: 1;
+  }
+  .mb-spinner {
+    animation: mb-spin 1.2s linear infinite !important;
+    animation-duration: 1.2s !important;
+  }
+  .mb-reveal {
+    animation: none !important;
   }
 }

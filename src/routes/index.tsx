@@ -236,6 +236,9 @@ function Index() {
   const [totalResults, setTotalResults] = useState(0);
   const [totalTools, setTotalTools] = useState(0);
   const [searchLoading, setSearchLoading] = useState(false);
+  // True once the feed has data at least once — after that we never blank the
+  // page again; refreshes keep existing cards visible.
+  const [feedReady, setFeedReady] = useState(false);
   const [dark, setDark] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [aiNews, setAiNews] = useState<Array<{ title: string; time: string; url?: string; source?: string }>>([]);
@@ -334,9 +337,8 @@ function Index() {
   const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
-    if (!catalogLoaded) return;
-
-    // ALL modes now fetch from server API — browsing, searching, filtering
+    // Runs in parallel with /tools-api.json (no waterfall): feed data is
+    // critical, so it must not wait for the categories/stats payload.
     setSearchLoading(true);
     setSearchOffset(0);
     const params = new URLSearchParams();
@@ -347,23 +349,33 @@ function Index() {
     params.set("offset", "0");
     params.set("limit", "50");
 
+    let cancelled = false;
     fetch(`/search-api.json?${params}`)
       .then((r) => r.json())
       .then((data: { results: Tool[]; total: number }) => {
+        if (cancelled) return;
         // Use search results directly — server already handles ranking + exclusive injection
         setCatalog((prev) => ({
           ...prev,
           tools: data.results,
         }));
         setTotalResults(data.total);
+        setFeedReady(true);
         setSearchLoading(false);
       })
-      .catch(() => setSearchLoading(false));
-  }, [query, activeCategory, pricing, activeFilter, catalogLoaded]);
+      .catch(() => {
+        if (cancelled) return;
+        setFeedReady(true);
+        setSearchLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [query, activeCategory, pricing, activeFilter]);
 
   // ── Restore scroll position when returning from a tool detail page ──
   useEffect(() => {
-    if (!catalogLoaded || searchLoading) return;
+    if (!feedReady || searchLoading) return;
     try {
       const saved = sessionStorage.getItem("mb:home:scroll");
       if (saved && catalog.tools.length > 0) {
@@ -379,7 +391,7 @@ function Index() {
         }
       }
     } catch {}
-  }, [catalogLoaded, searchLoading, catalog.tools.length]);
+  }, [feedReady, searchLoading, catalog.tools.length]);
 
   // ── Load more tools from server API ──
   const loadMore = useCallback(() => {
@@ -1122,20 +1134,22 @@ function Index() {
             </h2>
           </div>
 
-          {/* Loading indicator when filters change */}
-          {searchLoading && catalogLoaded && (
-            <div className="mb-4 flex items-center justify-center gap-3 rounded-xl border border-primary/20 bg-primary/5 py-5">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
-
+          {/* Inline search/refresh indicator — the feed below stays visible */}
+          {searchLoading && feedReady && (
+            <div className="mb-4 flex items-center justify-center gap-3 rounded-xl border border-primary/20 bg-primary/5 py-4">
+              <span className="mb-spinner" aria-hidden="true" />
               <span className="text-sm font-medium text-primary">Searching...</span>
             </div>
           )}
 
-          {/* Tool Cards Grid */}
-          {!catalogLoaded || searchLoading ? (
+          {/* Tool Cards Grid — skeletons only on the very first load */}
+          {!feedReady ? (
             <ToolCardSkeletons />
           ) : results.length ? (
-            <div className="flex flex-col gap-3">
+            <div
+              className={`flex flex-col gap-3 mb-reveal transition-opacity duration-200 ${searchLoading ? "opacity-60" : "opacity-100"}`}
+            >
+
 
               {results.map((tool, index) => (
                 <ToolCard
@@ -1175,7 +1189,7 @@ function Index() {
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
+                  <span className="mb-spinner" aria-hidden="true" />
                   <span className="text-sm text-muted-foreground">Loading more tools...</span>
                 </div>
               )}
@@ -2069,6 +2083,7 @@ function ToolCardSkeletons() {
         <div
           key={i}
           className="rounded-xl border border-border bg-card p-3 flex gap-3 items-start"
+          style={{ minHeight: "116px" }}
         >
           {/* Icon placeholder */}
           <div
