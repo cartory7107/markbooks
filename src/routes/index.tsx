@@ -1171,7 +1171,7 @@ function Index() {
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
                   <span className="text-sm text-muted-foreground">Loading more tools...</span>
                 </div>
               )}
