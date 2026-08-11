@@ -549,7 +549,7 @@ function Index() {
                     } else if (item.action === "latest") {
                       document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" });
                     } else if (item.action === "news") {
-                      document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" });
+                      if (window.innerWidth < 1024) { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/news"; }
                     }
                   }}
                   className={`${navIdx >= 6 ? "hidden 2xl:flex" : "flex"} shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1.5 text-[13px] font-medium text-foreground/75 transition-colors hover:bg-accent hover:text-foreground`}
@@ -721,7 +721,7 @@ function Index() {
                       if (item.action === "free") { setPricing("Free"); setVisible(20); }
                       else if (item.action === "categories") { navigate({ to: "/categories" }); }
                       else if (item.action === "latest") { document.getElementById("tools-feed")?.scrollIntoView({ behavior: "smooth" }); }
-                      else if (item.action === "news") { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); }
+                      else if (item.action === "news") { if (window.innerWidth < 1024) { document.getElementById("ai-news-section")?.scrollIntoView({ behavior: "smooth" }); } else { window.location.href = "/news"; } }
                       setMobileMenu(false);
                     }}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
@@ -1171,7 +1171,7 @@ function Index() {
 
           {/* ─── AI News Section ─── */}
           {aiNews.length > 0 && (
-          <section id="ai-news-section" className="mt-10">
+          <section id="ai-news-section" className="mt-10 lg:hidden">
             <div className="mb-4 flex items-center gap-2">
               <Newspaper className="size-5 text-primary" />
               <h2 className="text-lg font-bold">AI News</h2>
@@ -1237,7 +1237,7 @@ function Index() {
                 ))}
               </div>
               <div className="border-t border-border p-2 text-center">
-                <a href="#" className="text-[10px] font-medium text-primary hover:underline">
+                <a href="/news" className="text-[10px] font-medium text-primary hover:underline">
                   Read More AI News →
                 </a>
               </div>
@@ -1427,7 +1427,7 @@ function Index() {
               <h4 className="mb-3 text-sm font-bold">📚 Resources</h4>
               <div className="space-y-2">
                 {["AI News", "Blog", "Submit Tool", "Advertise", "Ranking", "Pricing"].map((label) => {
-                  const hrefs: Record<string, string> = { "AI News": "#", "Blog": "/blog", "Submit Tool": "/submit", "Advertise": "/advertise", "Ranking": "/ranking", "Pricing": "/pricing" };
+                  const hrefs: Record<string, string> = { "AI News": "/news", "Blog": "/blog", "Submit Tool": "/submit", "Advertise": "/advertise", "Ranking": "/ranking", "Pricing": "/pricing" };
                   return (
                     <Link key={label} to={hrefs[label] || "/"} className="block text-sm text-muted-foreground hover:text-primary">
                       {label}
