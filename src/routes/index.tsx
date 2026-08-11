@@ -1121,7 +1121,8 @@ function Index() {
           {/* Loading indicator when filters change */}
           {searchLoading && catalogLoaded && (
             <div className="mb-4 flex items-center justify-center gap-3 rounded-xl border border-primary/20 bg-primary/5 py-5">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
+
               <span className="text-sm font-medium text-primary">Searching...</span>
             </div>
           )}
