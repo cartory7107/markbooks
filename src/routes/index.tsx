@@ -2074,9 +2074,9 @@ function BackToTop() {
 }
 
 /** Skeleton placeholder grid shown while the AI catalog JSON is still being fetched. */
-function ToolCardSkeletons() {
-  // Render 6 skeleton cards matching the layout of ToolCard
-  const cards = Array.from({ length: 6 });
+function ToolCardSkeletons({ count = 6 }: { count?: number }) {
+  // Render skeleton cards matching the layout of ToolCard
+  const cards = Array.from({ length: count });
   return (
     <div className="flex flex-col gap-3" aria-hidden="true">
       {cards.map((_, i) => (
