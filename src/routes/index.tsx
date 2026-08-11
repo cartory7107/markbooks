@@ -104,6 +104,31 @@ const topNavItems = [
   { label: "Advertise", icon: "📢", href: "/advertise" },
 ];
 
+// ── Featured (sidebar) picks ──
+interface FeaturedPick { name: string; url: string; tagline: string; rating: number }
+
+const ZENITH_FEATURED: FeaturedPick = {
+  name: "Zenith AI",
+  url: "/?q=Zenith%20AI",
+  tagline: "All-in-one AI workspace — chat, research and content in one place.",
+  rating: 5.0,
+};
+
+const UNDERRATED_FEATURED: FeaturedPick[] = [
+  { name: "Napkin AI", url: "https://www.napkin.ai", tagline: "Turns plain text into clean diagrams and visuals instantly.", rating: 4.9 },
+  { name: "Krea AI", url: "https://www.krea.ai", tagline: "Real-time AI image generation and upscaling canvas.", rating: 4.8 },
+  { name: "Recraft", url: "https://www.recraft.ai", tagline: "Vector-first AI design tool for icons, logos and illustrations.", rating: 4.8 },
+  { name: "Elicit", url: "https://elicit.com", tagline: "AI research assistant that reads and summarises papers.", rating: 4.9 },
+  { name: "Gamma", url: "https://gamma.app", tagline: "Generate polished decks, docs and sites from a prompt.", rating: 4.8 },
+  { name: "Fathom", url: "https://fathom.video", tagline: "Free AI notetaker that records and summarises meetings.", rating: 4.9 },
+  { name: "Ideogram", url: "https://ideogram.ai", tagline: "Image generator that actually renders readable text.", rating: 4.7 },
+  { name: "tl;dv", url: "https://tldv.io", tagline: "Meeting recorder with AI highlights and CRM sync.", rating: 4.7 },
+  { name: "Durable", url: "https://durable.co", tagline: "Builds a full business website in about 30 seconds.", rating: 4.6 },
+  { name: "Cleanup.pictures", url: "https://cleanup.pictures", tagline: "Erase objects and people from photos in one click.", rating: 4.7 },
+];
+
+
+
 function initials(name: string) {
   return name
     .split(/\s+/)
