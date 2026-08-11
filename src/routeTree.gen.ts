@@ -24,11 +24,8 @@ import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as ModelsRouteImport } from './routes/models'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CompaniesRouteImport } from './routes/companies'
-import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
 import { Route as BlogAiGenerateApiDotjsonRouteImport } from './routes/blog-ai-generate-api[.]json'
@@ -49,8 +46,6 @@ import { Route as RankingsSlugRouteImport } from './routes/rankings/$slug'
 import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
-import { Route as ApiPublicLogoWorkerRouteImport } from './routes/api/public/logo-worker'
-import { Route as ApiPublicLogoDomainRouteImport } from './routes/api/public/logo/$domain'
 
 const VerifiedRoute = VerifiedRouteImport.update({
   id: '/verified',
@@ -127,11 +122,6 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ModelsRoute = ModelsRouteImport.update({
-  id: '/models',
-  path: '/models',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
   id: '/exclusive-api.json',
   path: '/exclusive-api.json',
@@ -140,16 +130,6 @@ const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompaniesRoute = CompaniesRouteImport.update({
-  id: '/companies',
-  path: '/companies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CollectionsRoute = CollectionsRouteImport.update({
-  id: '/collections',
-  path: '/collections',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesRoute = CategoriesRouteImport.update({
@@ -254,16 +234,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicLogoWorkerRoute = ApiPublicLogoWorkerRouteImport.update({
-  id: '/api/public/logo-worker',
-  path: '/api/public/logo-worker',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicLogoDomainRoute = ApiPublicLogoDomainRouteImport.update({
-  id: '/api/public/logo/$domain',
-  path: '/api/public/logo/$domain',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -277,11 +247,8 @@ export interface FileRoutesByFullPath {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
-  '/collections': typeof CollectionsRoute
-  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
-  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -306,8 +273,6 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
-  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
-  '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -321,11 +286,8 @@ export interface FileRoutesByTo {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
-  '/collections': typeof CollectionsRoute
-  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
-  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -350,8 +312,6 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/rankings': typeof RankingsIndexRoute
-  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
-  '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -366,11 +326,8 @@ export interface FileRoutesById {
   '/blog-ai-generate-api.json': typeof BlogAiGenerateApiDotjsonRoute
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
-  '/collections': typeof CollectionsRoute
-  '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
-  '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
@@ -395,8 +352,6 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
-  '/api/public/logo-worker': typeof ApiPublicLogoWorkerRoute
-  '/api/public/logo/$domain': typeof ApiPublicLogoDomainRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -412,11 +367,8 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
-    | '/collections'
-    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
-    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -441,8 +393,6 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
-    | '/api/public/logo-worker'
-    | '/api/public/logo/$domain'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -456,11 +406,8 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
-    | '/collections'
-    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
-    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -485,8 +432,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/compare'
     | '/rankings'
-    | '/api/public/logo-worker'
-    | '/api/public/logo/$domain'
   id:
     | '__root__'
     | '/'
@@ -500,11 +445,8 @@ export interface FileRouteTypes {
     | '/blog-ai-generate-api.json'
     | '/blog-categories-api.json'
     | '/categories'
-    | '/collections'
-    | '/companies'
     | '/contact'
     | '/exclusive-api.json'
-    | '/models'
     | '/pricing'
     | '/privacy'
     | '/profile'
@@ -529,8 +471,6 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
-    | '/api/public/logo-worker'
-    | '/api/public/logo/$domain'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -545,11 +485,8 @@ export interface RootRouteChildren {
   BlogAiGenerateApiDotjsonRoute: typeof BlogAiGenerateApiDotjsonRoute
   BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
-  CollectionsRoute: typeof CollectionsRoute
-  CompaniesRoute: typeof CompaniesRoute
   ContactRoute: typeof ContactRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
-  ModelsRoute: typeof ModelsRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
@@ -574,8 +511,6 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   RankingsIndexRoute: typeof RankingsIndexRoute
-  ApiPublicLogoWorkerRoute: typeof ApiPublicLogoWorkerRoute
-  ApiPublicLogoDomainRoute: typeof ApiPublicLogoDomainRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -685,13 +620,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/models': {
-      id: '/models'
-      path: '/models'
-      fullPath: '/models'
-      preLoaderRoute: typeof ModelsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/exclusive-api.json': {
       id: '/exclusive-api.json'
       path: '/exclusive-api.json'
@@ -704,20 +632,6 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/companies': {
-      id: '/companies'
-      path: '/companies'
-      fullPath: '/companies'
-      preLoaderRoute: typeof CompaniesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/collections': {
-      id: '/collections'
-      path: '/collections'
-      fullPath: '/collections'
-      preLoaderRoute: typeof CollectionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories': {
@@ -860,20 +774,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/logo-worker': {
-      id: '/api/public/logo-worker'
-      path: '/api/public/logo-worker'
-      fullPath: '/api/public/logo-worker'
-      preLoaderRoute: typeof ApiPublicLogoWorkerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/logo/$domain': {
-      id: '/api/public/logo/$domain'
-      path: '/api/public/logo/$domain'
-      fullPath: '/api/public/logo/$domain'
-      preLoaderRoute: typeof ApiPublicLogoDomainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -889,11 +789,8 @@ const rootRouteChildren: RootRouteChildren = {
   BlogAiGenerateApiDotjsonRoute: BlogAiGenerateApiDotjsonRoute,
   BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
-  CollectionsRoute: CollectionsRoute,
-  CompaniesRoute: CompaniesRoute,
   ContactRoute: ContactRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
-  ModelsRoute: ModelsRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
@@ -918,8 +815,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   RankingsIndexRoute: RankingsIndexRoute,
-  ApiPublicLogoWorkerRoute: ApiPublicLogoWorkerRoute,
-  ApiPublicLogoDomainRoute: ApiPublicLogoDomainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

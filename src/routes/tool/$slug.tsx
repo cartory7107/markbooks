@@ -644,6 +644,7 @@ ${kws}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://icon.horse">
 <script type="application/ld+json">${jsonLd}</script>
 <script type="application/ld+json">${faqLd}</script>
 <script type="application/ld+json">${breadcrumbLd}</script>
@@ -966,13 +967,14 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
 </div>
 
 <script>
-// Load the TavBook-hosted logo (single request, CDN cached, initials stay if it fails)
+// Try loading real favicon from icon.horse then Google fallback
 (function(){
   var logo = document.getElementById('tool-logo');
   if(!logo) return;
   var domain = ${JSON.stringify(domain)};
   if(!domain) return;
   var img = new Image();
+  img.crossOrigin = 'anonymous';
   img.onload = function(){
     logo.innerHTML = '';
     logo.style.padding = '10px';
@@ -983,10 +985,14 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
     i.style.cssText = 'width:100%;height:100%;border-radius:20px;object-fit:contain;';
     logo.appendChild(i);
   };
-  img.onerror = function(){};
-  img.src = '/api/public/logo/' + encodeURIComponent(domain);
+  img.onerror = function(){
+    var img2 = new Image();
+    img2.onload = img.onload;
+    img2.onerror = function(){};
+    img2.src = 'https://www.google.com/s2/favicons?domain=' + domain + '&sz=128';
+  };
+  img.src = 'https://icon.horse/icon/' + domain;
 })();
-
 
 // FAQ accordion
 document.querySelectorAll('.faq-q').forEach(function(q){

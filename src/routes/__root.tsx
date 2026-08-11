@@ -136,10 +136,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
       { rel: "sitemap", type: "application/xml", href: "https://tavbook.top/sitemap.xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://icon.horse" },
       { rel: "preconnect", href: "https://www.google.com" },
+      { rel: "preconnect", href: "https://icons.duckduckgo.com" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap",
       },
     ],
 
@@ -270,7 +272,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient; auth
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>

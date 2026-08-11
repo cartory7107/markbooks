@@ -43,7 +43,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogoPipelinePanel } from "@/components/admin/logo-pipeline-panel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlogManagement } from "@/components/admin/blog-management";
 
@@ -450,8 +449,6 @@ function DashboardTab({
           )}
         </CardContent>
       </Card>
-
-      <LogoPipelinePanel />
     </div>
   );
 }
