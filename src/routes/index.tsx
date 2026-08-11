@@ -104,6 +104,31 @@ const topNavItems = [
   { label: "Advertise", icon: "📢", href: "/advertise" },
 ];
 
+// ── Featured (sidebar) picks ──
+interface FeaturedPick { name: string; url: string; tagline: string; rating: number }
+
+const ZENITH_FEATURED: FeaturedPick = {
+  name: "Zenith AI",
+  url: "/?q=Zenith%20AI",
+  tagline: "All-in-one AI workspace — chat, research and content in one place.",
+  rating: 5.0,
+};
+
+const UNDERRATED_FEATURED: FeaturedPick[] = [
+  { name: "Napkin AI", url: "https://www.napkin.ai", tagline: "Turns plain text into clean diagrams and visuals instantly.", rating: 4.9 },
+  { name: "Krea AI", url: "https://www.krea.ai", tagline: "Real-time AI image generation and upscaling canvas.", rating: 4.8 },
+  { name: "Recraft", url: "https://www.recraft.ai", tagline: "Vector-first AI design tool for icons, logos and illustrations.", rating: 4.8 },
+  { name: "Elicit", url: "https://elicit.com", tagline: "AI research assistant that reads and summarises papers.", rating: 4.9 },
+  { name: "Gamma", url: "https://gamma.app", tagline: "Generate polished decks, docs and sites from a prompt.", rating: 4.8 },
+  { name: "Fathom", url: "https://fathom.video", tagline: "Free AI notetaker that records and summarises meetings.", rating: 4.9 },
+  { name: "Ideogram", url: "https://ideogram.ai", tagline: "Image generator that actually renders readable text.", rating: 4.7 },
+  { name: "tl;dv", url: "https://tldv.io", tagline: "Meeting recorder with AI highlights and CRM sync.", rating: 4.7 },
+  { name: "Durable", url: "https://durable.co", tagline: "Builds a full business website in about 30 seconds.", rating: 4.6 },
+  { name: "Cleanup.pictures", url: "https://cleanup.pictures", tagline: "Erase objects and people from photos in one click.", rating: 4.7 },
+];
+
+
+
 function initials(name: string) {
   return name
     .split(/\s+/)
@@ -230,6 +255,9 @@ function Index() {
   const [reactions, setReactions] = useState<Record<string, { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } }>>({});
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
+  // Random seed created once per page load — used to reshuffle the feed & featured picks
+  const pageSeedRef = useRef<number>(Math.random() * 1000);
+
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-scroll to search results when user types
@@ -447,11 +475,48 @@ function Index() {
     });
   }, [catalog]);
 
-  // Results are now served from the server (already filtered & sorted)
-  // In browsing mode, use the top-20 from tools-api; in search mode, use search-api results
+  // ── Featured picks: Zenith AI is always first, then underrated real tools that
+  //    rotate on every page reload ──
+  const featuredPicks = useMemo(() => {
+    const seed = pageSeedRef.current;
+    const pool = [...UNDERRATED_FEATURED];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const x = Math.sin((i + 1) * 45.164 + seed * 91.777) * 43758.5453;
+      const j = Math.floor((x - Math.floor(x)) * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return [ZENITH_FEATURED, ...pool.slice(0, 5)];
+  }, []);
+
+
+  // In browsing mode we reshuffle per page load so the feed never looks identical
+  // after a reload: lower tools get surfaced, top tools get pushed down.
   const results = useMemo(() => {
-    return catalog.tools;
-  }, [catalog.tools]);
+    const list = catalog.tools;
+    if (query || list.length < 4) return list;
+
+    const seed = pageSeedRef.current;
+    const rand = (i: number) => {
+      const x = Math.sin((i + 1) * 12.9898 + seed * 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    };
+
+    // Rotate the whole list so a different slice leads on every reload,
+    // then shuffle inside windows of 8 to break predictable ordering.
+    const rotate = Math.floor(rand(0) * list.length);
+    const rotated = [...list.slice(rotate), ...list.slice(0, rotate)];
+
+    const WINDOW = 8;
+    for (let start = 0; start < rotated.length; start += WINDOW) {
+      const end = Math.min(start + WINDOW, rotated.length);
+      for (let i = end - 1; i > start; i--) {
+        const j = start + Math.floor(rand(start + i) * (i - start + 1));
+        [rotated[i], rotated[j]] = [rotated[j], rotated[i]];
+      }
+    }
+    return rotated;
+  }, [catalog.tools, query]);
+
 
   const displayedCount = totalResults > 0 ? totalResults : totalTools;
 
@@ -943,7 +1008,7 @@ function Index() {
       {/* ─── Main Content: 3-Column Layout ─── */}
       <main className="mx-auto grid max-w-[1480px] gap-0 px-4 py-5 lg:grid-cols-[250px_minmax(0,1fr)_280px] lg:px-6">
 
-        {/* ─── Left Sidebar: Featured (placeholder) ─── */}
+        {/* ─── Left Sidebar: Featured ─── */}
         <aside className="hidden lg:block">
           <div className="sticky top-20 space-y-4">
             <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -952,10 +1017,34 @@ function Index() {
                   ⭐ Featured
                 </h2>
               </div>
-              <div className="flex min-h-[200px] items-center justify-center p-6">
-                <p className="text-center text-xs text-muted-foreground">Featured AI tools will appear here</p>
+              <div className="divide-y divide-border">
+                {featuredPicks.map((f, i) => (
+                  <a
+                    key={f.name}
+                    href={f.url}
+                    target={f.url.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2.5 px-3 py-2.5 transition-colors hover:bg-accent"
+                  >
+                    <ToolIcon name={f.name} url={f.url} small />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center gap-1.5">
+                        <span className="truncate text-xs font-semibold">{f.name}</span>
+                        {i === 0 && (
+                          <span className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary">#1</span>
+                        )}
+                      </span>
+                      <span className="mt-0.5 flex items-center gap-1">
+                        <span className="text-[10px] leading-none text-amber-500">★★★★★</span>
+                        <span className="text-[10px] leading-none text-muted-foreground">{f.rating.toFixed(1)}</span>
+                      </span>
+                      <span className="mt-1 block line-clamp-2 text-[10px] leading-3.5 text-muted-foreground">{f.tagline}</span>
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
+
 
             {/* Sponsored placeholder */}
             <div className="overflow-hidden rounded-xl border border-border bg-card p-4">
@@ -1032,7 +1121,8 @@ function Index() {
           {/* Loading indicator when filters change */}
           {searchLoading && catalogLoaded && (
             <div className="mb-4 flex items-center justify-center gap-3 rounded-xl border border-primary/20 bg-primary/5 py-5">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
+
               <span className="text-sm font-medium text-primary">Searching...</span>
             </div>
           )}
@@ -1081,7 +1171,7 @@ function Index() {
               {/* Loading more indicator */}
               {loadingMore && (
                 <div className="mt-3 flex items-center justify-center gap-3 py-4">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" style={{ animationDuration: "1.5s" }} />
                   <span className="text-sm text-muted-foreground">Loading more tools...</span>
                 </div>
               )}
@@ -1187,7 +1277,7 @@ function Index() {
                     rel="noopener noreferrer"
                     className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-accent"
                   >
-                    <span className="flex size-6 shrink-0 place-items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                    <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold leading-none text-primary tabular-nums">
                       {i + 1}
                     </span>
                     <div className="min-w-0">
@@ -1226,7 +1316,7 @@ function Index() {
                     rel="noopener noreferrer"
                     className="flex items-start gap-2.5 px-3 py-2 transition-colors hover:bg-accent"
                   >
-                    <span className="mt-0.5 flex size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">
+                    <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold leading-none text-primary tabular-nums">
                       {i + 1}
                     </span>
                     <div className="min-w-0">
@@ -1261,7 +1351,7 @@ function Index() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-accent"
                 >
-                  <span className="flex size-5 shrink-0 place-items-center rounded bg-primary/10 text-[10px] font-bold text-primary">
+                  <span className="inline-flex size-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold leading-none text-primary tabular-nums">
                     {i + 1}
                   </span>
                   <ToolIcon name={tool.n} url={tool.u} small />

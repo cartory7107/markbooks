@@ -353,7 +353,7 @@ function SplashOverlay() {
           height: 88,
           objectFit: "contain",
           filter: "drop-shadow(0 8px 32px rgba(99,102,241,0.35))",
-          animation: "mb-logo-pulse 3s ease-in-out infinite",
+          animation: "mb-logo-pulse 4.5s ease-in-out infinite",
         }}
       />
       <div className="mb-loader-bars" aria-label="Loading">
