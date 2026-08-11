@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import {
   ArrowRight,
   Bot,
+  BadgeCheck,
   Bookmark,
   ChevronDown,
   ChevronRight,
