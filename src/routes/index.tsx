@@ -1350,7 +1350,7 @@ function Index() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-accent"
                 >
-                  <span className="flex size-5 shrink-0 place-items-center rounded bg-primary/10 text-[10px] font-bold text-primary">
+                  <span className="inline-flex size-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold leading-none text-primary tabular-nums">
                     {i + 1}
                   </span>
                   <ToolIcon name={tool.n} url={tool.u} small />
