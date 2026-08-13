@@ -598,6 +598,18 @@ export const Route = createFileRoute("/tool/$slug")({
         const domain = tool.u ? (() => { try { return new URL(tool.u).hostname; } catch { return ""; } })() : "";
         const displayUrl = domain || (tool.u && tool.u !== "#" ? tool.u : "");
 
+        // Verification & link-health record (public, read-only)
+        const { getVerification, renderVerificationBlock, VERIFICATION_CSS } = await import("@/lib/verification.server");
+        const verification = await getVerification(slug);
+        const hasVerifiedBadge = ((tool as Tool & { badges?: string[] }).badges || [])
+          .some((b) => b.toLowerCase() === "verified");
+        const verificationHtml = renderVerificationBlock({
+          toolName: tool.n,
+          domain,
+          record: verification,
+          hasVerifiedBadge,
+        });
+
         // Star rating HTML
         const fullStars = Math.floor(parseFloat(rating));
         const halfStar = (parseFloat(rating) - fullStars) >= 0.3;
