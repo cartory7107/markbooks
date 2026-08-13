@@ -919,6 +919,9 @@ ${VERIFICATION_CSS}
     </div>
   </div>
 
+  <!-- Verification & link status -->
+${verificationHtml}
+
   <!-- About / SEO section -->
   <div class="sec">
     <h2>About ${esc(tool.n)}</h2>
