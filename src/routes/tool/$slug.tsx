@@ -789,6 +789,7 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
   .nav-inner{padding:0 16px}
   .nav-share{display:none}
 }
+${VERIFICATION_CSS}
 </style>
 </head>
 <body>
