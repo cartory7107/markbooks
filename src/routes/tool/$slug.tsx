@@ -598,6 +598,18 @@ export const Route = createFileRoute("/tool/$slug")({
         const domain = tool.u ? (() => { try { return new URL(tool.u).hostname; } catch { return ""; } })() : "";
         const displayUrl = domain || (tool.u && tool.u !== "#" ? tool.u : "");
 
+        // Verification & link-health record (public, read-only)
+        const { getVerification, renderVerificationBlock, VERIFICATION_CSS } = await import("@/lib/verification.server");
+        const verification = await getVerification(slug);
+        const hasVerifiedBadge = ((tool as Tool & { badges?: string[] }).badges || [])
+          .some((b) => b.toLowerCase() === "verified");
+        const verificationHtml = renderVerificationBlock({
+          toolName: tool.n,
+          domain,
+          record: verification,
+          hasVerifiedBadge,
+        });
+
         // Star rating HTML
         const fullStars = Math.floor(parseFloat(rating));
         const halfStar = (parseFloat(rating) - fullStars) >= 0.3;
@@ -777,6 +789,7 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
   .nav-inner{padding:0 16px}
   .nav-share{display:none}
 }
+${VERIFICATION_CSS}
 </style>
 </head>
 <body>
@@ -905,6 +918,9 @@ a{color:#4f46e5;text-decoration:none}a:hover{color:#6366f1}
       </div>
     </div>
   </div>
+
+  <!-- Verification & link status -->
+${verificationHtml}
 
   <!-- About / SEO section -->
   <div class="sec">
