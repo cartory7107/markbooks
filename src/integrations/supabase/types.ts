@@ -645,6 +645,63 @@ export type Database = {
           },
         ]
       }
+      tool_verifications: {
+        Row: {
+          consecutive_failures: number
+          created_at: string
+          domain: string | null
+          http_status: number | null
+          https_valid: boolean | null
+          id: string
+          last_checked_at: string | null
+          level: Database["public"]["Enums"]["verification_level"]
+          link_health: Database["public"]["Enums"]["link_health"]
+          public_notes: string | null
+          redirect_target: string | null
+          tool_name: string
+          tool_slug: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          consecutive_failures?: number
+          created_at?: string
+          domain?: string | null
+          http_status?: number | null
+          https_valid?: boolean | null
+          id?: string
+          last_checked_at?: string | null
+          level?: Database["public"]["Enums"]["verification_level"]
+          link_health?: Database["public"]["Enums"]["link_health"]
+          public_notes?: string | null
+          redirect_target?: string | null
+          tool_name?: string
+          tool_slug: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          consecutive_failures?: number
+          created_at?: string
+          domain?: string | null
+          http_status?: number | null
+          https_valid?: boolean | null
+          id?: string
+          last_checked_at?: string | null
+          level?: Database["public"]["Enums"]["verification_level"]
+          link_health?: Database["public"]["Enums"]["link_health"]
+          public_notes?: string | null
+          redirect_target?: string | null
+          tool_name?: string
+          tool_slug?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -682,7 +739,13 @@ export type Database = {
         | "published"
         | "archived"
         | "rejected"
+      link_health: "unknown" | "working" | "redirected" | "broken" | "insecure"
       review_status: "pending" | "approved" | "rejected"
+      verification_level:
+        | "unverified"
+        | "auto_checked"
+        | "human_verified"
+        | "flagged"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -819,7 +882,14 @@ export const Constants = {
         "archived",
         "rejected",
       ],
+      link_health: ["unknown", "working", "redirected", "broken", "insecure"],
       review_status: ["pending", "approved", "rejected"],
+      verification_level: [
+        "unverified",
+        "auto_checked",
+        "human_verified",
+        "flagged",
+      ],
     },
   },
 } as const
