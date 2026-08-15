@@ -478,6 +478,122 @@ export type Database = {
         }
         Relationships: []
       }
+      link_audit_results: {
+        Row: {
+          checked_at: string
+          domain: string | null
+          domain_changed: boolean
+          error_type: string | null
+          final_url: string | null
+          https_valid: boolean | null
+          id: string
+          link_health: Database["public"]["Enums"]["link_health"]
+          redirect_detected: boolean
+          response_ms: number | null
+          run_id: string | null
+          security_reasons: string[]
+          security_status: string
+          status_code: number | null
+          tool_name: string
+          tool_slug: string
+          url: string
+        }
+        Insert: {
+          checked_at?: string
+          domain?: string | null
+          domain_changed?: boolean
+          error_type?: string | null
+          final_url?: string | null
+          https_valid?: boolean | null
+          id?: string
+          link_health?: Database["public"]["Enums"]["link_health"]
+          redirect_detected?: boolean
+          response_ms?: number | null
+          run_id?: string | null
+          security_reasons?: string[]
+          security_status?: string
+          status_code?: number | null
+          tool_name?: string
+          tool_slug: string
+          url: string
+        }
+        Update: {
+          checked_at?: string
+          domain?: string | null
+          domain_changed?: boolean
+          error_type?: string | null
+          final_url?: string | null
+          https_valid?: boolean | null
+          id?: string
+          link_health?: Database["public"]["Enums"]["link_health"]
+          redirect_detected?: boolean
+          response_ms?: number | null
+          run_id?: string | null
+          security_reasons?: string[]
+          security_status?: string
+          status_code?: number | null
+          tool_name?: string
+          tool_slug?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "link_audit_results_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "link_audit_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      link_audit_runs: {
+        Row: {
+          broken: number
+          checked: number
+          created_at: string
+          finished_at: string | null
+          id: string
+          insecure: number
+          notes: string | null
+          quarantined: number
+          redirected: number
+          started_at: string
+          status: string
+          trigger_source: string
+          working: number
+        }
+        Insert: {
+          broken?: number
+          checked?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          insecure?: number
+          notes?: string | null
+          quarantined?: number
+          redirected?: number
+          started_at?: string
+          status?: string
+          trigger_source?: string
+          working?: number
+        }
+        Update: {
+          broken?: number
+          checked?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          insecure?: number
+          notes?: string | null
+          quarantined?: number
+          redirected?: number
+          started_at?: string
+          status?: string
+          trigger_source?: string
+          working?: number
+        }
+        Relationships: []
+      }
       tool_discoveries: {
         Row: {
           candidate_url: string | null
@@ -650,14 +766,21 @@ export type Database = {
           consecutive_failures: number
           created_at: string
           domain: string | null
+          final_url: string | null
           http_status: number | null
           https_valid: boolean | null
           id: string
           last_checked_at: string | null
+          last_error: string | null
           level: Database["public"]["Enums"]["verification_level"]
           link_health: Database["public"]["Enums"]["link_health"]
+          next_check_at: string | null
           public_notes: string | null
+          quarantined: boolean
           redirect_target: string | null
+          response_ms: number | null
+          security_reasons: string[]
+          security_status: string
           tool_name: string
           tool_slug: string
           updated_at: string
@@ -668,14 +791,21 @@ export type Database = {
           consecutive_failures?: number
           created_at?: string
           domain?: string | null
+          final_url?: string | null
           http_status?: number | null
           https_valid?: boolean | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           level?: Database["public"]["Enums"]["verification_level"]
           link_health?: Database["public"]["Enums"]["link_health"]
+          next_check_at?: string | null
           public_notes?: string | null
+          quarantined?: boolean
           redirect_target?: string | null
+          response_ms?: number | null
+          security_reasons?: string[]
+          security_status?: string
           tool_name?: string
           tool_slug: string
           updated_at?: string
@@ -686,14 +816,21 @@ export type Database = {
           consecutive_failures?: number
           created_at?: string
           domain?: string | null
+          final_url?: string | null
           http_status?: number | null
           https_valid?: boolean | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           level?: Database["public"]["Enums"]["verification_level"]
           link_health?: Database["public"]["Enums"]["link_health"]
+          next_check_at?: string | null
           public_notes?: string | null
+          quarantined?: boolean
           redirect_target?: string | null
+          response_ms?: number | null
+          security_reasons?: string[]
+          security_status?: string
           tool_name?: string
           tool_slug?: string
           updated_at?: string
