@@ -15,14 +15,34 @@ export const Route = createFileRoute("/api/public/link-audit")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secret = process.env["LINK_AUDIT_SECRET"];
-        if (!secret) {
-          return Response.json({ error: "Auditor is not configured." }, { status: 503 });
+        const header = request.headers.get("authorization") || "";
+        const provided =
+          header.replace(/^Bearer\s+/i, "").trim() || request.headers.get("x-audit-secret") || "";
+        if (!provided || provided.length < 16) {
+          return Response.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const header = request.headers.get("authorization") || "";
-        const provided = header.replace(/^Bearer\s+/i, "").trim() || request.headers.get("x-audit-secret") || "";
-        if (provided.length !== secret.length || provided !== secret) {
+        const envSecret = process.env["LINK_AUDIT_SECRET"] || "";
+        let authorized = envSecret.length > 0 && provided === envSecret;
+
+        if (!authorized) {
+          // The scheduled database job authenticates with its own rotating token.
+          try {
+            const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+            const { data } = await supabaseAdmin
+              .schema("private")
+              .from("audit_config")
+              .select("value")
+              .eq("key", "link_audit_token")
+              .maybeSingle();
+            const token = (data as { value?: string } | null)?.value || "";
+            authorized = token.length > 0 && provided === token;
+          } catch {
+            authorized = false;
+          }
+        }
+
+        if (!authorized) {
           return Response.json({ error: "Unauthorized" }, { status: 401 });
         }
 
