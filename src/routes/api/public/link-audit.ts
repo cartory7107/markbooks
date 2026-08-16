@@ -29,13 +29,25 @@ export const Route = createFileRoute("/api/public/link-audit")({
           // The scheduled database job authenticates with its own rotating token.
           try {
             const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-            const { data } = await supabaseAdmin
+            const db = supabaseAdmin as unknown as {
+              schema: (s: string) => {
+                from: (t: string) => {
+                  select: (c: string) => {
+                    eq: (
+                      c: string,
+                      v: string,
+                    ) => { maybeSingle: () => Promise<{ data: { value?: string } | null }> };
+                  };
+                };
+              };
+            };
+            const { data } = await db
               .schema("private")
               .from("audit_config")
               .select("value")
               .eq("key", "link_audit_token")
               .maybeSingle();
-            const token = (data as { value?: string } | null)?.value || "";
+            const token = data?.value || "";
             authorized = token.length > 0 && provided === token;
           } catch {
             authorized = false;
