@@ -642,7 +642,7 @@ export const Route = createFileRoute("/tool/$slug")({
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="robots" content="index,follow">
+<meta name="robots" content="${verification.quarantined ? "noindex,nofollow" : "index,follow"}">
 ${kws}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">

@@ -22,7 +22,9 @@ export const Route = createFileRoute("/sitemap-tools/$index")({
             return new Response("Invalid sitemap index", { status: 400 });
           }
 
-          const slugs = getIndexableToolSlugs();
+          const { getQuarantinedSlugs } = await import("@/lib/verification.server");
+          const quarantined = await getQuarantinedSlugs();
+          const slugs = getIndexableToolSlugs().filter((s) => !quarantined.has(s));
           const start = index * URLS_PER_SITEMAP;
           if (start >= slugs.length) {
             return new Response("Sitemap not found", { status: 404 });
