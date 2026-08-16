@@ -12,6 +12,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type VerificationLevel = "unverified" | "auto_checked" | "human_verified" | "flagged";
 export type LinkHealth = "unknown" | "working" | "redirected" | "broken" | "insecure";
+export type SecurityStatus = "clean" | "suspicious" | "parked" | "malicious";
 
 export interface VerificationRecord {
   level: VerificationLevel;
@@ -23,6 +24,9 @@ export interface VerificationRecord {
   last_checked_at: string | null;
   consecutive_failures: number;
   public_notes: string | null;
+  security_status: SecurityStatus;
+  security_reasons: string[];
+  quarantined: boolean;
 }
 
 const EMPTY: VerificationRecord = {
@@ -35,6 +39,9 @@ const EMPTY: VerificationRecord = {
   last_checked_at: null,
   consecutive_failures: 0,
   public_notes: null,
+  security_status: "clean",
+  security_reasons: [],
+  quarantined: false,
 };
 
 function publicClient() {
@@ -60,7 +67,7 @@ export async function getVerification(slug: string): Promise<VerificationRecord>
     const { data } = await supabase
       .from("tool_verifications")
       .select(
-        "level, verified_at, link_health, http_status, https_valid, redirect_target, last_checked_at, consecutive_failures, public_notes",
+        "level, verified_at, link_health, http_status, https_valid, redirect_target, last_checked_at, consecutive_failures, public_notes, security_status, security_reasons, quarantined",
       )
       .eq("tool_slug", slug)
       .maybeSingle();
@@ -113,6 +120,29 @@ const HEALTH_COPY: Record<LinkHealth, { label: string; tone: string }> = {
   unknown: { label: "Link not checked yet", tone: "warn" },
 };
 
+const SECURITY_COPY: Record<SecurityStatus, { label: string; tone: string; blurb: string }> = {
+  clean: {
+    label: "Security check passed",
+    tone: "ok",
+    blurb: "TavBook's automated security scan found no signs of phishing, brand impersonation or a parked domain on the destination site.",
+  },
+  suspicious: {
+    label: "Security review pending",
+    tone: "warn",
+    blurb: "TavBook's automated scan raised one or more low-confidence signals on this destination. A human editor is reviewing it.",
+  },
+  parked: {
+    label: "Domain appears parked",
+    tone: "bad",
+    blurb: "The official link now lands on a parked, expired or for-sale domain rather than a working AI product. The listing has been removed from search indexing until it is fixed.",
+  },
+  malicious: {
+    label: "Security risk detected",
+    tone: "bad",
+    blurb: "TavBook's automated scan detected serious risk signals (brand impersonation, credential or wallet harvesting). Do not enter personal data on this destination. The listing is quarantined and excluded from search indexing.",
+  },
+};
+
 /** CSS for the verification block — append inside the page's <style>. */
 export const VERIFICATION_CSS = `
 .vb{margin:0 0 28px;padding:22px;border:1px solid #e5e7eb;border-radius:16px;background:rgba(255,255,255,.9);position:relative;z-index:1}
@@ -131,6 +161,8 @@ export const VERIFICATION_CSS = `
 .vb-cell dd{margin-top:3px;font-size:13px;color:#111827;font-weight:600;word-break:break-word}
 .vb-foot{margin-top:14px;font-size:12px;color:#6b7280}
 .vb-foot a{font-weight:600}
+.vb-reasons{margin:10px 0 0 18px;font-size:13px;color:#4b5563;line-height:1.7}
+.vb-reasons li{margin-bottom:4px}
 `;
 
 /**
@@ -165,7 +197,14 @@ export function renderVerificationBlock(opts: {
     .map(([k, v]) => `<div class="vb-cell"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`)
     .join("");
 
+  const sc = SECURITY_COPY[rec.security_status] ?? SECURITY_COPY.clean;
   const notes = rec.public_notes ? `<p class="vb-note">${esc(rec.public_notes)}</p>` : "";
+  const securityReasons = rec.security_reasons?.length
+    ? `<ul class="vb-reasons">${rec.security_reasons.slice(0, 6).map((r) => `<li>${esc(r)}</li>`).join("")}</ul>`
+    : "";
+  const quarantineNote = rec.quarantined
+    ? `<p class="vb-note"><strong>Quarantined:</strong> this listing is hidden from TavBook's sitemap and search indexing until the link and destination pass a fresh check.</p>`
+    : "";
 
   return `
   <section class="vb" id="verification">
@@ -174,10 +213,38 @@ export function renderVerificationBlock(opts: {
     <div class="vb-badges">
       <span class="vb-badge vb-${lc.tone}">${esc(lc.label)}</span>
       <span class="vb-badge vb-${hc.tone}">${esc(hc.label)}</span>
+      <span class="vb-badge vb-${sc.tone}">${esc(sc.label)}</span>
     </div>
     <p class="vb-note">${esc(lc.blurb)}</p>
+    <p class="vb-note">${esc(sc.blurb)}</p>
+    ${securityReasons}
+    ${quarantineNote}
     ${notes}
     <dl class="vb-grid">${cellsHtml}</dl>
     <p class="vb-foot">Something wrong with this listing? <a href="/contact">Report it to the TavBook team</a> and we will re-check the link and details.</p>
   </section>`;
+}
+
+
+let _quarantineCache: { at: number; slugs: Set<string> } | null = null;
+
+/**
+ * Slugs currently quarantined by the automated audit. Cached for 60s so
+ * sitemap and tool-page renders stay fast.
+ */
+export async function getQuarantinedSlugs(): Promise<Set<string>> {
+  if (_quarantineCache && Date.now() - _quarantineCache.at < 60_000) return _quarantineCache.slugs;
+  try {
+    const supabase = publicClient();
+    const { data } = await supabase
+      .from("tool_verifications")
+      .select("tool_slug")
+      .eq("quarantined", true)
+      .limit(50_000);
+    const slugs = new Set((data ?? []).map((r) => r.tool_slug as string));
+    _quarantineCache = { at: Date.now(), slugs };
+    return slugs;
+  } catch {
+    return _quarantineCache?.slugs ?? new Set<string>();
+  }
 }

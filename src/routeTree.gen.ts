@@ -47,6 +47,7 @@ import { Route as RankingsSlugRouteImport } from './routes/rankings/$slug'
 import { Route as CompareSlugRouteImport } from './routes/compare/$slug'
 import { Route as CategorySlugRouteImport } from './routes/category/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiPublicLinkAuditRouteImport } from './routes/api/public/link-audit'
 
 const VerifiedRoute = VerifiedRouteImport.update({
   id: '/verified',
@@ -240,6 +241,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLinkAuditRoute = ApiPublicLinkAuditRouteImport.update({
+  id: '/api/public/link-audit',
+  path: '/api/public/link-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -280,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
+  '/api/public/link-audit': typeof ApiPublicLinkAuditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/compare': typeof CompareIndexRoute
   '/rankings': typeof RankingsIndexRoute
+  '/api/public/link-audit': typeof ApiPublicLinkAuditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -361,6 +369,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/compare/': typeof CompareIndexRoute
   '/rankings/': typeof RankingsIndexRoute
+  '/api/public/link-audit': typeof ApiPublicLinkAuditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
+    | '/api/public/link-audit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/compare'
     | '/rankings'
+    | '/api/public/link-audit'
   id:
     | '__root__'
     | '/'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/compare/'
     | '/rankings/'
+    | '/api/public/link-audit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -524,6 +536,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   CompareIndexRoute: typeof CompareIndexRoute
   RankingsIndexRoute: typeof RankingsIndexRoute
+  ApiPublicLinkAuditRoute: typeof ApiPublicLinkAuditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -794,6 +807,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/link-audit': {
+      id: '/api/public/link-audit'
+      path: '/api/public/link-audit'
+      fullPath: '/api/public/link-audit'
+      preLoaderRoute: typeof ApiPublicLinkAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -836,6 +856,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   CompareIndexRoute: CompareIndexRoute,
   RankingsIndexRoute: RankingsIndexRoute,
+  ApiPublicLinkAuditRoute: ApiPublicLinkAuditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
