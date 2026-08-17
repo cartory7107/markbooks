@@ -594,6 +594,42 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_comments: {
+        Row: {
+          author_avatar_url: string | null
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          status: string
+          tool_slug: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_avatar_url?: string | null
+          author_name: string
+          body: string
+          created_at?: string
+          id?: string
+          status?: string
+          tool_slug: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_avatar_url?: string | null
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          status?: string
+          tool_slug?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tool_discoveries: {
         Row: {
           candidate_url: string | null
@@ -636,6 +672,30 @@ export type Database = {
           status?: Database["public"]["Enums"]["review_status"]
           tool_name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      tool_engagements: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          tool_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          tool_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          tool_slug?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -686,6 +746,42 @@ export type Database = {
           source?: string | null
           status?: string
           storage_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tool_reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          reason: string
+          reported_by: string | null
+          status: string
+          tool_name: string
+          tool_slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason: string
+          reported_by?: string | null
+          status?: string
+          tool_name: string
+          tool_slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason?: string
+          reported_by?: string | null
+          status?: string
+          tool_name?: string
+          tool_slug?: string
           updated_at?: string
         }
         Relationships: []
@@ -865,7 +961,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      tool_comment_counts: {
+        Args: { _slugs: string[] }
+        Returns: {
+          comments: number
+          tool_slug: string
+        }[]
+      }
+      tool_engagement_counts: {
+        Args: { _slugs: string[] }
+        Returns: {
+          likes: number
+          saves: number
+          tool_slug: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
