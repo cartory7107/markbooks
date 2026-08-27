@@ -1504,11 +1504,16 @@ function Index() {
         </div>
       )}
 
-      {/* ─── Report Dialog ─── */}
-      {reportTool && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }}>
+      {/* ─── Report Dialog (real reports, stored for admin review) ─── */}
+      {reportTool && (() => {
+        const closeReport = () => {
+          setReportTool(null); setReportReason(""); setReportDetails("");
+          setReportSubmitted(false); setReportError("");
+        };
+        return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={closeReport}>
           <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
+            <button onClick={closeReport} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
             {!reportSubmitted ? (
               <>
                 <div className="flex items-center gap-2 mb-4">
@@ -1524,19 +1529,62 @@ function Index() {
                     </button>
                   ))}
                 </div>
-                <Button variant="outline" className="mt-4 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30" disabled={!reportReason}
-                  onClick={() => { setReportSubmitted(true); }}>
-                  <Send className="size-4 mr-2" /> Submit Report
+                <textarea
+                  value={reportDetails}
+                  onChange={(e) => setReportDetails(e.target.value)}
+                  rows={3}
+                  maxLength={1000}
+                  placeholder="Anything else we should know? (optional)"
+                  className="mt-3 w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                {reportError && <p className="mt-2 text-xs text-red-500">{reportError}</p>}
+                <Button variant="outline" className="mt-4 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30" disabled={!reportReason || reportSending}
+                  onClick={async () => {
+                    setReportSending(true); setReportError("");
+                    const res = await submitToolReport({
+                      slug: toolSlugOf(reportTool),
+                      name: reportTool,
+                      reason: reportReason,
+                      details: reportDetails,
+                    });
+                    setReportSending(false);
+                    if (res.ok) { setReportSubmitted(true); return; }
+                    if (res.error === "signed-out") {
+                      closeReport();
+                      setSignInPrompt("report a tool");
+                      return;
+                    }
+                    setReportError(res.error ?? "Something went wrong.");
+                  }}>
+                  <Send className="size-4 mr-2" /> {reportSending ? "Sending…" : "Submit Report"}
                 </Button>
               </>
             ) : (
               <div className="py-6 text-center">
                 <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-emerald-50 text-3xl dark:bg-emerald-950/30">✅</span>
                 <h3 className="mt-4 text-lg font-bold">Report Submitted</h3>
-                <p className="mt-2 text-sm text-muted-foreground">Thank you! Our team will review your report.</p>
-                <Button variant="outline" className="mt-5" onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }}>Close</Button>
+                <p className="mt-2 text-sm text-muted-foreground">Thank you! Our review team has your report and will check this listing.</p>
+                <Button variant="outline" className="mt-5" onClick={closeReport}>Close</Button>
               </div>
             )}
+          </div>
+        </div>
+        );
+      })()}
+
+      {/* ─── Sign-in prompt for community actions ─── */}
+      {signInPrompt && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => setSignInPrompt(null)}>
+          <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-7 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setSignInPrompt(null)} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
+            <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary/10 text-primary text-2xl">👋</span>
+            <h3 className="mt-4 text-lg font-bold">Sign in to {signInPrompt}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Likes, saves, reviews and reports on TavBook are real — they belong to your account.
+            </p>
+            <Button variant="brand" className="mt-5 w-full" asChild>
+              <Link to="/auth">Sign in / Sign up</Link>
+            </Button>
           </div>
         </div>
       )}
