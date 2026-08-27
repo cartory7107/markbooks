@@ -2040,18 +2040,16 @@ const ToolCard = memo(function ToolCard({
               </div>
             )}
           </div>
-          {/* Dislike button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); onReaction(tool.n, "dislike"); }}
-            className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors ${
-              reactionData.type === "dislike"
-                ? "bg-red-50 text-red-500 dark:bg-red-950/30 dark:text-red-400"
-                : "text-muted-foreground hover:bg-accent hover:text-foreground"
-            }`}
+          {/* Comments — real reviews live on the tool page */}
+          <a
+            href={`/tool/${toolSlug}#reviews`}
+            onClick={(e) => e.stopPropagation()}
+            title="Read reviews"
+            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
-            <ThumbsDown className={`size-3.5 ${reactionData.type === "dislike" ? "fill-red-500" : ""}`} />
-            <span className="text-[11px]">{reactionData.counts.dislike}</span>
-          </button>
+            <MessageCircle className="size-3.5" />
+            <span className="text-[11px]">{commentCount}</span>
+          </a>
           {/* Save button with count */}
           <button
             onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
@@ -2063,7 +2061,7 @@ const ToolCard = memo(function ToolCard({
             }`}
           >
             <Bookmark className={`size-3.5 ${saved ? "fill-primary" : ""}`} />
-            <span className="text-[11px]">{social.saves + (saved ? 1 : 0)}</span>
+            <span className="text-[11px]">{savedCount}</span>
           </button>
           {/* Visit button */}
 
