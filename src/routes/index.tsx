@@ -550,39 +550,46 @@ function Index() {
 
   const suggestions = searchFocused && query.length > 1 ? results.slice(0, 8) : [];
 
-  const toggleSave = useCallback((name: string) => {
-    setSavedTools((prev) => {
-      const next = new Set(prev);
-      if (next.has(name)) next.delete(name);
-      else next.add(name);
-      return next;
-    });
+  // ── Real community layer: likes, saves and comment counts come from the
+  //    database and are scoped to the signed-in user (Chapter 05) ──
+  const communityNames = useMemo(
+    () => [...results.slice(0, 150).map((t) => t.n), ...exclusiveTools.map((t) => t.n)],
+    [results, exclusiveTools],
+  );
+  const community = useCommunity(communityNames);
+
+  const requireSignIn = useCallback((action: string) => {
+    setSignInPrompt(action);
   }, []);
+
+  const toggleSave = useCallback(
+    async (name: string) => {
+      const res = await community.toggle(name, "save");
+      if (res === "auth") requireSignIn("save tools");
+    },
+    [community, requireSignIn],
+  );
 
   // Helper to generate ToolCard props for reaction/recommend/report features
   const getReactionProps = useCallback((tool: Tool) => ({
-    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: baseLikes(tool.n), dislike: 0 } },
-    onReaction: (_name: string, type: "like" | "dislike", emoji?: string) => {
-      setReactions((prev) => {
-        const name = tool.n;
-        const curr = prev[name] || { type: null, emoji: null, counts: { like: 0, dislike: 0 } };
-        if (type === "like" && curr.type === "like") {
-          return { ...prev, [name]: { ...curr, type: null, emoji: null, counts: { ...curr.counts, like: Math.max(0, curr.counts.like - 1) } } };
-        }
-        if (type === "dislike" && curr.type === "dislike") {
-          return { ...prev, [name]: { ...curr, type: null, emoji: null, counts: { ...curr.counts, dislike: Math.max(0, curr.counts.dislike - 1) } } };
-        }
-        const wasLike = curr.type === "like";
-        const wasDislike = curr.type === "dislike";
-        return { ...prev, [name]: { type, emoji: emoji || null, counts: { like: (curr.counts.like + (type === "like" ? 1 : 0)) - (wasLike ? 1 : 0), dislike: (curr.counts.dislike + (type === "dislike" ? 1 : 0)) - (wasDislike ? 1 : 0) } } };
-      });
+    reactionData: {
+      type: (community.isLiked(tool.n) ? "like" : null) as "like" | "dislike" | null,
+      emoji: null as string | null,
+      counts: { like: community.likesOf(tool.n), dislike: 0 },
     },
+    onReaction: async (_name: string, type: "like" | "dislike") => {
+      if (type !== "like") return;
+      const res = await community.toggle(tool.n, "like");
+      if (res === "auth") requireSignIn("like tools");
+    },
+    commentCount: community.commentsOf(tool.n),
+    savedCount: community.savesOf(tool.n),
     onReport: (_name: string) => setReportTool(tool.n),
     onRecommend: (_name: string) => setRecommendTools((prev) => { const next = new Set(prev); if (next.has(tool.n)) next.delete(tool.n); else next.add(tool.n); return next; }),
     isRecommended: recommendTools.has(tool.n),
     showReactionPopup: reactionPopup === tool.n,
     onToggleReactionPopup: (_name: string) => setReactionPopup(reactionPopup === tool.n ? null : tool.n),
-  }), [reactions, recommendTools, reactionPopup]);
+  }), [community, recommendTools, reactionPopup, requireSignIn]);
 
 
 
