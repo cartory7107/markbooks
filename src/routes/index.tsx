@@ -246,7 +246,6 @@ function Index() {
   const [aiNews, setAiNews] = useState<Array<{ title: string; time: string; url?: string; source?: string }>>([]);
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [savedTools, setSavedTools] = useState<Set<string>>(new Set());
   const [showSponsor, setShowSponsor] = useState(true);
   const [activeFilter, setActiveFilter] = useState<"today" | "new" | "saved" | "popular">("today");
   const [authUser, setAuthUser] = useState<{ email: string; name?: string } | null>(null);
@@ -255,9 +254,12 @@ function Index() {
   const [showVisitorPopup, setShowVisitorPopup] = useState(false);
   const [reportTool, setReportTool] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
+  const [reportDetails, setReportDetails] = useState("");
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [reportError, setReportError] = useState("");
+  const [reportSending, setReportSending] = useState(false);
+  const [signInPrompt, setSignInPrompt] = useState<string | null>(null);
   const [recommendTools, setRecommendTools] = useState<Set<string>>(new Set());
-  const [reactions, setReactions] = useState<Record<string, { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } }>>({});
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
   // Random seed applied only after hydration (0 on server + first client render)
