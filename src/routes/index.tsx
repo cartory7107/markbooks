@@ -32,7 +32,7 @@ import {
   Send,
   Star,
   Sun,
-  ThumbsDown,
+  MessageCircle,
   ThumbsUp,
   Trophy,
   TrendingUp,
