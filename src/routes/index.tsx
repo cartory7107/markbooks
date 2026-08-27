@@ -1,6 +1,8 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
-import { getSocialMeta, baseLikes } from "@/lib/social-meta";
+import { getSocialMeta } from "@/lib/social-meta";
+import { useCommunity } from "@/hooks/use-community";
+import { submitReport as submitToolReport, toolSlugOf } from "@/lib/community";
 
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
@@ -30,7 +32,7 @@ import {
   Send,
   Star,
   Sun,
-  ThumbsDown,
+  MessageCircle,
   ThumbsUp,
   Trophy,
   TrendingUp,
@@ -244,7 +246,6 @@ function Index() {
   const [aiNews, setAiNews] = useState<Array<{ title: string; time: string; url?: string; source?: string }>>([]);
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [savedTools, setSavedTools] = useState<Set<string>>(new Set());
   const [showSponsor, setShowSponsor] = useState(true);
   const [activeFilter, setActiveFilter] = useState<"today" | "new" | "saved" | "popular">("today");
   const [authUser, setAuthUser] = useState<{ email: string; name?: string } | null>(null);
@@ -253,9 +254,12 @@ function Index() {
   const [showVisitorPopup, setShowVisitorPopup] = useState(false);
   const [reportTool, setReportTool] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
+  const [reportDetails, setReportDetails] = useState("");
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [reportError, setReportError] = useState("");
+  const [reportSending, setReportSending] = useState(false);
+  const [signInPrompt, setSignInPrompt] = useState<string | null>(null);
   const [recommendTools, setRecommendTools] = useState<Set<string>>(new Set());
-  const [reactions, setReactions] = useState<Record<string, { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } }>>({});
   const [reactionPopup, setReactionPopup] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
   // Random seed applied only after hydration (0 on server + first client render)
@@ -548,39 +552,46 @@ function Index() {
 
   const suggestions = searchFocused && query.length > 1 ? results.slice(0, 8) : [];
 
-  const toggleSave = useCallback((name: string) => {
-    setSavedTools((prev) => {
-      const next = new Set(prev);
-      if (next.has(name)) next.delete(name);
-      else next.add(name);
-      return next;
-    });
+  // ── Real community layer: likes, saves and comment counts come from the
+  //    database and are scoped to the signed-in user (Chapter 05) ──
+  const communityNames = useMemo(
+    () => [...results.slice(0, 150).map((t) => t.n), ...exclusiveTools.map((t) => t.n)],
+    [results, exclusiveTools],
+  );
+  const community = useCommunity(communityNames);
+
+  const requireSignIn = useCallback((action: string) => {
+    setSignInPrompt(action);
   }, []);
+
+  const toggleSave = useCallback(
+    async (name: string) => {
+      const res = await community.toggle(name, "save");
+      if (res === "auth") requireSignIn("save tools");
+    },
+    [community, requireSignIn],
+  );
 
   // Helper to generate ToolCard props for reaction/recommend/report features
   const getReactionProps = useCallback((tool: Tool) => ({
-    reactionData: reactions[tool.n] || { type: null as "like" | "dislike" | null, emoji: null as string | null, counts: { like: baseLikes(tool.n), dislike: 0 } },
-    onReaction: (_name: string, type: "like" | "dislike", emoji?: string) => {
-      setReactions((prev) => {
-        const name = tool.n;
-        const curr = prev[name] || { type: null, emoji: null, counts: { like: 0, dislike: 0 } };
-        if (type === "like" && curr.type === "like") {
-          return { ...prev, [name]: { ...curr, type: null, emoji: null, counts: { ...curr.counts, like: Math.max(0, curr.counts.like - 1) } } };
-        }
-        if (type === "dislike" && curr.type === "dislike") {
-          return { ...prev, [name]: { ...curr, type: null, emoji: null, counts: { ...curr.counts, dislike: Math.max(0, curr.counts.dislike - 1) } } };
-        }
-        const wasLike = curr.type === "like";
-        const wasDislike = curr.type === "dislike";
-        return { ...prev, [name]: { type, emoji: emoji || null, counts: { like: (curr.counts.like + (type === "like" ? 1 : 0)) - (wasLike ? 1 : 0), dislike: (curr.counts.dislike + (type === "dislike" ? 1 : 0)) - (wasDislike ? 1 : 0) } } };
-      });
+    reactionData: {
+      type: (community.isLiked(tool.n) ? "like" : null) as "like" | "dislike" | null,
+      emoji: null as string | null,
+      counts: { like: community.likesOf(tool.n), dislike: 0 },
     },
+    onReaction: async (_name: string, type: "like" | "dislike") => {
+      if (type !== "like") return;
+      const res = await community.toggle(tool.n, "like");
+      if (res === "auth") requireSignIn("like tools");
+    },
+    commentCount: community.commentsOf(tool.n),
+    savedCount: community.savesOf(tool.n),
     onReport: (_name: string) => setReportTool(tool.n),
     onRecommend: (_name: string) => setRecommendTools((prev) => { const next = new Set(prev); if (next.has(tool.n)) next.delete(tool.n); else next.add(tool.n); return next; }),
     isRecommended: recommendTools.has(tool.n),
     showReactionPopup: reactionPopup === tool.n,
     onToggleReactionPopup: (_name: string) => setReactionPopup(reactionPopup === tool.n ? null : tool.n),
-  }), [reactions, recommendTools, reactionPopup]);
+  }), [community, recommendTools, reactionPopup, requireSignIn]);
 
 
 
@@ -1162,7 +1173,7 @@ function Index() {
                 <ToolCard
                   key={`${tool.n}-${tool.c}-${index}`}
                   tool={tool}
-                  saved={savedTools.has(tool.n)}
+                  saved={community.isSaved(tool.n)}
                   onToggleSave={() => toggleSave(tool.n)}
                   featured={!!tool.ex}
                   trending={!!tool.tr}
@@ -1444,7 +1455,7 @@ function Index() {
                 <ToolCard
                   key={`pick-${tool.n}-${i}`}
                   tool={tool}
-                  saved={savedTools.has(tool.n)}
+                  saved={community.isSaved(tool.n)}
                   onToggleSave={() => toggleSave(tool.n)}
                   featured
                   {...getReactionProps(tool)}
@@ -1462,7 +1473,7 @@ function Index() {
                   <ToolCard
                     key={`rec-${tool.n}-${i}`}
                     tool={tool}
-                    saved={savedTools.has(tool.n)}
+                    saved={community.isSaved(tool.n)}
                     onToggleSave={() => toggleSave(tool.n)}
                     {...getReactionProps(tool)}
                   />
@@ -1493,11 +1504,16 @@ function Index() {
         </div>
       )}
 
-      {/* ─── Report Dialog ─── */}
-      {reportTool && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }}>
+      {/* ─── Report Dialog (real reports, stored for admin review) ─── */}
+      {reportTool && (() => {
+        const closeReport = () => {
+          setReportTool(null); setReportReason(""); setReportDetails("");
+          setReportSubmitted(false); setReportError("");
+        };
+        return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={closeReport}>
           <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
+            <button onClick={closeReport} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
             {!reportSubmitted ? (
               <>
                 <div className="flex items-center gap-2 mb-4">
@@ -1513,19 +1529,62 @@ function Index() {
                     </button>
                   ))}
                 </div>
-                <Button variant="outline" className="mt-4 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30" disabled={!reportReason}
-                  onClick={() => { setReportSubmitted(true); }}>
-                  <Send className="size-4 mr-2" /> Submit Report
+                <textarea
+                  value={reportDetails}
+                  onChange={(e) => setReportDetails(e.target.value)}
+                  rows={3}
+                  maxLength={1000}
+                  placeholder="Anything else we should know? (optional)"
+                  className="mt-3 w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                {reportError && <p className="mt-2 text-xs text-red-500">{reportError}</p>}
+                <Button variant="outline" className="mt-4 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30" disabled={!reportReason || reportSending}
+                  onClick={async () => {
+                    setReportSending(true); setReportError("");
+                    const res = await submitToolReport({
+                      slug: toolSlugOf(reportTool),
+                      name: reportTool,
+                      reason: reportReason,
+                      details: reportDetails,
+                    });
+                    setReportSending(false);
+                    if (res.ok) { setReportSubmitted(true); return; }
+                    if (res.error === "signed-out") {
+                      closeReport();
+                      setSignInPrompt("report a tool");
+                      return;
+                    }
+                    setReportError(res.error ?? "Something went wrong.");
+                  }}>
+                  <Send className="size-4 mr-2" /> {reportSending ? "Sending…" : "Submit Report"}
                 </Button>
               </>
             ) : (
               <div className="py-6 text-center">
                 <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-emerald-50 text-3xl dark:bg-emerald-950/30">✅</span>
                 <h3 className="mt-4 text-lg font-bold">Report Submitted</h3>
-                <p className="mt-2 text-sm text-muted-foreground">Thank you! Our team will review your report.</p>
-                <Button variant="outline" className="mt-5" onClick={() => { setReportTool(null); setReportReason(""); setReportSubmitted(false); }}>Close</Button>
+                <p className="mt-2 text-sm text-muted-foreground">Thank you! Our review team has your report and will check this listing.</p>
+                <Button variant="outline" className="mt-5" onClick={closeReport}>Close</Button>
               </div>
             )}
+          </div>
+        </div>
+        );
+      })()}
+
+      {/* ─── Sign-in prompt for community actions ─── */}
+      {signInPrompt && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => setSignInPrompt(null)}>
+          <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-7 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setSignInPrompt(null)} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="size-5" /></button>
+            <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary/10 text-primary text-2xl">👋</span>
+            <h3 className="mt-4 text-lg font-bold">Sign in to {signInPrompt}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Likes, saves, reviews and reports on TavBook are real — they belong to your account.
+            </p>
+            <Button variant="brand" className="mt-5 w-full" asChild>
+              <Link to="/auth">Sign in / Sign up</Link>
+            </Button>
           </div>
         </div>
       )}
@@ -1780,6 +1839,8 @@ const ToolCard = memo(function ToolCard({
   exclusive = false,
   reactionData,
   onReaction,
+  commentCount = 0,
+  savedCount = 0,
   onReport,
   onRecommend,
   isRecommended,
@@ -1794,6 +1855,8 @@ const ToolCard = memo(function ToolCard({
   exclusive?: boolean;
   reactionData: { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } };
   onReaction: (name: string, type: "like" | "dislike", emoji?: string) => void;
+  commentCount?: number;
+  savedCount?: number;
   onReport: (name: string) => void;
   onRecommend: (name: string) => void;
   isRecommended: boolean;
@@ -2025,18 +2088,16 @@ const ToolCard = memo(function ToolCard({
               </div>
             )}
           </div>
-          {/* Dislike button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); onReaction(tool.n, "dislike"); }}
-            className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors ${
-              reactionData.type === "dislike"
-                ? "bg-red-50 text-red-500 dark:bg-red-950/30 dark:text-red-400"
-                : "text-muted-foreground hover:bg-accent hover:text-foreground"
-            }`}
+          {/* Comments — real reviews live on the tool page */}
+          <a
+            href={`/tool/${toolSlug}#reviews`}
+            onClick={(e) => e.stopPropagation()}
+            title="Read reviews"
+            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
-            <ThumbsDown className={`size-3.5 ${reactionData.type === "dislike" ? "fill-red-500" : ""}`} />
-            <span className="text-[11px]">{reactionData.counts.dislike}</span>
-          </button>
+            <MessageCircle className="size-3.5" />
+            <span className="text-[11px]">{commentCount}</span>
+          </a>
           {/* Save button with count */}
           <button
             onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
@@ -2048,7 +2109,7 @@ const ToolCard = memo(function ToolCard({
             }`}
           >
             <Bookmark className={`size-3.5 ${saved ? "fill-primary" : ""}`} />
-            <span className="text-[11px]">{social.saves + (saved ? 1 : 0)}</span>
+            <span className="text-[11px]">{savedCount}</span>
           </button>
           {/* Visit button */}
 
