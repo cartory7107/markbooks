@@ -1173,7 +1173,7 @@ function Index() {
                 <ToolCard
                   key={`${tool.n}-${tool.c}-${index}`}
                   tool={tool}
-                  saved={savedTools.has(tool.n)}
+                  saved={community.isSaved(tool.n)}
                   onToggleSave={() => toggleSave(tool.n)}
                   featured={!!tool.ex}
                   trending={!!tool.tr}
@@ -1455,7 +1455,7 @@ function Index() {
                 <ToolCard
                   key={`pick-${tool.n}-${i}`}
                   tool={tool}
-                  saved={savedTools.has(tool.n)}
+                  saved={community.isSaved(tool.n)}
                   onToggleSave={() => toggleSave(tool.n)}
                   featured
                   {...getReactionProps(tool)}
@@ -1473,7 +1473,7 @@ function Index() {
                   <ToolCard
                     key={`rec-${tool.n}-${i}`}
                     tool={tool}
-                    saved={savedTools.has(tool.n)}
+                    saved={community.isSaved(tool.n)}
                     onToggleSave={() => toggleSave(tool.n)}
                     {...getReactionProps(tool)}
                   />
