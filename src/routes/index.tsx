@@ -1791,6 +1791,8 @@ const ToolCard = memo(function ToolCard({
   exclusive = false,
   reactionData,
   onReaction,
+  commentCount = 0,
+  savedCount = 0,
   onReport,
   onRecommend,
   isRecommended,
@@ -1805,6 +1807,8 @@ const ToolCard = memo(function ToolCard({
   exclusive?: boolean;
   reactionData: { type: "like" | "dislike" | null; emoji: string | null; counts: { like: number; dislike: number } };
   onReaction: (name: string, type: "like" | "dislike", emoji?: string) => void;
+  commentCount?: number;
+  savedCount?: number;
   onReport: (name: string) => void;
   onRecommend: (name: string) => void;
   isRecommended: boolean;
