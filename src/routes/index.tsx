@@ -1,6 +1,8 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
 import { TOTAL_TOOLS_LABEL, TOTAL_TOOLS_SHORT } from "@/lib/tool-count";
-import { getSocialMeta, baseLikes } from "@/lib/social-meta";
+import { getSocialMeta } from "@/lib/social-meta";
+import { useCommunity } from "@/hooks/use-community";
+import { submitReport as submitToolReport, toolSlugOf } from "@/lib/community";
 
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
