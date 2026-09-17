@@ -1,49 +1,18 @@
 import { getCatalog, slugify, type Tool } from "@/lib/catalog-server";
+import { scoreTool } from "@/lib/quality.server";
 
 /** Max URLs per sitemap file (search-engine limit is 50,000). */
 export const URLS_PER_SITEMAP = 45000;
 
 /**
- * Domains that must never receive a canonical TavBook tool page in the sitemap:
- * parked/for-sale registrar pages, generic marketplaces, and model-repo hosts
- * that aren't standalone AI products.
+ * A tool qualifies for the sitemap only when the data-quality engine rates it
+ * "index": a real product domain, a usable name, a description with substance
+ * and a meaningful category. Thin and excluded listings stay crawlable for
+ * visitors but never enter a sitemap (see quality.server.ts).
  */
-const EXCLUDED_DOMAINS = [
-  "huggingface.co",
-  "github.com",
-  "github.io",
-  "gitlab.com",
-  "godaddy.com",
-  "afternic.com",
-  "dan.com",
-  "sedo.com",
-  "namecheap.com",
-  "hugedomains.com",
-  "bodis.com",
-  "parkingcrew.net",
-  "squadhelp.com",
-  "brandbucket.com",
-  "undeveloped.com",
-  "porkbun.com",
-];
-
-function host(url: string): string {
-  try {
-    const u = new URL(url);
-    if (u.protocol !== "http:" && u.protocol !== "https:") return "";
-    return u.hostname.toLowerCase().replace(/^www\./, "");
-  } catch {
-    return "";
-  }
-}
-
-/** A tool qualifies for the sitemap only when it is live, linkable and public. */
 function isIndexable(t: Tool): boolean {
-  const h = host(t.u);
-  if (!h || !h.includes(".")) return false;
-  if (EXCLUDED_DOMAINS.some((d) => h === d || h.endsWith(`.${d}`))) return false;
   if (!t.n || !slugify(t.n)) return false;
-  return true;
+  return scoreTool(t).tier === "index";
 }
 
 let _cache: string[] | null = null;
