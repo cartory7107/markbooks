@@ -449,7 +449,123 @@ function DashboardTab({
           )}
         </CardContent>
       </Card>
+
+      <DataQualityPanel />
     </div>
+  );
+}
+
+/* ---------- Data Quality & Indexability (Chapter 06) ---------- */
+type QualityData = {
+  summary: {
+    total: number;
+    index: number;
+    thin: number;
+    exclude: number;
+    duplicates: number;
+    averageScore: number;
+    topReasons: Array<{ reason: string; count: number }>;
+  };
+  worst: Array<{ name: string; slug: string; url: string; score: number; tier: string; reasons: string[] }>;
+};
+
+const REASON_LABELS: Record<string, string> = {
+  "generic-category": "No specific category",
+  "below-index-threshold": "Too little information overall",
+  "thin-description": "Description too short",
+  "no-https": "Insecure (http) link",
+  "spam-content": "Spam or placeholder text",
+  "non-product-host": "Not a real product website",
+  "bad-name-length": "Unusable name",
+  "missing-name": "Missing name",
+  "invalid-url": "Broken or invalid link",
+  "description-equals-name": "Description just repeats the name",
+  "no-pricing": "No pricing information",
+};
+
+function DataQualityPanel() {
+  const [data, setData] = useState<QualityData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/data-quality-api.json?sample=40")
+      .then((r) => r.json())
+      .then((d: QualityData) => { if (mounted) { setData(d); setLoading(false); } })
+      .catch(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  }, []);
+
+  const s = data?.summary;
+
+  return (
+    <Card className="mt-8">
+      <CardHeader>
+        <CardTitle className="text-base font-semibold">Data Quality &amp; Search Visibility</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Listings good enough for Google are indexed; weak ones stay visible to visitors but are kept out of search so they never drag the site down.
+        </p>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        ) : !s ? (
+          <p className="text-sm text-muted-foreground">Report unavailable right now.</p>
+        ) : (
+          <>
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+              {[
+                { label: "In search", value: s.index, tone: "text-emerald-600 dark:text-emerald-400" },
+                { label: "Weak (hidden from search)", value: s.thin, tone: "text-amber-600 dark:text-amber-400" },
+                { label: "Rejected", value: s.exclude, tone: "text-red-600 dark:text-red-400" },
+                { label: "Duplicates", value: s.duplicates, tone: "text-sky-600 dark:text-sky-400" },
+                { label: "Average score", value: s.averageScore, tone: "text-violet-600 dark:text-violet-400" },
+              ].map((c) => (
+                <div key={c.label} className="rounded-xl border border-border p-3">
+                  <p className="text-xs text-muted-foreground">{c.label}</p>
+                  <p className={`mt-1 text-xl font-bold ${c.tone}`}>{c.value.toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+
+            {s.topReasons.length > 0 && (
+              <div className="mt-5">
+                <p className="text-sm font-semibold">Most common problems</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {s.topReasons.map((r) => (
+                    <Badge key={r.reason} variant="outline" className="text-[11px]">
+                      {REASON_LABELS[r.reason] ?? r.reason} · {r.count.toLocaleString()}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {data.worst.length > 0 && (
+              <div className="mt-5">
+                <p className="text-sm font-semibold">Weakest listings to fix first</p>
+                <div className="mt-2 max-h-80 space-y-2 overflow-y-auto">
+                  {data.worst.map((w, i) => (
+                    <div key={`${w.slug}-${i}`} className="flex items-center justify-between gap-3 rounded-lg border border-border p-3 text-sm">
+                      <div className="min-w-0">
+                        <p className="truncate font-medium">{w.name}</p>
+                        <p className="truncate text-xs text-muted-foreground">{w.url}</p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2">
+                        <Badge variant={w.tier === "exclude" ? "destructive" : "secondary"} className="text-[10px]">
+                          {w.tier === "exclude" ? "rejected" : "weak"}
+                        </Badge>
+                        <span className="text-xs font-semibold">{w.score}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

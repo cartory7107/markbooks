@@ -26,6 +26,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as ExclusiveApiDotjsonRouteImport } from './routes/exclusive-api[.]json'
+import { Route as DataQualityApiDotjsonRouteImport } from './routes/data-quality-api[.]json'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BlogCategoriesApiDotjsonRouteImport } from './routes/blog-categories-api[.]json'
@@ -132,6 +133,11 @@ const NewsRoute = NewsRouteImport.update({
 const ExclusiveApiDotjsonRoute = ExclusiveApiDotjsonRouteImport.update({
   id: '/exclusive-api.json',
   path: '/exclusive-api.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataQualityApiDotjsonRoute = DataQualityApiDotjsonRouteImport.update({
+  id: '/data-quality-api.json',
+  path: '/data-quality-api.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -260,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
+  '/data-quality-api.json': typeof DataQualityApiDotjsonRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
@@ -301,6 +308,7 @@ export interface FileRoutesByTo {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
+  '/data-quality-api.json': typeof DataQualityApiDotjsonRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
@@ -343,6 +351,7 @@ export interface FileRoutesById {
   '/blog-categories-api.json': typeof BlogCategoriesApiDotjsonRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
+  '/data-quality-api.json': typeof DataQualityApiDotjsonRoute
   '/exclusive-api.json': typeof ExclusiveApiDotjsonRoute
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
+    | '/data-quality-api.json'
     | '/exclusive-api.json'
     | '/news'
     | '/pricing'
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
+    | '/data-quality-api.json'
     | '/exclusive-api.json'
     | '/news'
     | '/pricing'
@@ -468,6 +479,7 @@ export interface FileRouteTypes {
     | '/blog-categories-api.json'
     | '/categories'
     | '/contact'
+    | '/data-quality-api.json'
     | '/exclusive-api.json'
     | '/news'
     | '/pricing'
@@ -510,6 +522,7 @@ export interface RootRouteChildren {
   BlogCategoriesApiDotjsonRoute: typeof BlogCategoriesApiDotjsonRoute
   CategoriesRoute: typeof CategoriesRoute
   ContactRoute: typeof ContactRoute
+  DataQualityApiDotjsonRoute: typeof DataQualityApiDotjsonRoute
   ExclusiveApiDotjsonRoute: typeof ExclusiveApiDotjsonRoute
   NewsRoute: typeof NewsRoute
   PricingRoute: typeof PricingRoute
@@ -658,6 +671,13 @@ declare module '@tanstack/react-router' {
       path: '/exclusive-api.json'
       fullPath: '/exclusive-api.json'
       preLoaderRoute: typeof ExclusiveApiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data-quality-api.json': {
+      id: '/data-quality-api.json'
+      path: '/data-quality-api.json'
+      fullPath: '/data-quality-api.json'
+      preLoaderRoute: typeof DataQualityApiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -830,6 +850,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategoriesApiDotjsonRoute: BlogCategoriesApiDotjsonRoute,
   CategoriesRoute: CategoriesRoute,
   ContactRoute: ContactRoute,
+  DataQualityApiDotjsonRoute: DataQualityApiDotjsonRoute,
   ExclusiveApiDotjsonRoute: ExclusiveApiDotjsonRoute,
   NewsRoute: NewsRoute,
   PricingRoute: PricingRoute,
