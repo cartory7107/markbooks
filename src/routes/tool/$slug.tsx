@@ -600,6 +600,7 @@ export const Route = createFileRoute("/tool/$slug")({
 
         // Verification & link-health record (public, read-only)
         const { getVerification, renderVerificationBlock, VERIFICATION_CSS } = await import("@/lib/verification.server");
+        const { robotsFor, scoreTool } = await import("@/lib/quality.server");
         const verification = await getVerification(slug);
         const hasVerifiedBadge = ((tool as Tool & { badges?: string[] }).badges || [])
           .some((b) => b.toLowerCase() === "verified");
